@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "headline",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "The highest uninsured rates are in Texas and the Southeast, mostly states that had not expanded",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "color": "#1B1B1B",
+                      "fontWeight": "bold",
+                      "fontFamily": "Georgia"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Uninsured rate of low-income adults by state, 2023  \u00b7  hover over a state for its profile",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#55524C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 20,
+    "y": 115,
+    "z": 6000,
+    "height": 56,
+    "width": 1240,
+    "tabOrder": 6000
+  }
+}

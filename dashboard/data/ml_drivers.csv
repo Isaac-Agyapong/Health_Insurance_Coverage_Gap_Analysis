@@ -1,0 +1,11 @@
+trait,importance
+Uninsured rate before expansion,0.371
+Hispanic share,0.2461
+"Uninsured rate, adults 138-400% of poverty",0.106
+Share of residents 65+,0.095
+Black (non-Hispanic) share,0.066
+Change in uninsured rate over prior 3 years,0.0539
+Population (log),0.0224
+"Median household income (log, 2013)",0.0181
+Poverty rate (2013),0.0164
+"Rurality code (1 = big metro, 9 = remote)",0.0051

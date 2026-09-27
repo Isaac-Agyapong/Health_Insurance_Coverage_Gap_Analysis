@@ -1,0 +1,139 @@
+table ml_county_predictions
+	lineageTag: f5172f6d-462e-542a-94af-7a418e809af0
+
+	measure 'Adults Gaining' = SUM ( ml_county_predictions[adults_gaining_coverage] )
+		formatString: #,0
+		displayFolder: ML
+		lineageTag: 0dd60636-2c2d-5052-8ffd-98dcec92e929
+
+	measure 'Predicted Drop' = SUM ( ml_county_predictions[predicted_effect_pts] )
+		formatString: 0.0" pts"
+		displayFolder: ML
+		lineageTag: 6281222b-9996-5dfb-865c-6a2adb62814f
+
+	measure 'Rate Now' = SUM ( ml_county_predictions[base_rate] ) / 100
+		formatString: 0%
+		displayFolder: ML
+		lineageTag: c3eb2df3-9e4a-599f-8e4a-0aeb27c38a6f
+
+	measure 'Rate After' = SUM ( ml_county_predictions[predicted_rate_after] ) / 100
+		formatString: 0%
+		displayFolder: ML
+		lineageTag: 1e3c7920-a54a-53cb-87fd-19f7de126436
+
+	column county_fips
+		dataType: int64
+		formatString: 0
+		lineageTag: e8a44519-435b-54f8-bd37-b9057eba7bf0
+		summarizeBy: sum
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: 9e26e5c2-78fc-56aa-9ed4-b3136fe9d203
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: e028b8a3-8c42-5a7b-ae11-51fbd8cc80a8
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column rurality
+		dataType: string
+		lineageTag: 10be0e8a-65bc-5ad4-91f3-4fcbd09eec4f
+		summarizeBy: none
+		sourceColumn: rurality
+
+		annotation SummarizationSetBy = Automatic
+
+	column base_rate
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 891cb37e-557c-5204-a7e1-b7b924883c71
+		summarizeBy: sum
+		sourceColumn: base_rate
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_effect_pts
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 9dd8a6ca-c823-56ca-80b2-7e3b172d02fd
+		summarizeBy: sum
+		sourceColumn: predicted_effect_pts
+
+		annotation SummarizationSetBy = Automatic
+
+	column effect_lo
+		dataType: double
+		formatString: #,0.00
+		lineageTag: a7212acd-ec13-5fca-b091-c5fb0ae4143b
+		summarizeBy: sum
+		sourceColumn: effect_lo
+
+		annotation SummarizationSetBy = Automatic
+
+	column effect_hi
+		dataType: double
+		formatString: #,0.00
+		lineageTag: dd990efb-5cf7-514f-a191-adb64fb4588a
+		summarizeBy: sum
+		sourceColumn: effect_hi
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_rate_after
+		dataType: double
+		formatString: #,0.00
+		lineageTag: db8dc40a-4090-5ce0-b5ac-7f40b3314fa5
+		summarizeBy: sum
+		sourceColumn: predicted_rate_after
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_income_adults_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 1cf05e77-8fae-5c03-8208-ce1537656e15
+		summarizeBy: sum
+		sourceColumn: low_income_adults_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: f3fe2b9c-8e62-5ae3-94f4-2955d9ab8d99
+		summarizeBy: sum
+		sourceColumn: uninsured_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column adults_gaining_coverage
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 24a59960-f950-5f34-aa08-2be995a2c034
+		summarizeBy: sum
+		sourceColumn: adults_gaining_coverage
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_county_predictions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "ml_county_predictions.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", Int64.Type}, {"county_name", type text}, {"state", type text}, {"rurality", type text}, {"base_rate", type number}, {"predicted_effect_pts", type number}, {"effect_lo", type number}, {"effect_hi", type number}, {"predicted_rate_after", type number}, {"low_income_adults_2023", type number}, {"uninsured_2023", type number}, {"adults_gaining_coverage", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

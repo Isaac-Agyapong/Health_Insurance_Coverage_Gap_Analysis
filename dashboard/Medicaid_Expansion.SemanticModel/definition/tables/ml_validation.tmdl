@@ -1,0 +1,70 @@
+table ml_validation
+	lineageTag: b1dfab21-d319-54a8-bbb5-0ca301910342
+
+	measure 'Model Prediction' = SUM ( ml_validation[predicted] )
+		formatString: 0.0
+		displayFolder: ML
+		lineageTag: fc3cd385-7f78-51a5-b3be-9f51d996becc
+
+	measure 'Actual Result' = SUM ( ml_validation[actual_effect] )
+		formatString: 0.0
+		displayFolder: ML
+		lineageTag: a84498bd-8082-5d5a-a7da-a4650e3c0ae6
+
+	measure 'Top Quarter Actual' = CALCULATE ( [Actual Result], ml_validation[quartile] = 1 )
+		formatString: 0.0" pts"
+		displayFolder: ML
+		lineageTag: 4205e818-2f6d-5927-9868-51366668b75c
+
+	measure 'Validation Context' = "predicted " & FORMAT ( CALCULATE ( [Model Prediction], ml_validation[quartile] = 1 ), "0.0" ) & "  ·  bottom quarter: " & FORMAT ( CALCULATE ( [Actual Result], ml_validation[quartile] = 4 ), "0.0" )
+		displayFolder: Context
+		lineageTag: 6d8477b4-40bc-52cd-a904-6901ce883aa0
+
+	column quartile
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d92ca8c3-8177-54ac-88bd-c36a051e7d92
+		summarizeBy: none
+		sourceColumn: quartile
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted
+		dataType: double
+		formatString: #,0.00
+		lineageTag: fe2867d4-97ec-5aee-a2ff-a0454ef12735
+		summarizeBy: sum
+		sourceColumn: predicted
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_effect
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 5ad75046-ab6d-5833-94ee-13e3752e9ff2
+		summarizeBy: sum
+		sourceColumn: actual_effect
+
+		annotation SummarizationSetBy = Automatic
+
+	column label
+		dataType: string
+		sortByColumn: quartile
+		lineageTag: 0d2a2979-2e64-553c-80aa-d285bd916ebf
+		summarizeBy: none
+		sourceColumn: label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_validation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "ml_validation.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"quartile", Int64.Type}, {"predicted", type number}, {"actual_effect", type number}, {"label", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

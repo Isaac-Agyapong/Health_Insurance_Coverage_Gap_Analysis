@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "headline",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Where Medicaid expanded, the uninsured rate fell further; expansion itself cut it by about 6 points",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "color": "#1B1B1B",
+                      "fontWeight": "bold",
+                      "fontFamily": "Georgia"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Uninsured rate of adults 18-64 at or below 138% of the poverty line, the group expansion made eligible for Medicaid",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#55524C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 20,
+    "y": 115,
+    "z": 6000,
+    "height": 56,
+    "width": 1240,
+    "tabOrder": 6000
+  }
+}

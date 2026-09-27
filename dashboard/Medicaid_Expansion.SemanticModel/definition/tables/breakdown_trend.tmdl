@@ -1,0 +1,104 @@
+table breakdown_trend
+	lineageTag: 7808e087-f8b7-57a5-8126-7c8f32c2af3c
+
+	measure 'Rate Expanded 2023' = CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[year] = 2023, breakdown_trend[analysis_group] = "Expanded 2014" ) / 100
+		formatString: 0%
+		displayFolder: Breakdown
+		lineageTag: 5bf04aba-df99-5688-9726-8bdb86a8314c
+
+	measure 'Rate Not Expanded 2023' = CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[year] = 2023, breakdown_trend[analysis_group] = "Not expanded by 2023" ) / 100
+		formatString: 0%
+		displayFolder: Breakdown
+		lineageTag: b2e8b65f-c5e7-5fdd-90d0-9ef98e3b32cb
+
+	measure 'Gap 2023' = ( [Rate Not Expanded 2023] - [Rate Expanded 2023] ) * 100
+		formatString: 0" pts"
+		displayFolder: Breakdown
+		lineageTag: ef86b15d-576e-5c1b-a15b-21e9bd08bb23
+
+	measure 'Gap Eligible' =
+			CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[analysis_group] = "Not expanded by 2023", breakdown_trend[category] = "At or below 138% of poverty (eligible)" )
+			- CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[analysis_group] = "Expanded 2014", breakdown_trend[category] = "At or below 138% of poverty (eligible)" )
+		formatString: 0" pts"
+		displayFolder: Breakdown
+		lineageTag: 0aa05aa5-e1e2-5367-a80a-5ca677f8586f
+
+	measure 'Gap Not Eligible' =
+			CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[analysis_group] = "Not expanded by 2023", breakdown_trend[category] = "138-400% of poverty (not eligible)" )
+			- CALCULATE ( AVERAGE ( breakdown_trend[pct_uninsured] ), breakdown_trend[analysis_group] = "Expanded 2014", breakdown_trend[category] = "138-400% of poverty (not eligible)" )
+		formatString: 0" pts"
+		displayFolder: Breakdown
+		lineageTag: 938e9829-4144-525d-ab05-14b6c809f1c2
+
+	column dimension
+		dataType: string
+		lineageTag: 6d411454-6caa-5e91-9533-24e99827840d
+		summarizeBy: none
+		sourceColumn: dimension
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: c2d17d43-e9a6-5169-9ac0-a51317ac806d
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column analysis_group
+		dataType: string
+		lineageTag: 37e1d0f3-c089-5e7a-b199-e96a4b0e45c9
+		summarizeBy: none
+		sourceColumn: analysis_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 15efd37e-6b38-5027-8303-ba544bc14371
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_uninsured
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 58cba29b-8383-50a2-9680-7d841f3857b1
+		summarizeBy: sum
+		sourceColumn: pct_uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_label
+		dataType: string
+		sortByColumn: row_order
+		lineageTag: 2bfe86ff-2cba-52a0-9f87-a14fcef6489d
+		summarizeBy: none
+		sourceColumn: row_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column row_order
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 651d32bb-a473-5db8-866b-fec6d272a90a
+		summarizeBy: none
+		sourceColumn: row_order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition breakdown_trend = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "breakdown_trend.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"dimension", type text}, {"category", type text}, {"analysis_group", type text}, {"year", Int64.Type}, {"pct_uninsured", type number}, {"row_label", type text}, {"row_order", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,198 @@
+table state_year
+	lineageTag: 5cdfd694-39ea-59a7-b978-9979edd0b9ea
+
+	measure 'State Rate' = DIVIDE ( SUM ( state_year[uninsured] ), SUM ( state_year[population] ) )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: 887e6e54-0f2c-5c7c-87f3-c481946945fa
+
+	measure 'State Rate 2023' = CALCULATE ( [State Rate], state_year[year] = 2023 )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: 81a10e50-0b2c-527d-ac95-3c3f3fef0371
+
+	measure 'State Rate 2013' = CALCULATE ( [State Rate], state_year[year] = 2013 )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: 6a0b9278-4eb4-5c4b-b826-95b8349287de
+
+	measure 'State Change' = ( [State Rate 2023] - [State Rate 2013] ) * 100
+		formatString: +0.0" pts";-0.0" pts";0.0" pts"
+		displayFolder: States
+		lineageTag: 55074c90-b784-56d9-922b-8b4dd918fd06
+
+	measure 'Top 10 Uninsured 2023' =
+			// ranks every state, whatever is clicked on the map (REMOVEFILTERS, not ALLSELECTED)
+			VAR _cur = [State Rate 2023]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( state_year[state_name] ), "@r", [State Rate 2023] ),
+			    REMOVEFILTERS ( state_year ), REMOVEFILTERS ( StateGrid ) )
+			RETURN IF ( NOT ISBLANK ( _cur ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: da7bcdf4-605e-577c-95db-583d5a0b086a
+
+	measure 'Top 10 Drop' =
+			VAR _cur = [State Change]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( state_year[state_name] ), "@c", [State Change] ),
+			    REMOVEFILTERS ( state_year ), REMOVEFILTERS ( StateGrid ) )
+			RETURN IF ( NOT ISBLANK ( _cur ) && COUNTROWS ( FILTER ( _all, [@c] < _cur ) ) < 5, _cur )
+		formatString: +0.0" pts";-0.0" pts";0.0" pts"
+		displayFolder: States
+		lineageTag: 3bb8604f-c2e5-5c52-8e7c-e2ff8d596f79
+
+	measure 'Top 10 Drop 2013' = IF ( NOT ISBLANK ( [Top 10 Drop] ), [State Rate 2013] )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: af887aaf-9ae3-5cdb-a2b9-244f54035c60
+
+	measure 'Top 10 Drop 2023' = IF ( NOT ISBLANK ( [Top 10 Drop] ), [State Rate 2023] )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: 18e84ca3-ca04-5bf2-8f4d-40c0700b34a2
+
+	measure 'Status Colour' =
+			SWITCH ( SELECTEDVALUE ( state_year[analysis_group] ),
+			    "Not expanded by 2023", "#D1603D",
+			    "Excluded (early coverage)", "#CFCCC4",
+			    "#1D4E89" )
+		displayFolder: States
+		lineageTag: 6a0ed853-eb3f-51dd-a635-faa42563efb5
+
+	measure 'Tile Label' = SELECTEDVALUE ( StateGrid[state_abbr] )
+		displayFolder: Map
+		lineageTag: 89d8f190-b931-5bc7-bea1-831f934f7240
+
+	measure 'Rate Colour' =
+			VAR _r = [State Rate 2023]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( SELECTEDVALUE ( StateGrid[state_abbr] ) ), "#FFFFFF",
+			    ISBLANK ( _r ), "#E6E3DC",
+			    _r < 0.12, "#FFF1CF",
+			    _r < 0.16, "#FDD89A",
+			    _r < 0.20, "#F9B461",
+			    _r < 0.25, "#E8843A",
+			    _r < 0.30, "#C4561D",
+			    "#8A3510" )
+		displayFolder: Map
+		lineageTag: 69b59007-c77a-5e92-8c18-669a367652d2
+
+	measure 'Label Colour' = IF ( [State Rate 2023] >= 0.25, "#FFFFFF", "#1B1B1B" )
+		displayFolder: Map
+		lineageTag: 83c30007-bb30-5ae5-ba04-2d1c5b3dc0ff
+
+	measure 'Border Colour' = "#F7F5EF"
+		displayFolder: Map
+		lineageTag: a6771a6e-cec0-5f5f-98fb-8e8302cad62b
+
+	measure 'Selected State' = SELECTEDVALUE ( state_year[state_name], "All states" )
+		displayFolder: Tooltip
+		lineageTag: fa3cc5e1-4159-5745-935f-cc0ab5ccc5f3
+
+	measure 'Status Text' =
+			VAR _g = SELECTEDVALUE ( state_year[analysis_group] )
+			VAR _y = SELECTEDVALUE ( state_year[expansion_year] )
+			RETURN SWITCH ( TRUE (),
+			    _g = "Excluded (early coverage)", "Covered low-income adults before 2014",
+			    _g = "Not expanded by 2023" && ISBLANK ( _y ), "Has not expanded Medicaid",
+			    _g = "Not expanded by 2023", "Expanded in late 2023",
+			    "Expansion in effect from " & _y )
+		displayFolder: Tooltip
+		lineageTag: b3871eb1-2f1f-5f41-a417-787b5b444e95
+
+	measure 'Rank Text' =
+			VAR _cur = [State Rate 2023]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( state_year[state_name] ), "@r", [State Rate 2023] ),
+			    REMOVEFILTERS ( state_year ), REMOVEFILTERS ( StateGrid ) )
+			RETURN IF ( HASONEVALUE ( state_year[state_name] ), "#" & COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) + 1 & " of 51 for uninsured rate (2023)" )
+		displayFolder: Tooltip
+		lineageTag: 359fa53b-ff70-5cd4-89d0-e9eb49536459
+
+	column state_abbrev
+		dataType: string
+		lineageTag: c837c9b2-0734-5b2a-87ee-8afad2a667d4
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: 605f4ff2-fc00-53b9-9f0b-f59c8da9d45e
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column analysis_group
+		dataType: string
+		lineageTag: 89ade089-287a-5af6-956b-b2809857d459
+		summarizeBy: none
+		sourceColumn: analysis_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column expansion_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 3482f211-6a4b-5ba0-b7af-414a235136c5
+		summarizeBy: none
+		sourceColumn: expansion_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column in_study
+		dataType: boolean
+		isHidden
+		lineageTag: 9b331021-f615-53f1-9405-2cff6cd409f2
+		summarizeBy: none
+		sourceColumn: in_study
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 328822ab-f1c2-5ece-9e09-ae8066b634bb
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a917b99-0568-5460-9f70-7fa83ab7eef6
+		summarizeBy: sum
+		sourceColumn: uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	column population
+		dataType: int64
+		formatString: 0
+		lineageTag: 27a47a2e-7870-513c-9b5a-0e3cc9b860c8
+		summarizeBy: sum
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_uninsured
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 20e53654-68dc-5212-9452-f12ecf7ec03d
+		summarizeBy: sum
+		sourceColumn: pct_uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	partition state_year = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "state_year.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"state_abbrev", type text}, {"state_name", type text}, {"analysis_group", type text}, {"expansion_year", Int64.Type}, {"in_study", type logical}, {"year", Int64.Type}, {"uninsured", Int64.Type}, {"population", Int64.Type}, {"pct_uninsured", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

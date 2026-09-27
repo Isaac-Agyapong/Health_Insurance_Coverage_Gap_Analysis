@@ -1,0 +1,89 @@
+table ml_state_predictions
+	lineageTag: fcbeb912-155d-51c6-8651-4212859a22ff
+
+	measure 'State Adults Gaining' = CALCULATE ( SUM ( ml_state_predictions[adults_gaining_coverage] ), ml_state_predictions[expanded_late_2023] = FALSE () )
+		formatString: #,0
+		displayFolder: ML
+		lineageTag: f350709e-6af6-50d2-aa12-9f97d7a3f8ee
+
+	column state
+		dataType: string
+		lineageTag: c4bfa70f-4f00-5253-9556-b7ccbe7371db
+		summarizeBy: none
+		sourceColumn: state
+
+		annotation SummarizationSetBy = Automatic
+
+	column counties
+		dataType: int64
+		formatString: 0
+		lineageTag: f44311d9-95f4-5c51-806a-0a3218c31d77
+		summarizeBy: sum
+		sourceColumn: counties
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: da1251c4-ad5f-5cfd-a469-70d66ca11291
+		summarizeBy: sum
+		sourceColumn: uninsured_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_income_adults
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 413035d4-0bc4-522b-b2aa-e0b582d274d2
+		summarizeBy: sum
+		sourceColumn: low_income_adults
+
+		annotation SummarizationSetBy = Automatic
+
+	column adults_gaining_coverage
+		dataType: double
+		formatString: #,0.00
+		lineageTag: d0d7dde1-f280-5bc8-8125-48ef4db96cd9
+		summarizeBy: sum
+		sourceColumn: adults_gaining_coverage
+
+		annotation SummarizationSetBy = Automatic
+
+	column rate_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: d4b6d528-f5f7-5e0e-bea1-36f1bbcf13b7
+		summarizeBy: sum
+		sourceColumn: rate_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_rate_after
+		dataType: double
+		formatString: #,0.00
+		lineageTag: e87cd299-0ddc-5f95-b137-a139f0c46432
+		summarizeBy: sum
+		sourceColumn: predicted_rate_after
+
+		annotation SummarizationSetBy = Automatic
+
+	column expanded_late_2023
+		dataType: boolean
+		lineageTag: cae59350-1afe-563c-acfd-ebf5341b4923
+		summarizeBy: none
+		sourceColumn: expanded_late_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ml_state_predictions = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "ml_state_predictions.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"state", type text}, {"counties", Int64.Type}, {"uninsured_2023", type number}, {"low_income_adults", type number}, {"adults_gaining_coverage", type number}, {"rate_2023", type number}, {"predicted_rate_after", type number}, {"expanded_late_2023", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

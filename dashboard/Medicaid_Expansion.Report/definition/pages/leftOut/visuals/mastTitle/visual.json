@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "mastTitle",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Health Insurance Coverage Gap & Medicaid Expansion Impact",
+                    "textStyle": {
+                      "fontSize": "19pt",
+                      "color": "#FFFFFF",
+                      "fontWeight": "bold",
+                      "fontFamily": "Georgia"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "ANALYTICS + MACHINE LEARNING   \u00b7   3,143 US COUNTIES   \u00b7   2008-2023",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#D99A1E",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 16,
+    "y": 2,
+    "z": 1000,
+    "height": 64,
+    "width": 920,
+    "tabOrder": 1000
+  }
+}

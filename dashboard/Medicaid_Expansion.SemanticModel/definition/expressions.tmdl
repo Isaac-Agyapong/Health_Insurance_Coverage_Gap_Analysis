@@ -1,0 +1,4 @@
+expression DataFolder = "D:\Projects\Medicaid_Expansion_Coverage_Analysis\dashboard\data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: a2e2220e-230b-5c61-9286-75acbd180370
+
+	annotation PBI_ResultType = Text

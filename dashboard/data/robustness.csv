@@ -1,0 +1,5 @@
+metric,value,ci_low,ci_high,order,label
+Effect of expansion (years 0-2),-6.408894277426078,-7.843365953238134,-4.231214906238293,1,Main estimate
+Effect without county adjustment,-6.327713574201422,-8.00468218514053,-4.593251207845141,2,No county adjustment
+Adults 138-400% of poverty (not made eligible),-2.762002499582431,-3.872700793689574,-1.4433121861363938,3,Not made eligible (138-400%)
+Placebo: fake 2011 expansion date,0.03661403886364036,-0.8407029966409201,1.405271104113363,4,Fake 2011 date (placebo)

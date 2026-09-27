@@ -18,3 +18,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Fitted causal forest (44 MB): rebuilt by Python/06_ml_county_effects.py; predictions are saved as CSVs
+models/*.joblib

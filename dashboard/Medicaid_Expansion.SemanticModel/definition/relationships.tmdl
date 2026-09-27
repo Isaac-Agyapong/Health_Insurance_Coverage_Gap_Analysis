@@ -1,0 +1,3 @@
+relationship 18fc4097-49ba-5264-8ba4-f12447163298
+	fromColumn: state_year.state_abbrev
+	toColumn: StateGrid.state_abbr

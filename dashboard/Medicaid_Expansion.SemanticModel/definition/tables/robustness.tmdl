@@ -1,0 +1,77 @@
+table robustness
+	lineageTag: 1fdb87cd-861b-5be0-b342-85beb67622bb
+
+	measure Estimate = SUM ( robustness[value] )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: Causal
+		lineageTag: dd5f93d1-2617-5a45-b52c-3702bea54c38
+
+	measure 'Estimate Colour' = IF ( SELECTEDVALUE ( robustness[order] ) = 1, "#1D4E89", "#D99A1E" )
+		displayFolder: Causal
+		lineageTag: 06250bc3-1d68-52da-9c41-1983e568b861
+
+	column metric
+		dataType: string
+		lineageTag: 508fea56-2846-5b42-b3f2-13999285930a
+		summarizeBy: none
+		sourceColumn: metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column value
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 99320912-1ea9-5e5b-824e-bf808d7fa5d2
+		summarizeBy: sum
+		sourceColumn: value
+
+		annotation SummarizationSetBy = Automatic
+
+	column ci_low
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 18d97ae3-0421-5dfa-b429-7d09271b1681
+		summarizeBy: sum
+		sourceColumn: ci_low
+
+		annotation SummarizationSetBy = Automatic
+
+	column ci_high
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 760c0694-b319-57f1-ac74-a310ac240971
+		summarizeBy: sum
+		sourceColumn: ci_high
+
+		annotation SummarizationSetBy = Automatic
+
+	column order
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 0b870e0a-becd-5353-9a70-f93a9870fabc
+		summarizeBy: none
+		sourceColumn: order
+
+		annotation SummarizationSetBy = Automatic
+
+	column label
+		dataType: string
+		sortByColumn: order
+		lineageTag: a4f6d13c-10dd-5e2e-ba7a-f22ee151065c
+		summarizeBy: none
+		sourceColumn: label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition robustness = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "robustness.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"metric", type text}, {"value", type number}, {"ci_low", type number}, {"ci_high", type number}, {"order", Int64.Type}, {"label", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

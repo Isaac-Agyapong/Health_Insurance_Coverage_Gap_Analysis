@@ -1,0 +1,21 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table group_trend
+ref table state_year
+ref table breakdown_trend
+ref table county_2023
+ref table event_study
+ref table model_metrics
+ref table robustness
+ref table ml_validation
+ref table ml_state_predictions
+ref table ml_county_predictions
+ref table StateGrid

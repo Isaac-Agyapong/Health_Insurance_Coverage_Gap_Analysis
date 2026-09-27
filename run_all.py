@@ -21,6 +21,7 @@ STEPS = [
     ("06_ml_county_effects.py", "causal forest: county effects and predictions"),
     ("04_build_notebook.py", "build and execute Python/04_analysis.ipynb"),
     ("07_export_powerbi.py", "export tables for the Power BI report"),
+    ("08_build_powerbi_project.py", "generate the Power BI project (PBIP)"),
 ]
 
 

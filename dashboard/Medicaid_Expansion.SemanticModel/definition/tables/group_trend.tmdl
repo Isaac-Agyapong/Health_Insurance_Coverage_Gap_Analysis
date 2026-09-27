@@ -1,0 +1,117 @@
+table group_trend
+	lineageTag: b2371ab9-d05a-512f-b476-66cd9901b7b4
+
+	column 'Coverage Group' =
+			SWITCH ( group_trend[analysis_group],
+			    "Not expanded by 2023", "Not expanded",
+			    "Excluded (early coverage)", "Covered before 2014",
+			    "Expanded" )
+		dataType: string
+		lineageTag: 6a2b98df-6fe7-5410-b7ec-d209b525986e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'Uninsured Rate' = DIVIDE ( SUM ( group_trend[uninsured] ), SUM ( group_trend[population] ) )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Trend
+		lineageTag: 8734729b-711e-553d-b119-8fa727040aee
+
+	measure 'Expanded in 2014' = CALCULATE ( [Uninsured Rate], group_trend[analysis_group] = "Expanded 2014" )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Trend
+		lineageTag: 74db9273-a499-57dd-ac71-8941da891a2e
+
+	measure 'Not expanded' = CALCULATE ( [Uninsured Rate], group_trend[analysis_group] = "Not expanded by 2023" )
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Trend
+		lineageTag: 405cdaf7-a3e5-5e59-be96-426646656ebe
+
+	measure 'Exp Rate 2023' = CALCULATE ( [Expanded in 2014], group_trend[year] = 2023 )
+		formatString: 0%
+		displayFolder: Trend
+		lineageTag: d4a5d4e0-0869-50e8-9b4e-29a7bcbf3664
+
+	measure 'Exp Rate 2013' = CALCULATE ( [Expanded in 2014], group_trend[year] = 2013 )
+		formatString: 0%
+		displayFolder: Trend
+		lineageTag: ae473993-416c-50c3-b745-1e74c5227475
+
+	measure 'NonExp Rate 2023' = CALCULATE ( [Not expanded], group_trend[year] = 2023 )
+		formatString: 0%
+		displayFolder: Trend
+		lineageTag: 1101828d-2019-5cbc-97b4-7802d585c7f7
+
+	measure 'NonExp Rate 2013' = CALCULATE ( [Not expanded], group_trend[year] = 2013 )
+		formatString: 0%
+		displayFolder: Trend
+		lineageTag: 1fed9824-afbf-562c-993a-68c8f5b21ca2
+
+	measure 'KPI Exp Context' = "was " & FORMAT ( [Exp Rate 2013], "0%" ) & " in 2013  ·  down " & FORMAT ( ( [Exp Rate 2013] - [Exp Rate 2023] ) * 100, "0" ) & " points"
+		displayFolder: Context
+		lineageTag: f36f4dc8-25e4-5d84-96ae-5defe348ab68
+
+	measure 'KPI NonExp Context' = "was " & FORMAT ( [NonExp Rate 2013], "0%" ) & " in 2013  ·  down " & FORMAT ( ( [NonExp Rate 2013] - [NonExp Rate 2023] ) * 100, "0" ) & " points"
+		displayFolder: Context
+		lineageTag: f4909994-26b6-523e-80c2-5e64b1ed6a3c
+
+	measure 'Uninsured 2023' = CALCULATE ( SUM ( group_trend[uninsured] ), group_trend[year] = 2023 )
+		formatString: #,0
+		displayFolder: Trend
+		lineageTag: f0d87f94-c574-5f67-bca5-2ba3dbc2aefa
+
+	column analysis_group
+		dataType: string
+		lineageTag: 35635528-18b2-5947-87db-a347d266510f
+		summarizeBy: none
+		sourceColumn: analysis_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: f04d99a2-4b0e-59d4-b1e4-b860537b696c
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured
+		dataType: int64
+		formatString: 0
+		lineageTag: 7a795f0a-96d1-59a8-9e71-d6c5d500bf18
+		summarizeBy: sum
+		sourceColumn: uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	column population
+		dataType: int64
+		formatString: 0
+		lineageTag: dfba3bfe-d260-55d8-87f3-ca2c37721b0c
+		summarizeBy: sum
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_uninsured
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 7aa95572-c151-537e-86a9-a1cda2339e1f
+		summarizeBy: sum
+		sourceColumn: pct_uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	partition group_trend = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "group_trend.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"analysis_group", type text}, {"year", Int64.Type}, {"uninsured", Int64.Type}, {"population", Int64.Type}, {"pct_uninsured", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

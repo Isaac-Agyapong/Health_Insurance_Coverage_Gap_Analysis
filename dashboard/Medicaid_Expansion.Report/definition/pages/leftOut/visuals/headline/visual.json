@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "headline",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Hispanic adults and people in non-expansion states are the most likely to be uninsured today",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "color": "#1B1B1B",
+                      "fontWeight": "bold",
+                      "fontFamily": "Georgia"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Uninsured rate in 2023: states that expanded in 2014 vs states that had not expanded by 2023",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#55524C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 20,
+    "y": 115,
+    "z": 6000,
+    "height": 56,
+    "width": 1240,
+    "tabOrder": 6000
+  }
+}

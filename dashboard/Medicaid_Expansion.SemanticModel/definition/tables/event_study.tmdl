@@ -1,0 +1,67 @@
+table event_study
+	lineageTag: 5740d7f2-6348-5103-a2f2-35ad1a97fd27
+
+	measure Effect = SUM ( event_study[att] )
+		formatString: 0.0" pts"
+		displayFolder: Causal
+		lineageTag: 3d29e1f3-7c03-5bb6-8e5b-6f10e1d4a294
+
+	measure 'Effect Colour' = IF ( SELECTEDVALUE ( event_study[years_since_expansion] ) < 0, "#CFCCC4", "#1D4E89" )
+		displayFolder: Causal
+		lineageTag: ab632515-c5a2-5952-9d35-36c03fcf973e
+
+	column years_since_expansion
+		dataType: int64
+		formatString: 0
+		lineageTag: 32567aa2-b6be-5150-8431-528841253740
+		summarizeBy: none
+		sourceColumn: years_since_expansion
+
+		annotation SummarizationSetBy = Automatic
+
+	column att
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 118ed8ac-49ee-50f6-95c6-96f20ae31909
+		summarizeBy: sum
+		sourceColumn: att
+
+		annotation SummarizationSetBy = Automatic
+
+	column lo
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 86310665-103c-5a11-8dde-0af70a9b36ca
+		summarizeBy: sum
+		sourceColumn: lo
+
+		annotation SummarizationSetBy = Automatic
+
+	column hi
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c5fb04aa-a182-5832-aa35-9ba121a31cb4
+		summarizeBy: sum
+		sourceColumn: hi
+
+		annotation SummarizationSetBy = Automatic
+
+	column period
+		dataType: string
+		lineageTag: ffe63967-b40e-50a8-98ea-d46ed1436e47
+		summarizeBy: none
+		sourceColumn: period
+
+		annotation SummarizationSetBy = Automatic
+
+	partition event_study = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "event_study.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"years_since_expansion", Int64.Type}, {"att", type number}, {"lo", type number}, {"hi", type number}, {"period", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

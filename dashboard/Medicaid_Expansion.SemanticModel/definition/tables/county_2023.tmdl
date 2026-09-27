@@ -1,0 +1,105 @@
+table county_2023
+	lineageTag: d1a74ca1-630f-586d-aeee-a1efbdf57ef5
+
+	measure 'County Uninsured' = SUM ( county_2023[uninsured] )
+		formatString: #,0
+		displayFolder: Counties
+		lineageTag: 43802ee2-e12c-5838-95de-29aae54fc12b
+
+	measure 'County Rate' = DIVIDE ( SUM ( county_2023[uninsured] ), SUM ( county_2023[population] ) )
+		formatString: 0%
+		displayFolder: Counties
+		lineageTag: e6cd817e-6643-55bd-a256-4feedea21112
+
+	measure 'Top 10 County Uninsured' =
+			VAR _cur = [County Uninsured]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( county_2023[county_fips] ), "@u", [County Uninsured] ), REMOVEFILTERS ( county_2023 ) )
+			RETURN IF ( HASONEVALUE ( county_2023[county_fips] ) && COUNTROWS ( FILTER ( _all, [@u] > _cur ) ) < 10, _cur )
+		formatString: #,0
+		displayFolder: Counties
+		lineageTag: 055ed243-7017-5293-b535-08f1d3dbe048
+
+	measure 'Top 10 County Rate' = IF ( NOT ISBLANK ( [Top 10 County Uninsured] ), [County Rate] )
+		formatString: 0%
+		displayFolder: Counties
+		lineageTag: a165d4bc-63f2-5bca-8907-53fb411f8953
+
+	column county_fips
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d81388d-6d36-5afa-9fcf-6e2c91b4f569
+		summarizeBy: sum
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: ad50b435-0c38-5479-8d02-bf0cfd4de907
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_abbrev
+		dataType: string
+		lineageTag: b50067dd-e0a2-5b71-bd64-a02650118782
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column analysis_group
+		dataType: string
+		lineageTag: f64ebefc-4ebc-55f3-b036-f9c924241779
+		summarizeBy: none
+		sourceColumn: analysis_group
+
+		annotation SummarizationSetBy = Automatic
+
+	column rurality
+		dataType: string
+		lineageTag: 074be376-dcb8-5894-87e0-a6c90c81a5d0
+		summarizeBy: none
+		sourceColumn: rurality
+
+		annotation SummarizationSetBy = Automatic
+
+	column pct_uninsured
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 418ba3af-3e98-53ed-a461-fe6766a39933
+		summarizeBy: sum
+		sourceColumn: pct_uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured
+		dataType: int64
+		formatString: 0
+		lineageTag: 79dabe39-c74c-5228-8339-6ddc1ef110b9
+		summarizeBy: sum
+		sourceColumn: uninsured
+
+		annotation SummarizationSetBy = Automatic
+
+	column population
+		dataType: int64
+		formatString: 0
+		lineageTag: 63bee738-f671-5ef7-9fd2-317e08f05c4c
+		summarizeBy: sum
+		sourceColumn: population
+
+		annotation SummarizationSetBy = Automatic
+
+	partition county_2023 = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "county_2023.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", Int64.Type}, {"county_name", type text}, {"state_abbrev", type text}, {"analysis_group", type text}, {"rurality", type text}, {"pct_uninsured", type number}, {"uninsured", Int64.Type}, {"population", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

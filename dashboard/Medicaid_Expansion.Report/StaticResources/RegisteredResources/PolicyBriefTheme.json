@@ -1,0 +1,22 @@
+{
+  "name": "Policy Brief",
+  "dataColors": [
+    "#1D4E89",
+    "#D1603D",
+    "#D99A1E",
+    "#8A8780",
+    "#4F7CB3",
+    "#9FB6D4",
+    "#EFB7A3",
+    "#6B6860"
+  ],
+  "foreground": "#1B1B1B",
+  "background": "#FFFFFF",
+  "tableAccent": "#1D4E89",
+  "textClasses": {
+    "title": {
+      "fontFace": "Georgia",
+      "color": "#1B1B1B"
+    }
+  }
+}
