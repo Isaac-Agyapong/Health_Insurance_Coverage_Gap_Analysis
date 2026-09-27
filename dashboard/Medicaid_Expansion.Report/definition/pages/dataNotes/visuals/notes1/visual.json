@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Would gain coverage: our estimate of how many more adults would be insured if the state expanded",
+                    "value": "\u2022  Would gain coverage: the model's estimate of how many more adults would be insured if the state expanded",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"

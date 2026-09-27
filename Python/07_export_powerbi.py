@@ -95,7 +95,7 @@ def main():
     wi["year"] = wi.year.astype(int)
     save(wi[["year", "actual", "without_expansion"]], "what_if")
     last = wi.set_index("year").loc[2023]
-    save(pd.DataFrame({"scenario": ["With expansion (what happened)", "Without expansion (our estimate)"],
+    save(pd.DataFrame({"scenario": ["With expansion (what happened)", "Without expansion (estimated)"],
                        "rate": [last.actual, last.without_expansion], "order": [1, 2]}), "scenario_2023")
 
     # ---- causal results (difference-in-differences)

@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Can we trust this result?",
+                    "value": "Can this result be trusted?",
                     "textStyle": {
                       "fontSize": "15pt",
                       "color": "#1F2D3D",

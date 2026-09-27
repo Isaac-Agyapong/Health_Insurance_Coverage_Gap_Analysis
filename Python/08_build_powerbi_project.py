@@ -925,7 +925,7 @@ def build_pages():
                  **labels(26, labelDisplayUnits=lit("1D")), "dataPoint": fill_by("scenario_2023", "Scenario Colour")}))
     check = lambda t: [("✓  ", 14, True, EXP), (t, 12, False, INK)]
     p4.add("checks", X0 + 796, TOP + 128, W - 796, 384, textbox(
-        [("Can we trust this result?", 15, True, INK, FONT), ("", 6, False, INK),
+        [("Can this result be trusted?", 15, True, INK, FONT), ("", 6, False, INK),
          check("Before 2014, both groups of counties were on the same path, so the comparison is fair."),
          ("", 6, False, INK),
          check("Pretending expansion happened in 2011, when it did not, shows no effect, as it should."),
@@ -954,7 +954,7 @@ def build_pages():
     p5.add("validation", X0 + 396, TOP + 128, 340, 384, chart(
         "clusteredColumnChart", {"Category": [C("ml_validation", "label", "Counties, by the model's ranking")],
                                  "Y": [MN("Actual Drop", "Fewer uninsured in every 100 (what really happened)")]},
-        "We tested the model on states it had never seen",
+        "I tested the model on states it had never seen",
         "The counties it ranked highest really did gain the most. Bars = fewer uninsured in every 100 after expansion.",
         sort=(C("ml_validation", "label"), "Ascending"),
         objects={**axes(show_value=False, cat_size=10), **labels(12), "dataPoint": fill_by("ml_validation", "Validation Colour")}))
@@ -1014,7 +1014,7 @@ def build_pages():
             "Uninsured: has no health insurance of any kind",
             "Medicaid expansion: a state lets these adults get Medicaid; 40 states and DC have done it since 2014",
             "\"6 in 100\": for every 100 low-income adults, 6 fewer are uninsured",
-            "Would gain coverage: our estimate of how many more adults would be insured if the state expanded"]),
+            "Would gain coverage: the model's estimate of how many more adults would be insured if the state expanded"]),
         ("Where the data comes from", [
             "US Census Bureau Small Area Health Insurance Estimates (SAHIE), 2008-2023, every county",
             "KFF tracker of when each state expanded Medicaid",

@@ -285,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'We tested the model on states it had never seen'"
+                  "Value": "'I tested the model on states it had never seen'"
                 }
               }
             },
