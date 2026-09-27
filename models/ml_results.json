@@ -118,7 +118,7 @@
     },
     {
       "group": 2,
-      "predicted": -5.851128272921571,
+      "predicted": -5.851128272921572,
       "actual_effect": -6.712474849809989
     },
     {
@@ -163,7 +163,7 @@
       "Highest": -8.2
     }
   },
-  "nonexpansion_total_adults_gaining": 529029.8761756871,
+  "nonexpansion_total_adults_gaining": 529029.876175687,
   "nonexpansion_total_ci_note": "sum of county point estimates; county 95% intervals in ml_nonexpansion_county_predictions.csv",
   "nonexpansion_uninsured_2023": 2896289.9860000005,
   "nonexpansion_counties": 970

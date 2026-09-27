@@ -35,7 +35,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#55524C'"
+                      "Value": "'#FDE2EA'"
                     }
                   }
                 }
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#55524C'"
+                      "Value": "'#5B6B7C'"
                     }
                   }
                 }
@@ -106,7 +106,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -128,7 +128,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -146,7 +146,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -160,6 +160,45 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D63F6C'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D63F6C'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }
@@ -186,7 +225,7 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "16D"
                 }
               }
             },
@@ -217,11 +256,11 @@
     "drillFilterOtherVisuals": true
   },
   "position": {
-    "x": 338,
-    "y": 256,
-    "z": 15000,
+    "x": 340,
+    "y": 214,
+    "z": 12000,
     "height": 26,
-    "width": 292,
-    "tabOrder": 15000
+    "width": 288,
+    "tabOrder": 12000
   }
 }

@@ -242,15 +242,15 @@ def charts(es, es_u, r):
     # event study
     fig, ax = plt.subplots(figsize=(9.5, 5))
     ax.axhline(0, color=vs.GREY, lw=0.8)
-    ax.axvspan(-0.5, 8.5, color=vs.NAVY, alpha=0.04, lw=0)
-    ax.fill_between(es.e, es.lo, es.hi, color=vs.NAVY, alpha=0.15, lw=0, label="95% confidence interval")
-    ax.plot(es.e, es.att, color=vs.NAVY, marker="o", ms=5, label="Estimated effect of expansion")
+    ax.axvspan(-0.5, 8.5, color=vs.EXP, alpha=0.04, lw=0)
+    ax.fill_between(es.e, es.lo, es.hi, color=vs.EXP, alpha=0.15, lw=0, label="95% confidence interval")
+    ax.plot(es.e, es.att, color=vs.EXP, marker="o", ms=5, label="Estimated effect of expansion")
     ax.plot(es_u.e, es_u.att, color=vs.GREY, lw=1.2, ls="--", label="Same, without adjusting for county traits")
     for e, v in es[es.e.isin([0, 2, 8])][["e", "att"]].values:
-        ax.annotate(f"{v:.1f} pts", (e, v), xytext=(10, 12), textcoords="offset points", color=vs.NAVY,
+        ax.annotate(f"{v:.1f} pts", (e, v), xytext=(10, 12), textcoords="offset points", color=vs.EXP,
                     fontsize=10, fontweight="bold", bbox=dict(boxstyle="round,pad=0.2", fc=vs.PAPER, ec="none"))
     ax.text(-4.8, 1.2, "Before expansion:\nno difference in trends", color=vs.INK_2, fontsize=9.5)
-    ax.text(3.2, -4, "After expansion", color=vs.NAVY, fontsize=9.5)
+    ax.text(3.2, -4, "After expansion", color=vs.EXP, fontsize=9.5)
     ax.set_xlabel("Years since the state expanded Medicaid")
     ax.set_ylabel("Change in uninsured rate (percentage points)")
     ax.set_xticks(range(-5, 9))
@@ -262,10 +262,10 @@ def charts(es, es_u, r):
     vs.save(fig, "05_event_study")
 
     # robustness summary
-    rows = [("Main estimate (adjusted, years 0-2)", r["adjusted"]["att_years_0_2"], r["adjusted"]["ci"], vs.NAVY),
-            ("Without county adjustment", r["unadjusted"]["att_years_0_2"], r["unadjusted"]["ci"], vs.NAVY_LIGHT),
-            ("Adults 138-400% of poverty\n(not made eligible)", r["placebo_138_400"]["att_years_0_2"], r["placebo_138_400"]["ci"], vs.GOLD),
-            ("Placebo: fake 2011 expansion date", r["placebo_fake_2011"]["att"], r["placebo_fake_2011"]["ci"], vs.GOLD)]
+    rows = [("Main estimate (adjusted, years 0-2)", r["adjusted"]["att_years_0_2"], r["adjusted"]["ci"], vs.EXP),
+            ("Without county adjustment", r["unadjusted"]["att_years_0_2"], r["unadjusted"]["ci"], vs.EXP_L),
+            ("Adults 138-400% of poverty\n(not made eligible)", r["placebo_138_400"]["att_years_0_2"], r["placebo_138_400"]["ci"], vs.SUN),
+            ("Placebo: fake 2011 expansion date", r["placebo_fake_2011"]["att"], r["placebo_fake_2011"]["ci"], vs.SUN)]
     fig, ax = plt.subplots(figsize=(9.5, 4.2))
     for i, (lab, v, ci, col) in enumerate(rows[::-1]):
         ax.plot(ci, [i, i], color=col, lw=3, alpha=0.5, solid_capstyle="round")

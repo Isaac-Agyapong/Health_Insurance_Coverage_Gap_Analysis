@@ -52,9 +52,9 @@ table state_year
 
 	measure 'Status Colour' =
 			SWITCH ( SELECTEDVALUE ( state_year[analysis_group] ),
-			    "Not expanded by 2023", "#D1603D",
-			    "Excluded (early coverage)", "#CFCCC4",
-			    "#1D4E89" )
+			    "Not expanded by 2023", "#D63F6C",
+			    "Excluded (early coverage)", "#CDD3DA",
+			    "#0E9F6E" )
 		displayFolder: States
 		lineageTag: 6a0ed853-eb3f-51dd-a635-faa42563efb5
 
@@ -66,21 +66,21 @@ table state_year
 			VAR _r = [State Rate 2023]
 			RETURN SWITCH ( TRUE (),
 			    ISBLANK ( SELECTEDVALUE ( StateGrid[state_abbr] ) ), "#FFFFFF",
-			    ISBLANK ( _r ), "#E6E3DC",
-			    _r < 0.12, "#FFF1CF",
-			    _r < 0.16, "#FDD89A",
-			    _r < 0.20, "#F9B461",
-			    _r < 0.25, "#E8843A",
-			    _r < 0.30, "#C4561D",
-			    "#8A3510" )
+			    ISBLANK ( _r ), "#E6EAE4",
+			    _r < 0.12, "#EEEAF7",
+			    _r < 0.16, "#D2C8EE",
+			    _r < 0.20, "#A999DD",
+			    _r < 0.25, "#7E6CC7",
+			    _r < 0.30, "#5A48A8",
+			    "#3B2B7A" )
 		displayFolder: Map
 		lineageTag: 69b59007-c77a-5e92-8c18-669a367652d2
 
-	measure 'Label Colour' = IF ( [State Rate 2023] >= 0.25, "#FFFFFF", "#1B1B1B" )
+	measure 'Label Colour' = IF ( [State Rate 2023] >= 0.20, "#FFFFFF", "#1F2D3D" )
 		displayFolder: Map
 		lineageTag: 83c30007-bb30-5ae5-ba04-2d1c5b3dc0ff
 
-	measure 'Border Colour' = "#F7F5EF"
+	measure 'Border Colour' = "#F5F6F1"
 		displayFolder: Map
 		lineageTag: a6771a6e-cec0-5f5f-98fb-8e8302cad62b
 

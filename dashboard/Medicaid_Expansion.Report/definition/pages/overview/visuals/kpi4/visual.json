@@ -35,7 +35,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#D99A1E'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -44,14 +44,14 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "27D"
+                  "Value": "30D"
                 }
               }
             },
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Georgia'"
+                  "Value": "'Bahnschrift'"
                 }
               }
             }
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#55524C'"
+                      "Value": "'#4A3B00'"
                     }
                   }
                 }
@@ -106,7 +106,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#F5B700'"
                     }
                   }
                 }
@@ -128,7 +128,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#F5B700'"
                     }
                   }
                 }
@@ -146,7 +146,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -160,6 +160,45 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5B700'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#F5B700'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }
@@ -217,11 +256,11 @@
     "drillFilterOtherVisuals": true
   },
   "position": {
-    "x": 962,
-    "y": 176,
-    "z": 22000,
+    "x": 964,
+    "y": 134,
+    "z": 19000,
     "height": 80,
-    "width": 292,
-    "tabOrder": 22000
+    "width": 288,
+    "tabOrder": 19000
   }
 }

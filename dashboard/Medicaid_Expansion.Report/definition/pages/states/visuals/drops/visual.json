@@ -151,7 +151,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -160,7 +160,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -173,7 +173,106 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Custom'"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "88D"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }
@@ -200,14 +299,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "16D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "16D"
                 }
               }
             }
@@ -236,7 +335,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1B1B1B'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -259,7 +358,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Georgia'"
+                  "Value": "'Bahnschrift'"
                 }
               }
             }
@@ -324,9 +423,16 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1B1B1B'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Bahnschrift'"
                 }
               }
             }
@@ -368,7 +474,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#9FB6D4'"
+                        "Value": "'#9BDCC3'"
                       }
                     }
                   }
@@ -379,7 +485,7 @@
                   "color": {
                     "expr": {
                       "Literal": {
-                        "Value": "'#9FB6D4'"
+                        "Value": "'#9BDCC3'"
                       }
                     }
                   }
@@ -421,10 +527,10 @@
   },
   "position": {
     "x": 640,
-    "y": 482,
-    "z": 11000,
+    "y": 440,
+    "z": 9000,
     "height": 200,
     "width": 616,
-    "tabOrder": 11000
+    "tabOrder": 9000
   }
 }

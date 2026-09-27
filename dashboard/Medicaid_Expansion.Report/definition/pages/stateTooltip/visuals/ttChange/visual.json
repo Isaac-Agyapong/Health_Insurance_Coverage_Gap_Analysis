@@ -35,7 +35,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1B1B1B'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -51,7 +51,7 @@
             "fontFamily": {
               "expr": {
                 "Literal": {
-                  "Value": "'Georgia'"
+                  "Value": "'Bahnschrift'"
                 }
               }
             }
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#55524C'"
+                      "Value": "'#5B6B7C'"
                     }
                   }
                 }
@@ -128,7 +128,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -146,7 +146,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -160,6 +160,45 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }

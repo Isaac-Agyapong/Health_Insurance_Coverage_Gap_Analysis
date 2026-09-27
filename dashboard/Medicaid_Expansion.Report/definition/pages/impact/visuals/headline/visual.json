@@ -14,10 +14,10 @@
                   {
                     "value": "Expansion itself cut the uninsured rate by about 6 points, measured against similar counties that did not expand",
                     "textStyle": {
-                      "fontSize": "15pt",
-                      "color": "#1B1B1B",
+                      "fontSize": "14pt",
+                      "color": "#1F2D3D",
                       "fontWeight": "bold",
-                      "fontFamily": "Georgia"
+                      "fontFamily": "Bahnschrift"
                     }
                   }
                 ]
@@ -28,7 +28,7 @@
                     "value": "Difference-in-differences (Callaway & Sant'Anna) on 3,035 counties in 45 states, 2008-2023, 499 state-level bootstrap draws",
                     "textStyle": {
                       "fontSize": "10pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   }
                 ]
@@ -56,10 +56,10 @@
   },
   "position": {
     "x": 20,
-    "y": 115,
-    "z": 6000,
-    "height": 56,
+    "y": 76,
+    "z": 2000,
+    "height": 52,
     "width": 1240,
-    "tabOrder": 6000
+    "tabOrder": 2000
   }
 }

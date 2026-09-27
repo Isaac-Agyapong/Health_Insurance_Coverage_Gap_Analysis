@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "title",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Health Insurance Coverage Gap",
+                    "textStyle": {
+                      "fontSize": "24pt",
+                      "color": "#1F2D3D",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "MEDICAID EXPANSION IMPACT",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#D63F6C",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
+                    }
+                  },
+                  {
+                    "value": "     Analytics + machine learning  \u00b7  3,143 US counties  \u00b7  2008-2023",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 16,
+    "y": 6,
+    "z": 0,
+    "height": 70,
+    "width": 900,
+    "tabOrder": 0
+  }
+}

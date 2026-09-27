@@ -6,7 +6,7 @@ table robustness
 		displayFolder: Causal
 		lineageTag: dd5f93d1-2617-5a45-b52c-3702bea54c38
 
-	measure 'Estimate Colour' = IF ( SELECTEDVALUE ( robustness[order] ) = 1, "#1D4E89", "#D99A1E" )
+	measure 'Estimate Colour' = IF ( SELECTEDVALUE ( robustness[order] ) = 1, "#0E9F6E", "#F5B700" )
 		displayFolder: Causal
 		lineageTag: 06250bc3-1d68-52da-9c41-1983e568b861
 

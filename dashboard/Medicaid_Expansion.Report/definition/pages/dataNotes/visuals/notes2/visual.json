@@ -15,9 +15,9 @@
                     "value": "Definitions and methods",
                     "textStyle": {
                       "fontSize": "19pt",
-                      "color": "#1B1B1B",
+                      "color": "#1F2D3D",
                       "fontWeight": "bold",
-                      "fontFamily": "Georgia"
+                      "fontFamily": "Bahnschrift"
                     }
                   }
                 ]
@@ -28,7 +28,7 @@
                     "value": "\u2022  Low-income adults = ages 18-64 with income at or below 138% of the federal poverty level",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -39,7 +39,7 @@
                     "value": "\u2022  Expansion year = first calendar year with at least 6 months of expansion coverage",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -50,7 +50,7 @@
                     "value": "\u2022  Rates are population-weighted: total uninsured / total people",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -61,7 +61,7 @@
                     "value": "\u2022  Effect: staggered difference-in-differences vs counties in states that had not expanded, adjusted for county traits; 95% intervals from 499 state-level bootstrap draws",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -72,7 +72,7 @@
                     "value": "\u2022  Predictions: causal forest (double machine learning) validated on held-out states",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -129,7 +129,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -138,7 +138,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -151,7 +151,106 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Custom'"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "88D"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }
@@ -178,14 +277,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "20D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "20D"
                 }
               }
             }
@@ -209,10 +308,10 @@
   },
   "position": {
     "x": 440,
-    "y": 170,
-    "z": 10000,
+    "y": 128,
+    "z": 7000,
     "height": 512,
     "width": 400,
-    "tabOrder": 10000
+    "tabOrder": 7000
   }
 }

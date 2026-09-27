@@ -15,7 +15,7 @@
                     "value": "Uninsured   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C",
+                      "color": "#5B6B7C",
                       "fontWeight": "bold"
                     }
                   },
@@ -23,84 +23,84 @@
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#FFF1CF"
+                      "color": "#EEEAF7"
                     }
                   },
                   {
                     "value": "under 12%   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   },
                   {
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#FDD89A"
+                      "color": "#D2C8EE"
                     }
                   },
                   {
                     "value": "12-16%   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   },
                   {
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#F9B461"
+                      "color": "#A999DD"
                     }
                   },
                   {
                     "value": "16-20%   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   },
                   {
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#E8843A"
+                      "color": "#7E6CC7"
                     }
                   },
                   {
                     "value": "20-25%   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   },
                   {
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#C4561D"
+                      "color": "#5A48A8"
                     }
                   },
                   {
                     "value": "25-30%   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   },
                   {
                     "value": "\u25a0 ",
                     "textStyle": {
                       "fontSize": "12pt",
-                      "color": "#8A3510"
+                      "color": "#3B2B7A"
                     }
                   },
                   {
                     "value": "30%+   ",
                     "textStyle": {
                       "fontSize": "9pt",
-                      "color": "#55524C"
+                      "color": "#5B6B7C"
                     }
                   }
                 ]
@@ -128,10 +128,10 @@
   },
   "position": {
     "x": 40,
-    "y": 642,
-    "z": 9000,
+    "y": 600,
+    "z": 7000,
     "height": 36,
     "width": 568,
-    "tabOrder": 9000
+    "tabOrder": 7000
   }
 }

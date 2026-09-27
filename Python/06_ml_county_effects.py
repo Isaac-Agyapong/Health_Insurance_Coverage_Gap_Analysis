@@ -274,8 +274,8 @@ def charts(summary_q, imp, by_state, pred, total):
     # validation: predicted vs actual by quartile on held-out states
     fig, ax = plt.subplots(figsize=(9, 4.6))
     x = np.arange(len(summary_q))
-    ax.bar(x - 0.19, summary_q.predicted, 0.36, color=vs.NAVY_LIGHT, label="Model's prediction")
-    ax.bar(x + 0.19, summary_q.actual_effect, 0.36, color=vs.NAVY, label="What actually happened")
+    ax.bar(x - 0.19, summary_q.predicted, 0.36, color=vs.EXP_L, label="Model's prediction")
+    ax.bar(x + 0.19, summary_q.actual_effect, 0.36, color=vs.EXP, label="What actually happened")
     for i, (p, a) in enumerate(summary_q[["predicted", "actual_effect"]].values):
         ax.text(i - 0.19, p + 0.25, f"{p:.1f}", ha="center", va="bottom", color=vs.INK, fontsize=10.5, fontweight="bold")
         ax.text(i + 0.19, a + 0.25, f"{a:.1f}", ha="center", va="bottom", color="white", fontsize=10.5, fontweight="bold")
@@ -291,7 +291,7 @@ def charts(summary_q, imp, by_state, pred, total):
     # what drives differences in the effect
     fig, ax = plt.subplots(figsize=(9, 4.6))
     top = imp.head(8)[::-1]
-    colors = [vs.GOLD if i == len(top) - 1 else vs.NAVY_LIGHT for i in range(len(top))]
+    colors = [vs.SUN if i == len(top) - 1 else vs.EXP_L for i in range(len(top))]
     ax.barh(top.index, top.values, color=colors)
     for i, v in enumerate(top.values):
         ax.text(v + 0.004, i, f"{v:.0%}", va="center", fontsize=10)
@@ -305,7 +305,7 @@ def charts(summary_q, imp, by_state, pred, total):
     # predicted gains in the states still not expanded
     s = by_state[~by_state.expanded_late_2023].sort_values("adults_gaining_coverage")
     fig, ax = plt.subplots(figsize=(9, 4.8))
-    ax.barh(s.index, s.adults_gaining_coverage, color=[vs.GOLD if i == len(s) - 1 else vs.ORANGE for i in range(len(s))])
+    ax.barh(s.index, s.adults_gaining_coverage, color=[vs.SUN if i == len(s) - 1 else vs.NONEXP for i in range(len(s))])
     for i, (v, r0, r1) in enumerate(s[["adults_gaining_coverage", "rate_2023", "predicted_rate_after"]].values):
         ax.text(v + total * 0.004, i, f"{v:,.0f}   ({r0:.0f}% to {r1:.0f}% uninsured)", va="center", fontsize=9.5)
     ax.grid(axis="y", visible=False)

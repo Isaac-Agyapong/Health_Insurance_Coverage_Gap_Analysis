@@ -15,9 +15,9 @@
                     "value": "Limitations",
                     "textStyle": {
                       "fontSize": "19pt",
-                      "color": "#1B1B1B",
+                      "color": "#D63F6C",
                       "fontWeight": "bold",
-                      "fontFamily": "Georgia"
+                      "fontFamily": "Bahnschrift"
                     }
                   }
                 ]
@@ -28,7 +28,7 @@
                     "value": "\u2022  SAHIE figures are model-based estimates with margins of error (median about 4 points per county)",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -39,7 +39,7 @@
                     "value": "\u2022  DE, DC, MA, NY and VT are excluded from the effect estimate: they covered adults before 2014",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -50,7 +50,7 @@
                     "value": "\u2022  Connecticut counties changed in 2022, so Connecticut is left out of county-level results",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -61,7 +61,7 @@
                     "value": "\u2022  States chose whether to expand; a state-specific change at the same time would bias the estimate",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -72,7 +72,7 @@
                     "value": "\u2022  Predictions assume expansion would work as it did in similar counties; they are not enrollment forecasts",
                     "textStyle": {
                       "fontSize": "13pt",
-                      "color": "#1B1B1B"
+                      "color": "#1F2D3D"
                     }
                   }
                 ]
@@ -129,7 +129,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DEDAD0'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
@@ -138,7 +138,7 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "2D"
+                  "Value": "18D"
                 }
               }
             }
@@ -151,7 +151,106 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Custom'"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "88D"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5B6B7C'"
+                    }
+                  }
                 }
               }
             }
@@ -178,14 +277,14 @@
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "20D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "18D"
+                  "Value": "20D"
                 }
               }
             }
@@ -209,10 +308,10 @@
   },
   "position": {
     "x": 856,
-    "y": 170,
-    "z": 12000,
+    "y": 128,
+    "z": 8000,
     "height": 512,
     "width": 400,
-    "tabOrder": 12000
+    "tabOrder": 8000
   }
 }

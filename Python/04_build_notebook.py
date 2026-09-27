@@ -68,7 +68,7 @@ trend["pct_uninsured"] = trend.pct_uninsured.astype(float)
 wide = trend.pivot(index="year", columns="analysis_group", values="pct_uninsured")
 
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.axvspan(2013.5, 2023.4, color=vs.NAVY, alpha=0.035, lw=0)
+ax.axvspan(2013.5, 2023.4, color=vs.EXP, alpha=0.035, lw=0)
 for grp, col in vs.GROUP_COLORS.items():
     main = grp in ("Expanded 2014", "Not expanded by 2023")
     ax.plot(wide.index, wide[grp], color=col, lw=2.8 if main else 1.4, alpha=1 if main else 0.9, zorder=3 if main else 2)
@@ -120,7 +120,7 @@ for f in geo["features"]:
 vals = np.array(vals, dtype=float)
 
 fig, ax = plt.subplots(figsize=(11, 6.6))
-cmap = plt.get_cmap("YlOrBr").copy()
+cmap = vs.INDIGO_SCALE.copy()
 cmap.set_bad("#e6e3dc")
 pc = PolyCollection(polys, array=np.ma.masked_invalid(vals), cmap=cmap, edgecolors=vs.PAPER, linewidths=0.08)
 pc.set_clim(5, 50)
@@ -179,16 +179,16 @@ for ax, (ipr, label) in zip(axes, [(3, "At or below 138% of poverty (made eligib
     d = inc[inc.iprcat == ipr].pivot(index="year", columns="analysis_group", values="pct_uninsured")
     for grp in ["Expanded 2014", "Not expanded by 2023"]:
         ax.plot(d.index, d[grp], color=vs.GROUP_COLORS[grp], lw=2.4)
-    ax.fill_between(d.index, d["Expanded 2014"], d["Not expanded by 2023"], where=d.index >= 2014, color=vs.GOLD, alpha=0.18, lw=0)
+    ax.fill_between(d.index, d["Expanded 2014"], d["Not expanded by 2023"], where=d.index >= 2014, color=vs.SUN, alpha=0.18, lw=0)
     gap13 = d.loc[2013, "Not expanded by 2023"] - d.loc[2013, "Expanded 2014"]
     gap16 = d.loc[2016, "Not expanded by 2023"] - d.loc[2016, "Expanded 2014"]
     ax.set_title(label, fontsize=11, loc="left", pad=8)
     ax.text(2016.2, (d.loc[2016].mean()), f"gap {gap13:.0f} to {gap16:.0f} pts\\n(2013 to 2016)", color=vs.INK_2, fontsize=9.5)
     vs.pct(ax)
-axes[0].text(2008.3, 44, "Not expanded", color=vs.ORANGE, fontweight="bold")
-axes[0].text(2008.3, 33.5, "Expanded 2014", color=vs.NAVY, fontweight="bold")
+axes[0].text(2008.3, 44, "Not expanded", color=vs.NONEXP, fontweight="bold")
+axes[0].text(2008.3, 33.5, "Expanded 2014", color=vs.EXP, fontweight="bold")
 fig.suptitle("The gap nearly doubled for the eligible group; it widened far less for everyone else", x=0.01, ha="left",
-             fontfamily="Georgia", fontweight="bold", fontsize=14)
+             fontweight="bold", fontsize=15, color=vs.INK)
 vs.source(fig, "Source: Census SAHIE. Adults 18-64. The 138-400% group is published from 2012.")
 vs.save(fig, "04_income_groups")
 display(Image(vs.IMAGE_DIR / "04_income_groups.png"))

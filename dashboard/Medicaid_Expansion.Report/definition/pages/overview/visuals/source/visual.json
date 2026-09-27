@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "source",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Source: ",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#8A94A0",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "US Census Bureau SAHIE 2008-2023, SAIPE and population estimates; KFF Medicaid expansion tracker; USDA ERS rural-urban codes.  Low-income adults = ages 18-64 at or below 138% of the federal poverty level.",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#8A94A0"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 20,
+    "y": 640,
+    "z": 3000,
+    "height": 26,
+    "width": 1240,
+    "tabOrder": 3000
+  }
+}

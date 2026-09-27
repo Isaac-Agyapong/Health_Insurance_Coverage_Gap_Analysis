@@ -7,14 +7,16 @@ machine without a database. The folder is a parameter (DataFolder).
     dashboard/Medicaid_Expansion.SemanticModel/       model (TMDL), columns read from the CSV headers
     dashboard/Medicaid_Expansion.Report/              6 pages + a state tooltip page (PBIR JSON)
 
-Design: a policy-brief look, different from the other portfolio dashboards. Navy masthead across the top with
-a serif title, page tabs underneath, ivory paper canvas, square white cards with hairline borders, footer credit.
-Colour meanings: navy = expansion states / the estimated effect, orange = states that had not expanded,
-gold = the highlighted finding, grey = context.
+Design: a bold infographic look, different from every other portfolio dashboard. Title band with a yellow
+"sticker" credit, solid colour KPI blocks with white numbers and icons, floating rounded white cards with soft
+shadows, chapter navigation along the bottom, Bahnschrift (DIN-style) typeface, and a generated background: a faint dot map of every
+US county. Colour meanings: emerald = states that expanded / the estimated effect, rose = states that had not
+expanded, sunflower = the highlighted finding, slate/grey = context.
 """
 import json
 import shutil
 import subprocess
+import sys
 import uuid
 from pathlib import Path
 
@@ -42,14 +44,18 @@ S_PAGES = f"{SCHEMA}/item/report/definition/pagesMetadata/1.0.0/schema.json"
 S_PAGE = f"{SCHEMA}/item/report/definition/page/1.3.0/schema.json"
 S_VISUAL = f"{SCHEMA}/item/report/definition/visualContainer/1.4.0/schema.json"
 BASE_THEME = "CY24SU10"
-CUSTOM_THEME = "PolicyBriefTheme.json"
+CUSTOM_THEME = "CoverageInfographicTheme.json"
 
 # palette (same meanings as the matplotlib charts in viz_style.py)
-NAVY, NAVY_2, NAVY_LIGHT, ORANGE, GOLD = "#1D4E89", "#4F7CB3", "#9FB6D4", "#D1603D", "#D99A1E"
-GREY, GREY_LIGHT = "#8A8780", "#CFCCC4"
-MAST, PAPER, CARD_BORDER, INK, INK_2, RULE = "#14335C", "#F7F5EF", "#DEDAD0", "#1B1B1B", "#55524C", "#E9E5DA"
+EXP, EXP_2, EXP_L = "#0E9F6E", "#3DBB8F", "#9BDCC3"          # emerald: expanded / estimated effect
+NONEXP, NONEXP_L = "#D63F6C", "#F2A7BD"                      # rose: had not expanded
+SUN, SUN_L = "#F5B700", "#FBE3A0"                            # sunflower: the highlighted finding
+GREY, GREY_LIGHT = "#8A94A0", "#CDD3DA"
+SLATE, PAPER, INK, INK_2, RULE = "#1F2D3D", "#F5F6F1", "#1F2D3D", "#5B6B7C", "#E6EAE4"
 PCT1, PTS, INT = "0.0%;-0.0%;0.0%", '+0.0" pts";-0.0" pts";0.0" pts"', "#,0"
-SERIF = "Georgia"
+FONT = "Bahnschrift"     # DIN-style condensed face that ships with Windows
+# text colours that read well on each KPI block colour
+ON = {EXP: ("#FFFFFF", "#DDF5EB"), NONEXP: ("#FFFFFF", "#FDE2EA"), SLATE: ("#FFFFFF", "#CBD5DF"), SUN: (SLATE, "#4A3B00")}
 
 
 def tag(*parts):
@@ -118,19 +124,18 @@ MEASURES = [
     ("state_year", "Top 10 Drop 2023", "IF ( NOT ISBLANK ( [Top 10 Drop] ), [State Rate 2023] )", "0%", "States"),
     ("state_year", "Status Colour",
      "SWITCH ( SELECTEDVALUE ( state_year[analysis_group] ),\n"
-     f'    "Not expanded by 2023", "{ORANGE}",\n    "Excluded (early coverage)", "{GREY_LIGHT}",\n    "{NAVY}" )', None, "States"),
+     f'    "Not expanded by 2023", "{NONEXP}",\n    "Excluded (early coverage)", "{GREY_LIGHT}",\n    "{EXP}" )', None, "States"),
     ("state_year", "Tile Label", "SELECTEDVALUE ( StateGrid[state_abbr] )", None, "Map"),
     ("state_year", "Rate Colour",
      "VAR _r = [State Rate 2023]\n"
      "RETURN SWITCH ( TRUE (),\n"
      '    ISBLANK ( SELECTEDVALUE ( StateGrid[state_abbr] ) ), "#FFFFFF",\n'
-     '    ISBLANK ( _r ), "#E6E3DC",\n'
-     '    _r < 0.12, "#FFF1CF",\n    _r < 0.16, "#FDD89A",\n    _r < 0.20, "#F9B461",\n'
-     '    _r < 0.25, "#E8843A",\n    _r < 0.30, "#C4561D",\n    "#8A3510" )', None, "Map"),
+     '    ISBLANK ( _r ), "#E6EAE4",\n'
+     '    _r < 0.12, "#EEEAF7",\n    _r < 0.16, "#D2C8EE",\n    _r < 0.20, "#A999DD",\n'
+     '    _r < 0.25, "#7E6CC7",\n    _r < 0.30, "#5A48A8",\n    "#3B2B7A" )', None, "Map"),
     ("state_year", "Label Colour",
-     'IF ( [State Rate 2023] >= 0.25, "#FFFFFF", "#1B1B1B" )', None, "Map"),
+     'IF ( [State Rate 2023] >= 0.20, "#FFFFFF", "#1F2D3D" )', None, "Map"),
     ("state_year", "Border Colour",
-     # a navy or orange underline would need a second visual; the tooltip carries the status instead
      f'"{PAPER}"', None, "Map"),
     ("state_year", "Selected State", 'SELECTEDVALUE ( state_year[state_name], "All states" )', None, "Tooltip"),
     ("state_year", "Status Text",
@@ -175,7 +180,7 @@ MEASURES = [
     # ---- causal effect
     ("event_study", "Effect", "SUM ( event_study[att] )", '0.0" pts"', "Causal"),
     ("event_study", "Effect Colour",
-     f'IF ( SELECTEDVALUE ( event_study[years_since_expansion] ) < 0, "{GREY_LIGHT}", "{NAVY}" )', None, "Causal"),
+     f'IF ( SELECTEDVALUE ( event_study[years_since_expansion] ) < 0, "{GREY_LIGHT}", "{EXP}" )', None, "Causal"),
     ("model_metrics", "Effect Years 0-2", metric(EFFECT), '0.0" pts"', "Causal"),
     ("model_metrics", "Effect CI Text",
      f'"95% CI " & FORMAT ( {metric(EFFECT, "ci_low")}, "0.0" ) & " to " & FORMAT ( {metric(EFFECT, "ci_high")}, "0.0" ) & " points"',
@@ -187,7 +192,7 @@ MEASURES = [
     ("model_metrics", "Placebo Effect", metric("Placebo: fake 2011 expansion date"), '+0.0" pts";-0.0" pts";0.0" pts"', "Causal"),
     ("model_metrics", "Placebo Context", '"a fake 2011 date shows no effect, as it should"', None, "Context"),
     ("robustness", "Estimate", "SUM ( robustness[value] )", '+0.0;-0.0;0.0', "Causal"),
-    ("robustness", "Estimate Colour", f'IF ( SELECTEDVALUE ( robustness[order] ) = 1, "{NAVY}", "{GOLD}" )', None, "Causal"),
+    ("robustness", "Estimate Colour", f'IF ( SELECTEDVALUE ( robustness[order] ) = 1, "{EXP}", "{SUN}" )', None, "Causal"),
 
     # ---- machine learning
     ("model_metrics", "Adults Would Gain", metric("Adults who would gain coverage (10 states)"), INT, "ML"),
@@ -375,18 +380,25 @@ def by_measure(table, m):
     return {"solid": {"color": {"expr": field(table, m, True)}}}
 
 
-def tile(title=None, subtitle=None, background="#FFFFFF", border=True, tooltip_page=None, pad=(12, 10, 14, 14)):
-    """Card formatting shared by every visual: white square card, hairline border, serif title, grey subtitle."""
+def tile(title=None, subtitle=None, background="#FFFFFF", border=True, tooltip_page=None, pad=(12, 10, 16, 16),
+         shadow=True, radius=18):
+    """Card formatting shared by every visual: floating rounded card with a soft shadow, DIN title, grey subtitle.
+    (border=True keeps the old call signature; cards use a shadow instead of an outline.)"""
     objs = {
         "background": [{"properties": {"show": lit("true"), "color": solid(background), "transparency": lit("0D")}}],
-        "border": [{"properties": {"show": lit("true" if border else "false"), "color": solid(CARD_BORDER),
-                                   "radius": lit("2D")}}],
-        "dropShadow": [{"properties": {"show": lit("false")}}],
+        # Power BI only rounds corners when the border is on, so draw it in the card's own colour
+        "border": [{"properties": {"show": lit("true"), "color": solid(background), "radius": lit(f"{radius}D")}}],
+        "dropShadow": [{"properties": {
+            "show": lit("true"), "color": solid(SLATE), "position": s("Outer"), "preset": s("Custom"),
+            "transparency": lit("88D"), "shadowBlur": lit("14D"), "shadowSpread": lit("0D"),
+            "shadowDistance": lit("4D"), "angle": lit("90D")}}] if shadow else [{"properties": {"show": lit("false")}}],
+        "visualHeader": [{"properties": {"background": solid(background), "border": solid(background),
+                                         "foreground": solid(INK_2)}}],
         "padding": [{"properties": {"top": lit(f"{pad[0]}D"), "bottom": lit(f"{pad[1]}D"),
                                     "left": lit(f"{pad[2]}D"), "right": lit(f"{pad[3]}D")}}],
         "title": [{"properties": {"show": lit("true" if title else "false"), **({
             "text": s(title), "fontColor": solid(INK), "fontSize": lit("14D"), "bold": lit("true"),
-            "fontFamily": s(SERIF)} if title else {})}}],
+            "fontFamily": s(FONT)} if title else {})}}],
     }
     if subtitle:
         objs["subTitle"] = [{"properties": {"show": lit("true"), "text": s(subtitle), "fontColor": solid(INK_2),
@@ -443,7 +455,7 @@ def chart(vtype, roles, title, subtitle=None, sort=None, objects=None, colours=N
     return v
 
 
-def textbox(paragraphs, background=None, pad=(12, 10, 14, 14), border=False, align=None):
+def textbox(paragraphs, background=None, pad=(12, 10, 14, 14), border=False, align=None, shadow=False, radius=18):
     """paragraphs: list of (text, size, bold, colour[, font]) or lists of such runs for one line."""
     def run(t, size, bold, col, font=None):
         return {"value": t, "textStyle": {"fontSize": f"{size}pt", "color": col,
@@ -453,22 +465,23 @@ def textbox(paragraphs, background=None, pad=(12, 10, 14, 14), border=False, ali
               **({"horizontalTextAlignment": align} if align else {})} for p in paragraphs if p]
     v = {"visualType": "textbox", "drillFilterOtherVisuals": True,
          "objects": {"general": [{"properties": {"paragraphs": paras}}]}}
-    v["visualContainerObjects"] = tile(background=background, border=border, pad=pad) if background else \
+    v["visualContainerObjects"] = tile(background=background, pad=pad, shadow=shadow, radius=radius) if background else \
         {"background": [{"properties": {"show": lit("false")}}]}
     return v
 
 
-def block(colour):
-    return textbox([None], background=colour, pad=(0, 0, 0, 0))
+def block(colour, radius=0, shadow=False):
+    return textbox([None], background=colour, pad=(0, 0, 0, 0), radius=radius, shadow=shadow)
 
 
-def card(measure, label, value_colour=INK, size=28, show_label=True, background="#FFFFFF", pad=(4, 2, 14, 14), font=SERIF):
+def card(measure, label, value_colour=INK, size=28, show_label=True, background="#FFFFFF", pad=(4, 2, 14, 14), font=FONT,
+         label_colour=INK_2):
     v = {"visualType": "card", "query": {"queryState": {"Values": projections([M(measure)])}},
          "objects": {
              "labels": [{"properties": {"color": solid(value_colour), "fontSize": lit(f"{size}D"), "fontFamily": s(font)}}],
              "categoryLabels": [{"properties": {"show": lit("true" if show_label else "false"),
-                                                "color": solid(INK_2), "fontSize": lit("11D")}}]},
-         "visualContainerObjects": tile(background=background, border=False, pad=pad),
+                                                "color": solid(label_colour), "fontSize": lit("11D")}}]},
+         "visualContainerObjects": tile(background=background, pad=pad, shadow=False),
          "drillFilterOtherVisuals": True}
     v["query"]["queryState"]["Values"]["projections"][0]["displayName"] = label
     return v
@@ -487,18 +500,16 @@ def navigator():
     state = lambda sid, props: {"properties": props, "selector": {"id": sid}}
     return {"visualType": "pageNavigator", "drillFilterOtherVisuals": True,
             "objects": {
-                "layout": [{"properties": {"orientation": lit("2D"), "cellPadding": lit("4L")}}],     # 2 = one horizontal row
+                "layout": [{"properties": {"orientation": lit("2D"), "cellPadding": lit("6L")}}],     # 2 = one horizontal row
                 "pages": [{"properties": {"showHiddenPages": lit("false"), "showTooltipPages": lit("false")}}],
-                "shape": [{"properties": {"tileShape": s("rectangle")}}],
-                "fill": [state("default", {"show": lit("true"), "fillColor": solid(PAPER), "transparency": lit("0D")}),
-                         state("hover", {"fillColor": solid("#EDE8DC")}),
-                         state("selected", {"fillColor": solid("#FFFFFF")})],
-                "text": [state("default", {"fontColor": solid(INK_2), "fontSize": lit("12D")}),
-                         state("selected", {"fontColor": solid(MAST), "bold": lit("true")})],
+                "shape": [{"properties": {"tileShape": s("rectangleRounded"), "rectangleRoundedCurve": lit("14L")}}],
+                "fill": [state("default", {"show": lit("true"), "fillColor": solid(SLATE), "transparency": lit("0D")}),
+                         state("hover", {"fillColor": solid("#2E4157")}),
+                         state("selected", {"fillColor": solid(SUN)})],
+                "text": [state("default", {"fontColor": solid("#C9D3DD"), "fontSize": lit("12D"), "fontFamily": s(FONT)}),
+                         state("selected", {"fontColor": solid(SLATE), "bold": lit("true")})],
                 "outline": [state("default", {"show": lit("false")})],
-                "accentBar": [state("default", {"show": lit("false")}),
-                              state("selected", {"show": lit("true"), "position": s("Bottom"),
-                                                 "color": solid(GOLD), "width": lit("4D")})],
+                "accentBar": [state("default", {"show": lit("false")})],
             },
             "visualContainerObjects": {"background": [{"properties": {"show": lit("false")}}]}}
 
@@ -517,7 +528,13 @@ class Page:
     def json(self):
         page = {"$schema": S_PAGE, "name": self.name, "displayName": self.display, "displayOption": "FitToPage",
                 "height": self.height, "width": self.width,
-                "objects": {"background": [{"properties": {"color": solid(PAPER), "transparency": lit("0D")}}],
+                "objects": {"background": [{"properties": {"color": solid(PAPER), "transparency": lit("0D"),
+                                                           "image": {"image": {
+                                                               "name": s("page_background.png"),
+                                                               "url": {"expr": {"ResourcePackageItem": {
+                                                                   "PackageName": "RegisteredResources", "PackageType": 1,
+                                                                   "ItemName": "page_background.png"}}},
+                                                               "scaling": s("Fit")}}}}],
                             "outspace": [{"properties": {"color": solid(PAPER)}}]}}
         if self.no_filter:
             page["visualInteractions"] = [{"source": a, "target": b, "type": "NoFilter"} for a, b in self.no_filter]
@@ -528,37 +545,47 @@ class Page:
         return page
 
 
-TITLE = "Health Insurance Coverage Gap & Medicaid Expansion Impact"
-X0, W, TOP = 24, 1232, 170          # content area
+X0, W, TOP = 24, 1232, 128          # content area (y 128-640); chapter bar at the bottom
 
 
 def frame(page, finding, sub):
-    """Masthead, tabs, section headline and footer: identical on every page."""
-    page.add("masthead", 0, 0, 1280, 66, block(MAST))
-    page.add("mastTitle", 16, 2, 920, 64, textbox(
-        [(TITLE, 19, True, "#FFFFFF", SERIF),
-         ("ANALYTICS + MACHINE LEARNING   ·   3,143 US COUNTIES   ·   2008-2023", 9, True, GOLD)], pad=(2, 0, 8, 8)))
-    page.add("mastCredit", 940, 8, 324, 54, textbox(
-        [("Built by Isaac Agyapong", 10, True, "#FFFFFF"), ("Census SAHIE  ·  KFF  ·  PostgreSQL  ·  EconML", 8, False, "#C9D4E3")],
-        align="right", pad=(2, 0, 8, 8)))
-    page.add("mastRule", 0, 66, 1280, 3, block(GOLD))
-    page.add("navigator", 16, 74, 1248, 38, navigator())
-    page.add("navRule", X0, 113, W, 1, block(CARD_BORDER))
-    page.add("headline", X0 - 4, 115, W + 8, 56, textbox(
-        [(finding, 15, True, INK, SERIF), (sub, 10, False, INK_2)], pad=(0, 0, 4, 4)))
-    page.add("footer", X0 - 4, 688, W + 8, 30, textbox(
+    """Title band, sticker credit, section finding, source line and bottom chapter bar: identical on every page."""
+    page.add("title", 16, 6, 900, 70, textbox(
+        [("Health Insurance Coverage Gap", 24, True, SLATE, FONT),
+         [("MEDICAID EXPANSION IMPACT", 11, True, NONEXP, FONT),
+          ("     Analytics + machine learning  ·  3,143 US counties  ·  2008-2023", 10, False, INK_2)]],
+        pad=(0, 0, 8, 8)))
+    page.add("sticker", 1040, 16, 224, 50, textbox(
+        [("Built by Isaac Agyapong", 11, True, SLATE, FONT), ("PostgreSQL · Python · EconML · Power BI", 8, False, "#4A3B00")],
+        background=SUN, radius=25, align="center", pad=(6, 2, 8, 8), shadow=True))
+    page.add("headline", X0 - 4, 76, W + 8, 52, textbox(
+        [(finding, 14, True, INK, FONT), (sub, 10, False, INK_2)], pad=(0, 0, 4, 4)))
+    page.add("source", X0 - 4, 640, W + 8, 26, textbox(
         [[("Source: ", 8, True, GREY), ("US Census Bureau SAHIE 2008-2023, SAIPE and population estimates; KFF Medicaid expansion tracker; "
                                         "USDA ERS rural-urban codes.  Low-income adults = ages 18-64 at or below 138% of the federal poverty level.", 8, False, GREY)]],
-        pad=(0, 0, 4, 4)))
+        pad=(2, 0, 4, 4)))
+    page.add("chapterBar", 16, 664, 1248, 48, block(SLATE, radius=24, shadow=True))
+    page.add("navigator", 28, 668, 1224, 40, navigator())
 
 
-def kpi(page, i, x, y, w, measure, label, context, colour, h=116, size=27):
-    page.add(f"kpiTile{i}", x, y, w, h, textbox([None], background="#FFFFFF", border=True))
-    page.add(f"kpiRule{i}", x, y, w, 4, block(colour))
-    page.add(f"kpi{i}", x + 2, y + 6, w - 4, h - 36 if context else h - 12, card(measure, label, value_colour=colour, size=size))
+ICONS = {"Exp Rate 2023": "✔", "NonExp Rate 2023": "✖", "Effect Years 0-2": "▼", "Adults Would Gain": "★",
+         "Adults Covered 2023": "♥", "Placebo Effect": "◎", "Forest Effect": "◆", "Top Quarter Actual": "✔"}
+
+
+def kpi(page, i, x, y, w, measure, label, context, colour, h=116, size=30):
+    """Solid colour block: big white number, label, context line and an icon badge."""
+    text, soft = ON[colour]
+    page.add(f"kpiTile{i}", x, y, w, h, block(colour, radius=18, shadow=True))
+    page.add(f"kpi{i}", x + 4, y + 6, w - 8, h - 36 if context else h - 12,
+             card(measure, label, value_colour=text, size=size, background=colour, label_colour=soft))
     if context:
-        page.add(f"kpiContext{i}", x + 2, y + h - 30, w - 4, 26,
-                 card(context, "", value_colour=INK_2, size=11, show_label=False, pad=(0, 0, 14, 14), font="Segoe UI"))
+        page.add(f"kpiContext{i}", x + 4, y + h - 30, w - 8, 26,
+                 card(context, "", value_colour=soft, size=11, show_label=False, pad=(0, 0, 16, 14), font="Segoe UI",
+                      background=colour))
+    if measure in ICONS:
+        page.add(f"kpiIcon{i}", x + w - 54, y + 12, 40, 40, textbox(
+            [(ICONS[measure], 16, True, colour if colour != SUN else SUN)], background=text if colour != SUN else SLATE,
+            radius=20, align="center", pad=(6, 0, 0, 0)))
 
 
 def data_bar(table, measure, colour):
@@ -569,7 +596,8 @@ def data_bar(table, measure, colour):
 
 
 TABLE_FMT = {"values": [{"properties": {"fontSize": lit("11D")}}],
-             "columnHeaders": [{"properties": {"fontSize": lit("11D"), "bold": lit("true"), "fontColor": solid(INK)}}],
+             "columnHeaders": [{"properties": {"fontSize": lit("11D"), "bold": lit("true"), "fontColor": solid(INK),
+                                               "fontFamily": s(FONT)}}],
              "total": [{"properties": {"totals": lit("false")}}],
              "grid": [{"properties": {"rowPadding": lit("1D")}}]}
 
@@ -608,13 +636,13 @@ def build_pages():
     kw = (W - 48) // 4
 
     # ---------------------------------------------------------------- 1. Overview
-    p1 = Page("overview", "Overview")
+    p1 = Page("overview", "01  Overview")
     frame(p1, f"Where Medicaid expanded, the uninsured rate fell further; expansion itself cut it by about {abs(f['effect']):.0f} points",
           "Uninsured rate of adults 18-64 at or below 138% of the poverty line, the group expansion made eligible for Medicaid")
-    kpi(p1, 1, kx[0], TOP, kw, "Exp Rate 2023", "Uninsured, 2014 expansion states", "KPI Exp Context", NAVY)
-    kpi(p1, 2, kx[1], TOP, kw, "NonExp Rate 2023", "Uninsured, non-expansion states", "KPI NonExp Context", ORANGE)
-    kpi(p1, 3, kx[2], TOP, kw, "Effect Years 0-2", "Drop caused by expansion", "Effect CI Text", NAVY)
-    kpi(p1, 4, kx[3], TOP, kw, "Adults Would Gain", "Adults who would gain coverage", "Gain Context", GOLD)
+    kpi(p1, 1, kx[0], TOP, kw, "Exp Rate 2023", "Uninsured, 2014 expansion states", "KPI Exp Context", EXP)
+    kpi(p1, 2, kx[1], TOP, kw, "NonExp Rate 2023", "Uninsured, non-expansion states", "KPI NonExp Context", NONEXP)
+    kpi(p1, 3, kx[2], TOP, kw, "Effect Years 0-2", "Drop caused by expansion", "Effect CI Text", EXP)
+    kpi(p1, 4, kx[3], TOP, kw, "Adults Would Gain", "Adults who would gain coverage", "Gain Context", SUN)
     p1.add("trend", X0, TOP + 128, 800, 384, chart(
         "lineChart", {"Category": [C("group_trend", "year")],
                       "Y": [MN("Expanded in 2014", "States that expanded in 2014"), MN("Not expanded", "States that had not expanded")]},
@@ -622,11 +650,11 @@ def build_pages():
         "Share of low-income adults without health insurance", sort=(C("group_trend", "year"), "Ascending"),
         objects={**axes(), "legend": [{"properties": {"show": lit("true"), "position": s("Top")}}],
                  "lineStyles": [{"properties": {"strokeWidth": lit("3D"), "showMarker": lit("true"), "markerSize": lit("4D")}}]},
-        colours={"Expanded in 2014": NAVY, "Not expanded": ORANGE}))
+        colours={"Expanded in 2014": EXP, "Not expanded": NONEXP}))
     grp = field("group_trend", "Coverage Group")
     donut_colours = [{"properties": {"fill": solid(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
         "ComparisonKind": 0, "Left": grp, "Right": {"Literal": {"Value": f"'{g}'"}}}}}]}}
-        for g, c in {"Not expanded": ORANGE, "Expanded": NAVY, "Covered before 2014": GREY_LIGHT}.items()]
+        for g, c in {"Not expanded": NONEXP, "Expanded": EXP, "Covered before 2014": GREY_LIGHT}.items()]
     p1.add("donut", X0 + 816, TOP + 128, W - 816, 384, chart(
         "donutChart", {"Category": [C("group_trend", "Coverage Group")], "Y": [MN("Uninsured 2023", "Uninsured low-income adults, 2023")]},
         f"{f['nonexp_share']:.0%} of the uninsured live in the states that had not expanded",
@@ -638,7 +666,7 @@ def build_pages():
                  "dataPoint": donut_colours}))
 
     # ---------------------------------------------------------------- 2. States
-    p2 = Page("states", "States")
+    p2 = Page("states", "02  States")
     frame(p2, "The highest uninsured rates are in Texas and the Southeast, mostly states that had not expanded",
           "Uninsured rate of low-income adults by state, 2023  ·  hover over a state for its profile")
     every_cell = {"data": [{"dataViewWildcard": {"matchingOption": 1}}], "metadata": "state_year.Tile Label"}
@@ -661,14 +689,14 @@ def build_pages():
     tile_map["query"]["queryState"]["Values"]["projections"][0]["displayName"] = " "
     p2.add("tileMap", X0, TOP, 600, 512, tile_map)
     legend = [("Uninsured   ", 9, True, INK_2)]
-    for colr, lab in [("#FFF1CF", "under 12%"), ("#FDD89A", "12-16%"), ("#F9B461", "16-20%"), ("#E8843A", "20-25%"),
-                      ("#C4561D", "25-30%"), ("#8A3510", "30%+")]:
+    for colr, lab in [("#EEEAF7", "under 12%"), ("#D2C8EE", "12-16%"), ("#A999DD", "16-20%"), ("#7E6CC7", "20-25%"),
+                      ("#5A48A8", "25-30%"), ("#3B2B7A", "30%+")]:
         legend += [("■ ", 12, False, colr), (lab + "   ", 9, False, INK_2)]
     p2.add("mapLegend", X0 + 16, TOP + 472, 568, 36, textbox([legend], pad=(4, 0, 0, 0)))
     p2.no_filter += [("tileMap", "top10"), ("tileMap", "drops"), ("top10", "drops"), ("drops", "top10")]
     p2.add("top10", X0 + 616, TOP, W - 616, 300, chart(
         "clusteredBarChart", {"Category": [C("state_year", "state_name")], "Y": [MN("Top 10 Uninsured 2023", "Uninsured rate, 2023")]},
-        f"{f['top10_nonexp']} of the 10 highest rates are in states that had not expanded", "Orange = had not expanded by 2023  ·  navy = expanded",
+        f"{f['top10_nonexp']} of the 10 highest rates are in states that had not expanded", "Rose = had not expanded by 2023  ·  emerald = expanded",
         tooltip_page="stateTooltip", sort=(M("Top 10 Uninsured 2023"), "Descending"),
         objects={**axes(show_value=False, cat_size=10, inner_padding=18), **labels(10), "dataPoint": fill_by("state_year", "Status Colour")}))
     p2.add("drops", X0 + 616, TOP + 312, W - 616, 200, chart(
@@ -676,10 +704,10 @@ def build_pages():
                                MN("Top 10 Drop 2013", "2013"), MN("Top 10 Drop 2023", "2023"), MN("Top 10 Drop", "Change")]},
         "The 5 biggest drops since 2013 were all in expansion states", None, tooltip_page="stateTooltip",
         sort=(M("Top 10 Drop"), "Ascending"),
-        objects={**TABLE_FMT, "columnFormatting": [data_bar("state_year", "Top 10 Drop", NAVY_LIGHT)]}))
+        objects={**TABLE_FMT, "columnFormatting": [data_bar("state_year", "Top 10 Drop", EXP_L)]}))
 
     # ---------------------------------------------------------------- 3. Who is left out
-    p3 = Page("leftOut", "Who Is Left Out")
+    p3 = Page("leftOut", "03  Who Is Left Out")
     frame(p3, "Hispanic adults and people in non-expansion states are the most likely to be uninsured today",
           "Uninsured rate in 2023: states that expanded in 2014 vs states that had not expanded by 2023")
     p3.add("breakdown", X0, TOP, 600, 512, chart(
@@ -694,9 +722,9 @@ def build_pages():
                  **widths(breakdown_trend__row_label=262, **{"breakdown_trend__Rate Expanded 2023": 92,
                                                              "breakdown_trend__Rate Not Expanded 2023": 112,
                                                              "breakdown_trend__Gap 2023": 84}),
-                 "columnFormatting": [data_bar("breakdown_trend", "Rate Expanded 2023", NAVY_LIGHT),
-                                      data_bar("breakdown_trend", "Rate Not Expanded 2023", "#EFB7A3"),
-                                      data_bar("breakdown_trend", "Gap 2023", "#F2D49B")]}))
+                 "columnFormatting": [data_bar("breakdown_trend", "Rate Expanded 2023", EXP_L),
+                                      data_bar("breakdown_trend", "Rate Not Expanded 2023", NONEXP_L),
+                                      data_bar("breakdown_trend", "Gap 2023", SUN_L)]}))
     p3.add("incomeGap", X0 + 616, TOP, W - 616, 186, chart(
         "lineChart", {"Category": [C("breakdown_trend", "year")],
                       "Y": [MN("Gap Eligible", "Made eligible (at or below 138%)"), MN("Gap Not Eligible", "Not made eligible (138-400%)")]},
@@ -704,7 +732,7 @@ def build_pages():
         "Points between non-expansion and 2014 expansion states", sort=(C("breakdown_trend", "year"), "Ascending"),
         objects={**axes(), "legend": [{"properties": {"show": lit("true"), "position": s("Top")}}],
                  "lineStyles": [{"properties": {"strokeWidth": lit("3D")}}]},
-        colours={"Gap Eligible": GOLD, "Gap Not Eligible": GREY}))
+        colours={"Gap Eligible": SUN, "Gap Not Eligible": GREY}))
     p3.no_filter += [("breakdown", "counties"), ("incomeGap", "counties")]
     p3.add("counties", X0 + 616, TOP + 198, W - 616, 314, chart(
         "tableEx", {"Values": [C("county_2023", "county_name", "County"), C("county_2023", "state_abbrev", "State"),
@@ -712,16 +740,16 @@ def build_pages():
         f"{f['tx_counties']} of the 10 counties with the most uninsured are in Texas", "Low-income adults without insurance, 2023",
         sort=(M("Top 10 County Uninsured"), "Descending"),
         objects={**TABLE_FMT, "values": [{"properties": {"fontSize": lit("10D")}}],
-                 "columnFormatting": [data_bar("county_2023", "Top 10 County Uninsured", "#EFB7A3")]}))
+                 "columnFormatting": [data_bar("county_2023", "Top 10 County Uninsured", NONEXP_L)]}))
 
     # ---------------------------------------------------------------- 4. Impact (causal)
-    p4 = Page("impact", "Impact of Expansion")
+    p4 = Page("impact", "04  Impact of Expansion")
     frame(p4, f"Expansion itself cut the uninsured rate by about {abs(f['effect']):.0f} points, measured against similar counties that did not expand",
           "Difference-in-differences (Callaway & Sant'Anna) on 3,035 counties in 45 states, 2008-2023, 499 state-level bootstrap draws")
     kw3 = (W - 32) // 3
-    kpi(p4, 1, X0, TOP, kw3, "Effect Years 0-2", "Effect of expansion, first 3 years", "Effect CI Text", NAVY)
-    kpi(p4, 2, X0 + kw3 + 16, TOP, kw3, "Adults Covered 2023", "Adults insured in 2023 because of expansion", "Covered Context", NAVY)
-    kpi(p4, 3, X0 + 2 * (kw3 + 16), TOP, kw3, "Placebo Effect", "Placebo test (fake expansion in 2011)", "Placebo Context", GOLD)
+    kpi(p4, 1, X0, TOP, kw3, "Effect Years 0-2", "Effect of expansion, first 3 years", "Effect CI Text", EXP)
+    kpi(p4, 2, X0 + kw3 + 16, TOP, kw3, "Adults Covered 2023", "Adults insured in 2023 because of expansion", "Covered Context", EXP)
+    kpi(p4, 3, X0 + 2 * (kw3 + 16), TOP, kw3, "Placebo Effect", "Placebo test (fake expansion in 2011)", "Placebo Context", SUN)
     p4.add("eventStudy", X0, TOP + 128, 780, 384, chart(
         "columnChart", {"Category": [C("event_study", "years_since_expansion", "Years since expansion")],
                         "Y": [MN("Effect", "Effect on uninsured rate (pts)")]},
@@ -736,36 +764,36 @@ def build_pages():
         objects={**axes(show_value=False, cat_size=11, label_area=55), **labels(12), "dataPoint": fill_by("robustness", "Estimate Colour")}))
 
     # ---------------------------------------------------------------- 5. Predictions (machine learning)
-    p5 = Page("predictions", "If the Rest Expanded")
+    p5 = Page("predictions", "05  If the Rest Expanded")
     frame(p5, f"A machine learning model predicts about {round(f['gain'], -4):,.0f} more adults would be insured if the 10 remaining states expanded",
           "Causal forest (EconML) trained on every expansion wave 2014-2021; predictions use each county's 2023 situation")
-    kpi(p5, 1, kx[0], TOP, kw, "Adults Would Gain", "Adults who would gain coverage", "Gain Context", GOLD)
-    kpi(p5, 2, kx[1], TOP, kw, "Forest Effect", "Model's average effect", "Forest Context", NAVY)
-    kpi(p5, 3, kx[2], TOP, kw, "Top Quarter Actual", "Actual drop, top-ranked quarter", "Validation Context", NAVY)
+    kpi(p5, 1, kx[0], TOP, kw, "Adults Would Gain", "Adults who would gain coverage", "Gain Context", SUN)
+    kpi(p5, 2, kx[1], TOP, kw, "Forest Effect", "Model's average effect", "Forest Context", EXP)
+    kpi(p5, 3, kx[2], TOP, kw, "Top Quarter Actual", "Actual drop, top-ranked quarter", "Validation Context", EXP)
     p5.add("stateSlicer", kx[3], TOP, kw, 116, slicer("ml_county_predictions", "state", "Filter counties by state"))
     p5.add("stateGain", X0, TOP + 128, 380, 384, chart(
         "clusteredBarChart", {"Category": [C("ml_state_predictions", "state", "State")], "Y": [MN("State Adults Gaining", "Adults gaining coverage")]},
         f"Texas alone accounts for {f['tx_gain_share']:.0%}", "Predicted adults gaining coverage by state",
         sort=(M("State Adults Gaining"), "Descending"),
         objects={**axes(show_value=False), **labels(11, labelDisplayUnits=lit("1000D"), labelPrecision=lit("0L")),
-                 "dataPoint": [{"properties": {"fill": solid(ORANGE)}}]}))
+                 "dataPoint": [{"properties": {"fill": solid(NONEXP)}}]}))
     p5.add("validation", X0 + 396, TOP + 128, 340, 384, chart(
         "clusteredColumnChart", {"Category": [C("ml_validation", "label", "Model's ranking")],
                                  "Y": [MN("Model Prediction", "Predicted"), MN("Actual Result", "Actual")]},
         "Tested on unseen states, the ranking holds", "Effect by predicted quarter (pts), held-out states",
         sort=(C("ml_validation", "label"), "Ascending"),
         objects={**axes(show_value=False, cat_size=10), **labels(10), "legend": [{"properties": {"show": lit("true"), "position": s("Top")}}]},
-        colours={"Model Prediction": NAVY_LIGHT, "Actual Result": NAVY}))
+        colours={"Model Prediction": EXP_L, "Actual Result": EXP}))
     p5.no_filter += [("stateGain", "validation"), ("stateSlicer", "validation"), ("stateSlicer", "stateGain")]
     p5.add("countyTable", X0 + 752, TOP + 128, W - 752, 384, chart(
         "tableEx", {"Values": [C("ml_county_predictions", "county_name", "County"), C("ml_county_predictions", "state", "State"),
                                MN("Rate Now", "Now"), MN("Rate After", "After"), MN("Adults Gaining", "Adults gaining")]},
         "Counties with the largest predicted gains", "Uninsured rate now and predicted after expansion",
         sort=(M("Adults Gaining"), "Descending"),
-        objects={**TABLE_FMT, "columnFormatting": [data_bar("ml_county_predictions", "Adults Gaining", "#F2D49B")]}))
+        objects={**TABLE_FMT, "columnFormatting": [data_bar("ml_county_predictions", "Adults Gaining", SUN_L)]}))
 
     # ---------------------------------------------------------------- 6. Data notes
-    p6 = Page("dataNotes", "Data Notes")
+    p6 = Page("dataNotes", "06  Data Notes")
     frame(p6, "Data notes", "Sources, definitions, methods and limitations")
     cols = [
         ("Sources", [
@@ -788,22 +816,21 @@ def build_pages():
             "States chose whether to expand; a state-specific change at the same time would bias the estimate",
             "Predictions assume expansion would work as it did in similar counties; they are not enrollment forecasts"]),
     ]
-    for i, (heading, lines) in enumerate(cols):
+    for i, ((heading, lines), colour) in enumerate(zip(cols, [EXP, SLATE, NONEXP])):
         x = X0 + i * (W + 16) // 3
         w = (W - 32) // 3
         p6.add(f"notes{i + 1}", x, TOP, w, 512, textbox(
-            [(heading, 19, True, INK, SERIF)] + [("•  " + t, 13, False, INK) for t in lines],
-            background="#FFFFFF", border=True, pad=(18, 12, 18, 18)))
-        p6.add(f"notesRule{i + 1}", x, TOP, w, 4, block(NAVY if i < 2 else GOLD))
+            [(heading, 19, True, colour, FONT)] + [("•  " + t, 13, False, INK) for t in lines],
+            background="#FFFFFF", pad=(18, 12, 20, 20), shadow=True))
 
     # ---------------------------------------------------------------- tooltip: state profile
     tt = Page("stateTooltip", "State Tooltip", width=320, height=240, kind="Tooltip")
-    tt.add("ttHeader", 0, 0, 320, 70, block(MAST))
-    tt.add("ttName", 4, 2, 312, 38, card("Selected State", "", value_colour="#FFFFFF", size=16, show_label=False, background=MAST))
-    tt.add("ttStatus", 4, 38, 312, 28, card("Status Text", "", value_colour=GOLD, size=10, show_label=False,
-                                            background=MAST, pad=(0, 0, 14, 14), font="Segoe UI"))
+    tt.add("ttHeader", 0, 0, 320, 70, block(SLATE))
+    tt.add("ttName", 4, 2, 312, 38, card("Selected State", "", value_colour="#FFFFFF", size=16, show_label=False, background=SLATE))
+    tt.add("ttStatus", 4, 38, 312, 28, card("Status Text", "", value_colour=SUN, size=10, show_label=False,
+                                            background=SLATE, pad=(0, 0, 14, 14), font="Segoe UI"))
     tt.add("ttRate13", 8, 78, 148, 74, card("State Rate 2013", "Uninsured, 2013", value_colour=GREY, size=18))
-    tt.add("ttRate23", 164, 78, 148, 74, card("State Rate 2023", "Uninsured, 2023", value_colour=NAVY, size=18))
+    tt.add("ttRate23", 164, 78, 148, 74, card("State Rate 2023", "Uninsured, 2023", value_colour=INK, size=18))
     tt.add("ttChange", 8, 158, 148, 74, card("State Change", "Change since 2013", value_colour=INK, size=18))
     tt.add("ttRank", 164, 158, 148, 74, card("Rank Text", "", value_colour=INK_2, size=10, show_label=False, font="Segoe UI"))
     return [p1, p2, p3, p4, p5, p6, tt]
@@ -836,15 +863,19 @@ def build_report():
             {"name": "SharedResources", "type": "SharedResources",
              "items": [{"name": BASE_THEME, "path": f"BaseThemes/{BASE_THEME}.json", "type": "BaseTheme"}]},
             {"name": "RegisteredResources", "type": "RegisteredResources",
-             "items": [{"name": CUSTOM_THEME, "path": CUSTOM_THEME, "type": "CustomTheme"}]}]})
+             "items": [{"name": CUSTOM_THEME, "path": CUSTOM_THEME, "type": "CustomTheme"},
+                       {"name": "page_background.png", "path": "page_background.png", "type": "Image"}]}]})
     static = RPT / "StaticResources"
     (static / "SharedResources" / "BaseThemes").mkdir(parents=True, exist_ok=True)
     shutil.copy(find_base_theme(), static / "SharedResources" / "BaseThemes" / f"{BASE_THEME}.json")
+    subprocess.run([sys.executable, str(ROOT / "Python" / "make_background.py")], check=True)
+    (static / "RegisteredResources").mkdir(parents=True, exist_ok=True)
+    shutil.copy(DASH / "assets" / "page_background.png", static / "RegisteredResources" / "page_background.png")
     write_json(static / "RegisteredResources" / CUSTOM_THEME, {
-        "name": "Policy Brief",
-        "dataColors": [NAVY, ORANGE, GOLD, GREY, NAVY_2, NAVY_LIGHT, "#EFB7A3", "#6B6860"],
-        "foreground": INK, "background": "#FFFFFF", "tableAccent": NAVY,
-        "textClasses": {"title": {"fontFace": SERIF, "color": INK}}})
+        "name": "Coverage Infographic",
+        "dataColors": [EXP, NONEXP, SUN, GREY, EXP_2, EXP_L, NONEXP_L, SLATE],
+        "foreground": INK, "background": "#FFFFFF", "tableAccent": EXP,
+        "textClasses": {"title": {"fontFace": FONT, "color": INK}, "callout": {"fontFace": FONT}}})
     pages = build_pages()
     write_json(d / "pages" / "pages.json", {"$schema": S_PAGES, "pageOrder": [p.name for p in pages],
                                             "activePageName": pages[0].name})

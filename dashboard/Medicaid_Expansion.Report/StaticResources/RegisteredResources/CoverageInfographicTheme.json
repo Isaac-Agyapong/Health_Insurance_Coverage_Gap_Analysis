@@ -1,0 +1,25 @@
+{
+  "name": "Coverage Infographic",
+  "dataColors": [
+    "#0E9F6E",
+    "#D63F6C",
+    "#F5B700",
+    "#8A94A0",
+    "#3DBB8F",
+    "#9BDCC3",
+    "#F2A7BD",
+    "#1F2D3D"
+  ],
+  "foreground": "#1F2D3D",
+  "background": "#FFFFFF",
+  "tableAccent": "#0E9F6E",
+  "textClasses": {
+    "title": {
+      "fontFace": "Bahnschrift",
+      "color": "#1F2D3D"
+    },
+    "callout": {
+      "fontFace": "Bahnschrift"
+    }
+  }
+}

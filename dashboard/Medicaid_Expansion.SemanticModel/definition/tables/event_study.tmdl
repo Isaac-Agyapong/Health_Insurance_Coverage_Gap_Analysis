@@ -6,7 +6,7 @@ table event_study
 		displayFolder: Causal
 		lineageTag: 3d29e1f3-7c03-5bb6-8e5b-6f10e1d4a294
 
-	measure 'Effect Colour' = IF ( SELECTEDVALUE ( event_study[years_since_expansion] ) < 0, "#CFCCC4", "#1D4E89" )
+	measure 'Effect Colour' = IF ( SELECTEDVALUE ( event_study[years_since_expansion] ) < 0, "#CDD3DA", "#0E9F6E" )
 		displayFolder: Causal
 		lineageTag: ab632515-c5a2-5952-9d35-36c03fcf973e
 
