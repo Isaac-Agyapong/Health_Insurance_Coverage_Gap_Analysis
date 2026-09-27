@@ -14,18 +14,19 @@
                   {
                     "value": "Health Insurance Coverage Gap",
                     "textStyle": {
-                      "fontSize": "18pt",
+                      "fontSize": "24pt",
                       "color": "#1F2D3D",
                       "fontWeight": "bold",
                       "fontFamily": "Bahnschrift"
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               },
               {
                 "textRuns": [
                   {
-                    "value": "Medicaid Expansion Impact",
+                    "value": "MEDICAID EXPANSION IMPACT",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#D63F6C",
@@ -34,13 +35,14 @@
                     }
                   },
                   {
-                    "value": "   \u00b7   analytics and machine learning",
+                    "value": "   \u00b7   analytics and machine learning   \u00b7   3,143 US counties   \u00b7   2008-2023",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#5B6B7C"
                     }
                   }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }
@@ -64,11 +66,11 @@
     }
   },
   "position": {
-    "x": 78,
-    "y": 10,
+    "x": 240,
+    "y": 6,
     "z": 2000,
-    "height": 58,
-    "width": 600,
+    "height": 72,
+    "width": 800,
     "tabOrder": 2000
   }
 }

@@ -129,9 +129,9 @@
   "position": {
     "x": 40,
     "y": 600,
-    "z": 12000,
+    "z": 10000,
     "height": 36,
     "width": 568,
-    "tabOrder": 12000
+    "tabOrder": 10000
   }
 }

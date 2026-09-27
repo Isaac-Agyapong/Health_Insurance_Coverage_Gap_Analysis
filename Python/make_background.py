@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFilter
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "dashboard" / "assets" / "page_background.png"
 W, H, K = 1280, 720, 2
-BASE = (245, 246, 241)
+BASE = (223, 229, 221)       # soft grey-green, a little darker than the white cards
 EMERALD, SUN, ROSE = (14, 159, 110), (245, 183, 0), (214, 63, 108)
 
 
@@ -64,7 +64,7 @@ def main():
     d = ImageDraw.Draw(dots)
     r = 1.6 * K
     for a, b in zip(px * K, py * K):
-        d.ellipse([a - r, b - r, a + r, b + r], fill=(*EMERALD, 38))
+        d.ellipse([a - r, b - r, a + r, b + r], fill=(*EMERALD, 55))
     img = Image.alpha_composite(img, dots)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

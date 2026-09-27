@@ -80,7 +80,7 @@ table state_year
 		displayFolder: Map
 		lineageTag: 83c30007-bb30-5ae5-ba04-2d1c5b3dc0ff
 
-	measure 'Border Colour' = "#F5F6F1"
+	measure 'Border Colour' = "#DFE5DD"
 		displayFolder: Map
 		lineageTag: a6771a6e-cec0-5f5f-98fb-8e8302cad62b
 

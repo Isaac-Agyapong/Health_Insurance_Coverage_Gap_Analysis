@@ -488,9 +488,9 @@
   "position": {
     "x": 640,
     "y": 128,
-    "z": 12000,
+    "z": 10000,
     "height": 262,
     "width": 616,
-    "tabOrder": 12000
+    "tabOrder": 10000
   }
 }

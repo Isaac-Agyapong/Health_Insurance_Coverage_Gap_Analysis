@@ -51,7 +51,7 @@ EXP, EXP_2, EXP_L = "#0E9F6E", "#3DBB8F", "#9BDCC3"          # emerald: expanded
 NONEXP, NONEXP_L = "#D63F6C", "#F2A7BD"                      # rose: had not expanded
 SUN, SUN_L = "#F5B700", "#FBE3A0"                            # sunflower: the highlighted finding
 GREY, GREY_LIGHT = "#8A94A0", "#CDD3DA"
-SLATE, PAPER, INK, INK_2, RULE = "#1F2D3D", "#F5F6F1", "#1F2D3D", "#5B6B7C", "#E6EAE4"
+SLATE, PAPER, INK, INK_2, RULE = "#1F2D3D", "#DFE5DD", "#1F2D3D", "#5B6B7C", "#E6EAE4"
 PCT1, PTS, INT = "0.0%;-0.0%;0.0%", '+0.0" pts";-0.0" pts";0.0" pts"', "#,0"
 FONT = "Bahnschrift"     # DIN-style condensed face that ships with Windows
 # text colours that read well on each KPI block colour
@@ -669,16 +669,15 @@ def chip(text, fill="#EEF1EC", colour=INK_2, bold=False):
 
 def frame(page, finding, sub):
     """App-bar header, section finding with an accent bar, source line and bottom chapter bar: same on every page."""
-    page.add("appBar", 16, 10, 1248, 58, block("#FFFFFF", radius=16, shadow=True))
-    page.add("logo", 28, 19, 40, 40, textbox([("✚", 17, True, "#FFFFFF")], background=EXP, radius=12,
+    page.add("appBar", 16, 8, 1248, 64, block("#FFFFFF", radius=16, shadow=True))
+    page.add("logo", 30, 20, 40, 40, textbox([("✚", 17, True, "#FFFFFF")], background=EXP, radius=12,
                                              align="center", pad=(6, 0, 0, 0)))
-    page.add("title", 78, 10, 600, 58, textbox(
-        [("Health Insurance Coverage Gap", 18, True, SLATE, FONT),
-         [("Medicaid Expansion Impact", 10, True, NONEXP, FONT), ("   ·   analytics and machine learning", 10, False, INK_2)]],
-        pad=(0, 0, 4, 4)))
-    page.add("chipCounties", 792, 26, 118, 26, chip("3,143 US counties"))
-    page.add("chipYears", 918, 26, 92, 26, chip("2008 - 2023"))
-    page.add("chipAuthor", 1018, 26, 234, 26, chip("Built by Isaac Agyapong", fill=SUN, colour=SLATE, bold=True))
+    page.add("title", 240, 6, 800, 72, textbox(          # centred title
+        [("Health Insurance Coverage Gap", 24, True, SLATE, FONT),
+         [("MEDICAID EXPANSION IMPACT", 10, True, NONEXP, FONT),
+          ("   ·   analytics and machine learning   ·   3,143 US counties   ·   2008-2023", 10, False, INK_2)]],
+        align="center", pad=(0, 0, 4, 4)))
+    page.add("chipAuthor", 1062, 27, 190, 26, chip("Built by Isaac Agyapong", fill=SUN, colour=SLATE, bold=True))
     page.add("accent", X0, 82, 5, 38, block(EXP, radius=3))
     page.add("headline", X0 + 12, 76, W - 12, 52, textbox(
         [(finding, 15, True, INK, FONT), (sub, 10, False, INK_2)], pad=(0, 0, 4, 4)))
