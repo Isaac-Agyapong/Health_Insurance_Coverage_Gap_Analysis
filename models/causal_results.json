@@ -1,0 +1,94 @@
+{
+  "unadjusted": {
+    "att_years_0_2": -6.327713574201422,
+    "ci": [
+      -8.00468218514053,
+      -4.593251207845141
+    ],
+    "mean_pre_trend": -0.009029408187954044,
+    "max_abs_pre_trend": 0.42908367738157377,
+    "att_all_post_years": -6.993549912637702
+  },
+  "adjusted": {
+    "att_years_0_2": -6.408894277426078,
+    "ci": [
+      -7.843365953238134,
+      -4.231214906238293
+    ],
+    "mean_pre_trend": 0.0923026853942943,
+    "max_abs_pre_trend": 0.4248871343625496,
+    "att_all_post_years": -7.39939209033984
+  },
+  "people_covered_2023": {
+    "estimate": 968009.2883632617,
+    "ci": [
+      236664.36031372834,
+      1286217.8987218477
+    ]
+  },
+  "placebo_138_400": {
+    "att_years_0_2": -2.762002499582431,
+    "ci": [
+      -3.872700793689574,
+      -1.4433121861363938
+    ]
+  },
+  "placebo_fake_2011": {
+    "att": 0.03661403886364036,
+    "ci": [
+      -0.8407029966409201,
+      1.405271104113363
+    ]
+  },
+  "twfe": -7.077461943983953,
+  "by_cohort_year_2": [
+    {
+      "expansion_year": 2014,
+      "att_year_2": -8.279555507024288,
+      "counties": 1078
+    },
+    {
+      "expansion_year": 2015,
+      "att_year_2": -6.412052677024018,
+      "counties": 169
+    },
+    {
+      "expansion_year": 2016,
+      "att_year_2": -8.97382701634412,
+      "counties": 81
+    },
+    {
+      "expansion_year": 2017,
+      "att_year_2": -8.319565951667537,
+      "counties": 64
+    },
+    {
+      "expansion_year": 2019,
+      "att_year_2": -7.385454008160583,
+      "counties": 149
+    },
+    {
+      "expansion_year": 2020,
+      "att_year_2": -3.218873716399835,
+      "counties": 73
+    },
+    {
+      "expansion_year": 2021,
+      "att_year_2": -1.9017939288631789,
+      "counties": 93
+    }
+  ],
+  "counties": 3035,
+  "states": 45,
+  "covariates": [
+    "poverty_pct_2013",
+    "log_income_2013",
+    "pct_nh_black_2013",
+    "pct_hispanic_2013",
+    "pct_age_65plus_2013",
+    "log_pop_2013",
+    "rural_near",
+    "rural_remote"
+  ],
+  "bootstrap_draws": 499
+}
