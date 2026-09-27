@@ -243,6 +243,14 @@ PLAIN = [
     ("county_2023", "Top 8 County Rate", "IF ( NOT ISBLANK ( [Top 8 County Uninsured] ), [County Rate] )", "0%", "Plain"),
 ]
 MEASURES += PLAIN
+MEASURES += [
+    ("group_trend", "Waffle Square", 'IF ( NOT ISEMPTY ( Waffle ), "■" )', None, "Waffle"),
+    # fill from the bottom row up, like a glass filling: cells 90-99 first
+    ("group_trend", "Waffle Exp Colour",
+     f'IF ( ( 99 - MIN ( Waffle[cell] ) ) < ROUND ( [Exp Rate 2023] * 100, 0 ), "{EXP}", "#D5DCD3" )', None, "Waffle"),
+    ("group_trend", "Waffle NonExp Colour",
+     f'IF ( ( 99 - MIN ( Waffle[cell] ) ) < ROUND ( [NonExp Rate 2023] * 100, 0 ), "{NONEXP}", "#D5DCD3" )', None, "Waffle"),
+]
 ONE = "HASONEVALUE ( county_profile[county_label] )"
 MEASURES += [
     ("county_profile", "Profile Name", f'IF ( {ONE}, SELECTEDVALUE ( county_profile[county_label] ), "Pick a county" )', None, "County"),
@@ -404,7 +412,7 @@ def build_model():
         "model Model", "\tculture: en-US", "\tdefaultPowerBIDataSourceVersion: powerBI_V3",
         "\tsourceQueryCulture: en-US", "\tdataAccessOptions", "\t\tlegacyRedirects", "\t\treturnErrorValuesAsNull",
         "", "annotation __PBI_TimeIntelligenceEnabled = 0", "",
-        *[f"ref table {t}" for t in TABLES + ["StateGrid", "Compare"]], ""]))
+        *[f"ref table {t}" for t in TABLES + ["StateGrid", "Compare", "Waffle"]], ""]))
     folder = str(DATA) + "\\"
     write(d / "expressions.tmdl", "\n".join([
         f'expression DataFolder = "{folder}" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]',
@@ -431,6 +439,16 @@ def build_model():
         "table Compare", f"\tlineageTag: {tag('Compare')}", "", *cmp_cols,
         "\tpartition Compare = calculated", "\t\tmode: import", "\t\tsource =",
         indent('DATATABLE ( "order", INTEGER, "place", STRING, { { 1, "This county" }, { 2, "Its state" }, { 3, "United States" } } )', 4), ""]))
+    wf_cols = []
+    for col in ("cell", "grid_row", "grid_col"):
+        wf_cols += [f"\tcolumn {col}", "\t\tdataType: int64", "\t\tisHidden", f"\t\tlineageTag: {tag('Waffle', col)}",
+                    "\t\tsummarizeBy: none", "\t\tisNameInferred", f"\t\tsourceColumn: [{col}]", "",
+                    "\t\tannotation SummarizationSetBy = Automatic", ""]
+    write(d / "tables" / "Waffle.tmdl", "\n".join([
+        "table Waffle", f"\tlineageTag: {tag('Waffle')}", "", *wf_cols,
+        "\tpartition Waffle = calculated", "\t\tmode: import", "\t\tsource =",
+        indent('SELECTCOLUMNS ( GENERATESERIES ( 0, 99, 1 ), "cell", [Value], "grid_row", INT ( [Value] / 10 ), "grid_col", MOD ( [Value], 10 ) )', 4),
+        ""]))
     write(d / "relationships.tmdl", f"relationship {tag('rel', 'stategrid')}\n\tfromColumn: state_year.state_abbrev\n"
                                     "\ttoColumn: StateGrid.state_abbr\n")
 
@@ -758,6 +776,8 @@ def facts():
         "tx_counties8": words[int((cty8.state_abbrev == "TX").sum())],
         "actual_2023": wi.loc[2023, "actual"],
         "without_2023": wi.loc[2023, "without_expansion"],
+        "exp_2023": rate(gt_all, "Expanded 2014", 2023),
+        "nonexp_2023": rate(gt_all, "Not expanded by 2023", 2023),
         # differences of the rounded percentages the reader sees (37% - 16% = 21), not of unrounded values
         "drop_exp": round(rate(gt_all, "Expanded 2014", 2013)) - round(rate(gt_all, "Expanded 2014", 2023)),
         "drop_nonexp": round(rate(gt_all, "Not expanded by 2023", 2013)) - round(rate(gt_all, "Not expanded by 2023", 2023)),
@@ -800,6 +820,41 @@ def add_donut_panel(page, x, y, w, h, f):
             pad=(0, 0, 0, 0)))
 
 
+def waffle(colour_measure):
+    """10 x 10 grid of squares from a matrix: one square per person out of every 100."""
+    every_cell = {"data": [{"dataViewWildcard": {"matchingOption": 1}}], "metadata": "group_trend.Waffle Square"}
+    hidden = {"fontColor": solid("#FFFFFF"), "backColor": solid("#FFFFFF"), "fontSize": lit("1D")}
+    v = chart("pivotTable", {"Rows": [C("Waffle", "grid_row")], "Columns": [C("Waffle", "grid_col")], "Values": [M("Waffle Square")]},
+              None, objects={
+                  "values": [{"properties": {"fontSize": lit("13D"), "backColorPrimary": solid("#FFFFFF"),
+                                             "backColorSecondary": solid("#FFFFFF")}},
+                             {"properties": {"fontColor": by_measure("group_trend", colour_measure)}, "selector": every_cell}],
+                  "columnHeaders": [{"properties": hidden}], "rowHeaders": [{"properties": hidden}],
+                  "subTotals": [{"properties": {"rowSubtotals": lit("false"), "columnSubtotals": lit("false")}}],
+                  "grid": [{"properties": {"gridVertical": lit("false"), "gridHorizontal": lit("false"),
+                                           "outlineColor": solid("#FFFFFF"), "rowPadding": lit("0D")}}]})
+    v["query"]["queryState"]["Values"]["projections"][0]["displayName"] = " "
+    v["visualContainerObjects"] = tile(pad=(0, 0, 0, 0), shadow=False)
+    return v
+
+
+def add_waffle_panel(page, x, y, w, h, f):
+    """Out of every 100 low-income adults, how many are uninsured today: two 10x10 grids."""
+    ratio = f["nonexp_2023"] / f["exp_2023"]
+    how = "almost twice" if 1.7 <= ratio < 2 else f"{ratio:.1f} times"
+    page.add("waffleCard", x, y, w, h, textbox(
+        [(f"In states that did not expand, adults are {how} as likely to be uninsured", 14, True, INK, FONT),
+         ("Each square is 1 of every 100 low-income adults. Coloured squares = no health insurance (2023).", 10, False, INK_2)],
+        background="#FFFFFF", pad=(12, 10, 16, 16), shadow=True))
+    for i, (key, name, colour, rate) in enumerate([("Exp", "States that expanded Medicaid", EXP, f["exp_2023"]),
+                                                    ("NonExp", "States that did not expand", NONEXP, f["nonexp_2023"])]):
+        gx = x + 40 + i * 390
+        page.add(f"waffle{i}", gx, y + 62, 330, 256, waffle(f"Waffle {key} Colour"))
+        page.add(f"waffleLabel{i}", gx + 20, y + 318, 290, 60, textbox(
+            [[(f"{round(rate)} in 100", 20, True, colour, FONT), ("  uninsured", 12, False, INK_2)],
+             (name, 12, True, colour, FONT)], align="center", pad=(0, 0, 0, 0)))
+
+
 def build_pages():
     f = facts()
     kx = [X0 + i * (W + 16) // 4 for i in range(4)]
@@ -813,7 +868,7 @@ def build_pages():
     kpi(p1, 2, kx[1], TOP, kw, "NonExp Rate 2023", "Uninsured where it did not expand", "KPI NonExp Context", NONEXP)
     kpi(p1, 3, kx[2], TOP, kw, "Effect Plain", "fewer uninsured in the first 3 years", "Effect Range Text", EXP)
     kpi(p1, 4, kx[3], TOP, kw, "Adults Would Gain", "more adults could be insured", "Gain Context", SUN)
-    add_donut_panel(p1, X0, TOP + 128, 800, 384, f)
+    add_waffle_panel(p1, X0, TOP + 128, 800, 384, f)
     grp = field("group_trend", "Coverage Group")
     donut_colours = [{"properties": {"fill": solid(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
         "ComparisonKind": 0, "Left": grp, "Right": {"Literal": {"Value": f"'{g}'"}}}}}]}}

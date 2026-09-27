@@ -1,91 +1,39 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "pct2023_1",
+  "name": "waffleCard",
   "visual": {
-    "visualType": "card",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "group_trend"
-                    }
-                  },
-                  "Property": "NonExp Uninsured 2023"
-                }
-              },
-              "queryRef": "group_trend.NonExp Uninsured 2023",
-              "nativeQueryRef": "NonExp Uninsured 2023",
-              "displayName": ""
-            }
-          ]
-        }
-      }
-    },
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
     "objects": {
-      "labels": [
+      "general": [
         {
           "properties": {
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#D63F6C'"
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "In states that did not expand, adults are almost twice as likely to be uninsured",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#1F2D3D",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
                     }
                   }
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "17D"
-                }
-              }
-            },
-            "fontFamily": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Bahnschrift'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "categoryLabels": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#5B6B7C'"
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Each square is 1 of every 100 low-income adults. Coloured squares = no health insurance (2023).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5B6B7C"
                     }
                   }
-                }
+                ]
               }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            }
+            ]
           }
         }
       ]
@@ -159,7 +107,67 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Outer'"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Custom'"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "88D"
+                }
+              }
+            },
+            "shadowBlur": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "shadowDistance": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "angle": {
+              "expr": {
+                "Literal": {
+                  "Value": "90D"
                 }
               }
             }
@@ -211,28 +219,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "12D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "10D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "16D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "16D"
                 }
               }
             }
@@ -252,15 +260,14 @@
           }
         }
       ]
-    },
-    "drillFilterOtherVisuals": true
+    }
   },
   "position": {
-    "x": 494,
-    "y": 543,
-    "z": 39000,
-    "height": 38,
-    "width": 70,
-    "tabOrder": 39000
+    "x": 24,
+    "y": 256,
+    "z": 25000,
+    "height": 384,
+    "width": 800,
+    "tabOrder": 25000
   }
 }

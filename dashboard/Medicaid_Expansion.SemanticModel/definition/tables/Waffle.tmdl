@@ -1,0 +1,37 @@
+table Waffle
+	lineageTag: 5951940a-605b-5191-8b7d-1d2810010392
+
+	column cell
+		dataType: int64
+		isHidden
+		lineageTag: 02d0dde3-137a-57c2-8e04-2c110cc47059
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [cell]
+
+		annotation SummarizationSetBy = Automatic
+
+	column grid_row
+		dataType: int64
+		isHidden
+		lineageTag: 7377394b-700e-5f41-b4ac-21c825b47d2c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [grid_row]
+
+		annotation SummarizationSetBy = Automatic
+
+	column grid_col
+		dataType: int64
+		isHidden
+		lineageTag: fa75dd5d-5848-583e-9bee-ca546f4ee8a6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [grid_col]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Waffle = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS ( GENERATESERIES ( 0, 99, 1 ), "cell", [Value], "grid_row", INT ( [Value] / 10 ), "grid_col", MOD ( [Value], 10 ) )

@@ -1,11 +1,47 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "donut2023_0",
+  "name": "waffle1",
   "visual": {
-    "visualType": "donutChart",
+    "visualType": "pivotTable",
     "query": {
       "queryState": {
-        "Y": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Waffle"
+                    }
+                  },
+                  "Property": "grid_row"
+                }
+              },
+              "queryRef": "Waffle.grid_row",
+              "nativeQueryRef": "grid_row"
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Waffle"
+                    }
+                  },
+                  "Property": "grid_col"
+                }
+              },
+              "queryRef": "Waffle.grid_col",
+              "nativeQueryRef": "grid_col"
+            }
+          ]
+        },
+        "Values": {
           "projections": [
             {
               "field": {
@@ -15,27 +51,12 @@
                       "Entity": "group_trend"
                     }
                   },
-                  "Property": "Exp Uninsured 2023"
+                  "Property": "Waffle Square"
                 }
               },
-              "queryRef": "group_trend.Exp Uninsured 2023",
-              "nativeQueryRef": "Exp Uninsured 2023",
-              "displayName": "Uninsured"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "group_trend"
-                    }
-                  },
-                  "Property": "Exp Insured 2023"
-                }
-              },
-              "queryRef": "group_trend.Exp Insured 2023",
-              "nativeQueryRef": "Exp Insured 2023",
-              "displayName": "Insured"
+              "queryRef": "group_trend.Waffle Square",
+              "nativeQueryRef": "Waffle Square",
+              "displayName": " "
             }
           ]
         }
@@ -206,85 +227,207 @@
     },
     "drillFilterOtherVisuals": true,
     "objects": {
-      "labels": [
+      "values": [
         {
           "properties": {
-            "show": {
+            "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "13D"
+                }
+              }
+            },
+            "backColorPrimary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColorSecondary": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
                 }
               }
             }
           }
-        }
-      ],
-      "legend": [
+        },
         {
           "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "group_trend"
+                        }
+                      },
+                      "Property": "Waffle NonExp Colour"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
+                }
+              }
+            ],
+            "metadata": "group_trend.Waffle Square"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "1D"
                 }
               }
             }
           }
         }
       ],
-      "dataPoint": [
+      "rowHeaders": [
         {
           "properties": {
-            "fill": {
+            "fontColor": {
               "solid": {
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
               }
+            },
+            "backColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
             }
-          },
-          "selector": {
-            "metadata": "group_trend.Exp Uninsured 2023"
           }
-        },
+        }
+      ],
+      "subTotals": [
         {
           "properties": {
-            "fill": {
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "outlineColor": {
               "solid": {
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E4E8E2'"
+                      "Value": "'#FFFFFF'"
                     }
                   }
                 }
               }
+            },
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
             }
-          },
-          "selector": {
-            "metadata": "group_trend.Exp Insured 2023"
           }
         }
       ]
     }
   },
   "position": {
-    "x": 444,
-    "y": 346,
-    "z": 31000,
-    "height": 140,
-    "width": 170,
-    "tabOrder": 31000
+    "x": 454,
+    "y": 318,
+    "z": 28000,
+    "height": 256,
+    "width": 330,
+    "tabOrder": 28000
   }
 }

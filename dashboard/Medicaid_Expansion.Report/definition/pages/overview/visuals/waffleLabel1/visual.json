@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "rowLabel1",
+  "name": "waffleLabel1",
   "visual": {
     "visualType": "textbox",
     "drillFilterOtherVisuals": true,
@@ -12,26 +12,37 @@
               {
                 "textRuns": [
                   {
+                    "value": "29 in 100",
+                    "textStyle": {
+                      "fontSize": "20pt",
+                      "color": "#D63F6C",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
+                    }
+                  },
+                  {
+                    "value": "  uninsured",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "center"
+              },
+              {
+                "textRuns": [
+                  {
                     "value": "States that did not expand",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "12pt",
                       "color": "#D63F6C",
                       "fontWeight": "bold",
                       "fontFamily": "Bahnschrift"
                     }
                   }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "as of 2023",
-                    "textStyle": {
-                      "fontSize": "10pt",
-                      "color": "#5B6B7C"
-                    }
-                  }
-                ]
+                ],
+                "horizontalTextAlignment": "center"
               }
             ]
           }
@@ -55,11 +66,11 @@
     }
   },
   "position": {
-    "x": 40,
-    "y": 532,
-    "z": 35000,
-    "height": 72,
-    "width": 176,
-    "tabOrder": 35000
+    "x": 474,
+    "y": 574,
+    "z": 29000,
+    "height": 60,
+    "width": 290,
+    "tabOrder": 29000
   }
 }

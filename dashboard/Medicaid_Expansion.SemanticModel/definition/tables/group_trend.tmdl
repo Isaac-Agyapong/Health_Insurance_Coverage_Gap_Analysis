@@ -60,6 +60,18 @@ table group_trend
 		displayFolder: Trend
 		lineageTag: f0d87f94-c574-5f67-bca5-2ba3dbc2aefa
 
+	measure 'Waffle Square' = IF ( NOT ISEMPTY ( Waffle ), "■" )
+		displayFolder: Waffle
+		lineageTag: 95b6a641-590c-5731-b814-454ef1e5ce17
+
+	measure 'Waffle Exp Colour' = IF ( ( 99 - MIN ( Waffle[cell] ) ) < ROUND ( [Exp Rate 2023] * 100, 0 ), "#0E9F6E", "#D5DCD3" )
+		displayFolder: Waffle
+		lineageTag: 634828f1-4b7f-51c6-a41e-e88b329356fc
+
+	measure 'Waffle NonExp Colour' = IF ( ( 99 - MIN ( Waffle[cell] ) ) < ROUND ( [NonExp Rate 2023] * 100, 0 ), "#D63F6C", "#D5DCD3" )
+		displayFolder: Waffle
+		lineageTag: f62b3ef2-9cec-5066-925c-88a8f87481a3
+
 	measure 'Exp Uninsured 2013' = [Exp Rate 2013]
 		formatString: 0%
 		displayFolder: Donuts

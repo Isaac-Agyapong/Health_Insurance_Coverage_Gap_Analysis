@@ -23,3 +23,4 @@ ref table ml_state_predictions
 ref table ml_county_predictions
 ref table StateGrid
 ref table Compare
+ref table Waffle
