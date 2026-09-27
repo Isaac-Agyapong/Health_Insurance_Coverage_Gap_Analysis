@@ -15,12 +15,12 @@
                       "Entity": "county_profile"
                     }
                   },
-                  "Property": "Profile Gain"
+                  "Property": "Profile State Rank"
                 }
               },
-              "queryRef": "county_profile.Profile Gain",
-              "nativeQueryRef": "Profile Gain",
-              "displayName": "more insured if the state expands"
+              "queryRef": "county_profile.Profile State Rank",
+              "nativeQueryRef": "Profile State Rank",
+              "displayName": "in its state for share uninsured"
             }
           ]
         }

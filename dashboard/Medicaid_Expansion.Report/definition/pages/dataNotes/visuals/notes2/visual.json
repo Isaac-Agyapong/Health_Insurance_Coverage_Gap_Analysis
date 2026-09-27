@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Effect of expansion: difference-in-differences (Callaway & Sant'Anna), comparing each county with similar counties in states that did not expand; ranges from 499 resamples of states",
+                    "value": "\u2022  Loaded into PostgreSQL and checked: county totals match state totals, and medians match the Census's published 2023 figures exactly",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Predictions: causal forest machine learning model (EconML), tested on states it never saw",
+                    "value": "\u2022  How much expansion itself caused, and predictions for the remaining states: see the companion machine learning project (Medicaid_Expansion_Impact_Model)",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"

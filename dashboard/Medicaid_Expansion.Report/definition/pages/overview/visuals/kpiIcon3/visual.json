@@ -12,10 +12,10 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u25bc",
+                    "value": "\u25cf",
                     "textStyle": {
                       "fontSize": "16pt",
-                      "color": "#0E9F6E",
+                      "color": "#1F2D3D",
                       "fontWeight": "bold"
                     }
                   }

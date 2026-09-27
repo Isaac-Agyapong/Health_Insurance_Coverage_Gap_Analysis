@@ -2,8 +2,8 @@
 
     python Python/04_build_notebook.py
 
-The notebook reads the analytics views in PostgreSQL (part 1: analytics) and the saved outputs of
-05_causal_effects.py and 06_ml_county_effects.py (part 2: causal effect and machine learning).
+The notebook reads the analytics views in PostgreSQL. How much of the change expansion itself caused, and the
+machine learning predictions, are in the companion project Medicaid_Expansion_Impact_Model.
 """
 import subprocess
 import sys
@@ -26,9 +26,10 @@ poverty line could get free coverage. This notebook measures what happened to th
 without health insurance, how much of the drop the policy itself caused, and which places would gain the most
 if the remaining states expanded.
 
-* **Part 1, analytics:** trends, gaps between states, counties, income, rural areas and race (PostgreSQL views).
-* **Part 2, causal effect and machine learning:** results of `05_causal_effects.py` (difference-in-differences)
-  and `06_ml_county_effects.py` (causal forest).
+This notebook covers the analytics: trends, gaps between states, counties, income, rural areas and race, all read
+from the PostgreSQL analytics views. How much of the drop expansion itself caused, and what would happen if the
+remaining states expanded, are answered by the companion machine learning project
+([Medicaid_Expansion_Impact_Model](https://github.com/Isaac-Agyapong/Medicaid_Expansion_Impact_Model)).
 
 Data: Census Small Area Health Insurance Estimates (SAHIE) 2008-2023 for 3,143 counties; KFF expansion dates;
 Census poverty, income and population estimates; USDA rural-urban codes. Main outcome: the uninsured rate of
@@ -210,68 +211,14 @@ non-expansion states nearly half (46%) are still uninsured.
 """)
 
 md("""
-## Part 2: How much did expansion itself cause? (difference-in-differences)
-
-The fall in part 1 mixes the effect of expansion with everything else that happened after 2014 (the ACA
-Marketplace, a strong economy). `05_causal_effects.py` isolates expansion's effect by comparing each expansion
-county's change with the change in similar counties in states that did not expand over the same years
-(Callaway & Sant'Anna staggered difference-in-differences, population-weighted, state-clustered bootstrap).
-""")
-code("""
-cr = json.loads((ROOT / "models" / "causal_results.json").read_text())
-display(Image(vs.IMAGE_DIR / "05_event_study.png"))
-pd.DataFrame({
-    "estimate (pts)": [cr["adjusted"]["att_years_0_2"], cr["unadjusted"]["att_years_0_2"], cr["placebo_138_400"]["att_years_0_2"],
-                       cr["placebo_fake_2011"]["att"], cr["adjusted"]["att_all_post_years"], cr["twfe"]],
-    "95% CI": [f"{a:.1f} to {b:.1f}" for a, b in [cr["adjusted"]["ci"], cr["unadjusted"]["ci"], cr["placebo_138_400"]["ci"],
-                                                  cr["placebo_fake_2011"]["ci"]]] + ["", ""],
-}, index=["Main: covariate-adjusted, years 0-2", "Unadjusted, years 0-2", "Adults 138-400% FPL (not made eligible)",
-          "Placebo: fake 2011 expansion", "Adjusted, all post years", "Two-way fixed effects (traditional)"])
-""")
-code("""
-display(Image(vs.IMAGE_DIR / "06_robustness_checks.png"))
-print(f"Low-income adults with coverage in 2023 because of expansion (study states): "
-      f"{cr['people_covered_2023']['estimate']:,.0f} (95% CI {cr['people_covered_2023']['ci'][0]:,.0f} to {cr['people_covered_2023']['ci'][1]:,.0f})")
-""")
-
-md("""
-## Part 3: Machine learning: which counties gain the most? (causal forest)
-
-`06_ml_county_effects.py` trains a causal forest (EconML, double machine learning) on every expansion wave from
-2014 to 2021, compared with counties in states that did not expand over the same years. It estimates a separate
-effect for each county from its pre-expansion traits, and is checked two ways: its average must agree with the
-difference-in-differences estimate, and on states held out of training, counties predicted to gain more must
-really have gained more.
-""")
-code("""
-mr = json.loads((ROOT / "models" / "ml_results.json").read_text())
-print(f"Causal forest average effect on expansion counties: {mr['forest_ate_expansion_counties']:.2f} pts "
-      f"(difference-in-differences: {mr['did_estimate_years_0_2']:.2f} pts)")
-display(Image(vs.IMAGE_DIR / "07_model_validation.png"))
-pd.DataFrame(mr["validation_splits"])[["split", "gap_top_vs_bottom_predicted", "gap_top_vs_bottom_actual"]]
-""")
-code("""
-display(Image(vs.IMAGE_DIR / "08_effect_drivers.png"))
-pd.DataFrame(mr["effect_by"]).T
-""")
-code("""
-display(Image(vs.IMAGE_DIR / "09_nonexpansion_predictions.png"))
-top = pd.read_csv(ROOT / "Data" / "clean" / "ml_nonexpansion_county_predictions.csv")
-top = top[~top.state.isin(["NC", "SD"])]
-top.head(15)[["county_name", "state", "rurality", "base_rate", "predicted_effect_pts", "effect_lo", "effect_hi", "adults_gaining_coverage"]]
-""")
-md("""
 ## Limitations
 
 * SAHIE numbers are model-based estimates with margins of error (median about 4 points for a county's low-income
   adults); models weight counties by population so large, precise counties count more.
-* States chose whether to expand. The design removes fixed differences between states and shared yearly
-  changes, and pre-expansion trends match, but a state-specific shock at the same time as expansion would still bias
-  the estimate.
+* The comparison between states that did and did not expand is descriptive: those states differed before 2014
+  too. The companion machine learning project estimates the part of the difference that expansion itself caused.
 * SAHIE measures income over a year; Medicaid uses monthly income, so some people above 138% were eligible part
   of the year. This is one reason the 138-400% group shows a small effect.
-* Predictions for the remaining states assume expansion would work there as it did in similar counties that
-  expanded, under 2023 conditions. They are estimates of the drop in the uninsured rate, not enrollment forecasts.
 """)
 
 nb = nbf.v4.new_notebook(cells=cells, metadata={"kernelspec": {"name": "python3", "display_name": "Python 3"}})

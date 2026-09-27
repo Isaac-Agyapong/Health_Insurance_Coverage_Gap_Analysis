@@ -12,15 +12,15 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "model_metrics"
+                      "Entity": "state_year"
                     }
                   },
-                  "Property": "Adults Would Gain"
+                  "Property": "Highest State Rate"
                 }
               },
-              "queryRef": "model_metrics.Adults Would Gain",
-              "nativeQueryRef": "Adults Would Gain",
-              "displayName": "more adults could be insured"
+              "queryRef": "state_year.Highest State Rate",
+              "nativeQueryRef": "Highest State Rate",
+              "displayName": "uninsured in Texas, highest in the US"
             }
           ]
         }

@@ -12,14 +12,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "model_metrics"
+                      "Entity": "group_trend"
                     }
                   },
-                  "Property": "Effect Range Text"
+                  "Property": "US Uninsured Context"
                 }
               },
-              "queryRef": "model_metrics.Effect Range Text",
-              "nativeQueryRef": "Effect Range Text",
+              "queryRef": "group_trend.US Uninsured Context",
+              "nativeQueryRef": "US Uninsured Context",
               "displayName": ""
             }
           ]
@@ -35,7 +35,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DDF5EB'"
+                      "Value": "'#CBD5DF'"
                     }
                   }
                 }
@@ -106,7 +106,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -174,7 +174,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }
@@ -185,7 +185,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#1F2D3D'"
                     }
                   }
                 }

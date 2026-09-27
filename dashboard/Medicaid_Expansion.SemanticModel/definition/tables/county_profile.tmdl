@@ -37,14 +37,6 @@ table county_profile
 		displayFolder: County
 		lineageTag: c7fd34d7-b9fd-5e98-be59-2cdab3fed8d9
 
-	measure 'Profile Gain' = IF ( HASONEVALUE ( county_profile[county_label] ), IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "Already expanded", FORMAT ( SUM ( county_profile[adults_gaining_coverage] ), "#,0" ) ) )
-		displayFolder: County
-		lineageTag: 0665a08b-09ec-5f5f-9395-edb3412987e4
-
-	measure 'Profile Gain Context' = IF ( HASONEVALUE ( county_profile[county_label] ), IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "this state already expanded Medicaid", "uninsured would fall to about " & FORMAT ( SUM ( county_profile[predicted_rate_after] ) / 100, "0%" ) ) )
-		displayFolder: County
-		lineageTag: 19db19d1-e613-523c-9442-6b5d62783627
-
 	measure 'Compare Rate' =
 			SWITCH ( SELECTEDVALUE ( Compare[order] ),
 			    1, [Profile Rate],
@@ -63,17 +55,22 @@ table county_profile
 			VAR _st = SELECTEDVALUE ( county_profile[state_name] )
 			VAR _r = SUM ( county_profile[rate_2023] )
 			VAR _s = SUM ( county_profile[state_rate_2023] )
-			VAR _g = SUM ( county_profile[adults_gaining_coverage] )
 			RETURN IF ( HASONEVALUE ( county_profile[county_label] ),
 			    "About " & FORMAT ( ROUND ( SUM ( county_profile[uninsured_2023] ), -2 ), "#,0" ) & " low-income adults in " & _n
 			        & " have no health insurance: " & FORMAT ( _r, "0" ) & " in every 100. That is "
 			        & IF ( _r > _s + 0.5, "higher than", IF ( _r < _s - 0.5, "lower than", "about the same as" ) )
-			        & " the " & _st & " average (" & FORMAT ( _s, "0" ) & " in 100)."
-			        & IF ( NOT ISBLANK ( _g ), " If " & _st & " expanded Medicaid, about " & FORMAT ( ROUND ( _g, -2 ), "#,0" )
-			        & " more adults here would be insured.", "" ),
+			        & " the " & _st & " average (" & FORMAT ( _s, "0" ) & " in 100).",
 			    "Pick a county in the search box to see what its numbers mean." )
 		displayFolder: County
 		lineageTag: 5a6de0c6-72d4-55a7-b049-34530e9eb459
+
+	measure 'Profile State Rank' = IF ( HASONEVALUE ( county_profile[county_label] ), "#" & SUM ( county_profile[rank_in_state] ) & " of " & MAX ( county_profile[counties_in_state] ) )
+		displayFolder: County
+		lineageTag: 519940e8-e936-5dce-a424-16520a2c35bd
+
+	measure 'Profile State Rank Context' = IF ( HASONEVALUE ( county_profile[county_label] ), "counties in " & SELECTEDVALUE ( county_profile[state_name] ) & " (1 = most uninsured)" )
+		displayFolder: County
+		lineageTag: 672f5866-0e60-5655-8e78-b632bb69f941
 
 	column county_fips
 		dataType: int64
@@ -187,24 +184,6 @@ table county_profile
 
 		annotation SummarizationSetBy = Automatic
 
-	column adults_gaining_coverage
-		dataType: double
-		formatString: #,0.00
-		lineageTag: fd7cf141-c880-58d2-bd05-4b648971fd68
-		summarizeBy: sum
-		sourceColumn: adults_gaining_coverage
-
-		annotation SummarizationSetBy = Automatic
-
-	column predicted_rate_after
-		dataType: double
-		formatString: #,0.00
-		lineageTag: c5795b9a-7d86-5523-8950-e318b6acd8b4
-		summarizeBy: sum
-		sourceColumn: predicted_rate_after
-
-		annotation SummarizationSetBy = Automatic
-
 	column rank_us
 		dataType: int64
 		formatString: 0
@@ -224,13 +203,31 @@ table county_profile
 
 		annotation SummarizationSetBy = Automatic
 
+	column rank_in_state
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cdd9cdf-b852-578a-b8e5-2978603a3aa4
+		summarizeBy: sum
+		sourceColumn: rank_in_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column counties_in_state
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ed8ab7a-f354-5bfb-b986-c368812fe4c5
+		summarizeBy: sum
+		sourceColumn: counties_in_state
+
+		annotation SummarizationSetBy = Automatic
+
 	partition county_profile = m
 		mode: import
 		source =
 				let
 				    Source = Csv.Document(File.Contents(DataFolder & "county_profile.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
-				    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", Int64.Type}, {"county_name", type text}, {"state_abbrev", type text}, {"state_name", type text}, {"county_label", type text}, {"medicaid_status", type text}, {"rurality", type text}, {"uninsured_2023", Int64.Type}, {"low_income_adults_2023", Int64.Type}, {"rate_2023", type number}, {"rate_2013", type number}, {"state_rate_2023", type number}, {"us_rate_2023", type number}, {"adults_gaining_coverage", type number}, {"predicted_rate_after", type number}, {"rank_us", Int64.Type}, {"counties_ranked", Int64.Type}}, "en-US")
+				    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", Int64.Type}, {"county_name", type text}, {"state_abbrev", type text}, {"state_name", type text}, {"county_label", type text}, {"medicaid_status", type text}, {"rurality", type text}, {"uninsured_2023", Int64.Type}, {"low_income_adults_2023", Int64.Type}, {"rate_2023", type number}, {"rate_2013", type number}, {"state_rate_2023", type number}, {"us_rate_2023", type number}, {"rank_us", Int64.Type}, {"counties_ranked", Int64.Type}, {"rank_in_state", Int64.Type}, {"counties_in_state", Int64.Type}}, "en-US")
 				in
 				    Typed
 

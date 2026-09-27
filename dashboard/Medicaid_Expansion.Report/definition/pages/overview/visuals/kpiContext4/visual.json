@@ -12,14 +12,14 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "model_metrics"
+                      "Entity": "state_year"
                     }
                   },
-                  "Property": "Gain Context"
+                  "Property": "Highest State Context"
                 }
               },
-              "queryRef": "model_metrics.Gain Context",
-              "nativeQueryRef": "Gain Context",
+              "queryRef": "state_year.Highest State Context",
+              "nativeQueryRef": "Highest State Context",
               "displayName": ""
             }
           ]

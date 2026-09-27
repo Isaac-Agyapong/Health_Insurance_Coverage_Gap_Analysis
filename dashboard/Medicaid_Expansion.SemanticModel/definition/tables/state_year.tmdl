@@ -112,6 +112,18 @@ table state_year
 		displayFolder: Plain
 		lineageTag: 548d1f39-8d74-53f7-912d-eb4ff844d68d
 
+	measure 'Highest State Rate' = MAXX ( ALL ( state_year[state_name] ), [State Rate 2023] )
+		formatString: 0%
+		displayFolder: Overview
+		lineageTag: 33d983e2-88fd-5aed-b6dd-65311039458e
+
+	measure 'Highest State Context' =
+			VAR _t = TOPN ( 1, ADDCOLUMNS ( ALL ( state_year[state_name] ), "@r", [State Rate 2023],
+			    "@u", CALCULATE ( SUM ( state_year[uninsured] ), state_year[year] = 2023 ) ), [@r], DESC )
+			RETURN "about " & FORMAT ( ROUND ( MAXX ( _t, [@u] ), -4 ), "#,0" ) & " people"
+		displayFolder: Overview
+		lineageTag: 43350603-ed9d-55a0-8ebf-5db02dc5ed69
+
 	column state_abbrev
 		dataType: string
 		lineageTag: c837c9b2-0734-5b2a-87ee-8afad2a667d4

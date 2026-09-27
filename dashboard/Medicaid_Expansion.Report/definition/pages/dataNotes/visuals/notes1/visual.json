@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  \"6 in 100\": for every 100 low-income adults, 6 fewer are uninsured",
+                    "value": "\u2022  \"16 in 100\": out of every 100 low-income adults, 16 have no health insurance",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Would gain coverage: the model's estimate of how many more adults would be insured if the state expanded",
+                    "value": "\u2022  States that did not expand: the 12 states that had not expanded Medicaid by the end of 2023",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"

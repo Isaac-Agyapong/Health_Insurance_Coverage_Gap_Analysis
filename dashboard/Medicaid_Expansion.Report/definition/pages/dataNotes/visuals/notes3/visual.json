@@ -36,7 +36,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Five states that already covered these adults before 2014 (DE, DC, MA, NY, VT) are left out of the effect",
+                    "value": "\u2022  Five states covered these adults before 2014 (DE, DC, MA, NY, VT); they are shown separately",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  States chose whether to expand; something else changing at the same time could affect the estimate",
+                    "value": "\u2022  Differences between states that did and did not expand are not all caused by expansion; the companion project measures the part that is",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Predictions assume expansion would work as it did in similar places; they are not enrollment forecasts",
+                    "value": "\u2022  Small counties have wider margins of error than large ones",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"

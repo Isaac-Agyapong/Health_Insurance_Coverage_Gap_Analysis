@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2605",
+                    "value": "#",
                     "textStyle": {
                       "fontSize": "16pt",
                       "color": "#F5B700",

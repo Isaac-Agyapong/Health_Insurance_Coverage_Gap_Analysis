@@ -13,14 +13,6 @@ ref table state_year
 ref table breakdown_trend
 ref table county_2023
 ref table county_profile
-ref table what_if
-ref table scenario_2023
-ref table event_study
-ref table model_metrics
-ref table robustness
-ref table ml_validation
-ref table ml_state_predictions
-ref table ml_county_predictions
 ref table StateGrid
 ref table Compare
 ref table Waffle

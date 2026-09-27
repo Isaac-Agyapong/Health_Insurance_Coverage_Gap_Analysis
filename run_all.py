@@ -4,8 +4,8 @@
     python run_all.py --skip-download
 
 Steps: download sources -> load PostgreSQL (raw, core, analytics) -> data quality and business queries
--> causal effect (difference-in-differences) -> machine learning (causal forest) -> analysis notebook
--> Power BI export.
+-> analysis notebook -> Power BI extracts -> Power BI project.
+The machine learning model is a separate project (Medicaid_Expansion_Impact_Model) that reads this database.
 """
 import subprocess
 import sys
@@ -17,11 +17,9 @@ STEPS = [
     ("01_download_data.py", "download source files"),
     ("02_load_postgres.py", "load PostgreSQL star schema"),
     ("03_run_sql_queries.py", "data quality + business questions -> SQL/query_results.md"),
-    ("05_causal_effects.py", "difference-in-differences effect of expansion"),
-    ("06_ml_county_effects.py", "causal forest: county effects and predictions"),
     ("04_build_notebook.py", "build and execute Python/04_analysis.ipynb"),
-    ("07_export_powerbi.py", "export tables for the Power BI report"),
-    ("08_build_powerbi_project.py", "generate the Power BI project (PBIP)"),
+    ("05_export_powerbi.py", "export tables for the Power BI report"),
+    ("06_build_powerbi_project.py", "generate the Power BI project (PBIP)"),
 ]
 
 

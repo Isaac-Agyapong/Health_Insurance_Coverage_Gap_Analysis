@@ -15,11 +15,11 @@
                       "Entity": "county_profile"
                     }
                   },
-                  "Property": "Profile Gain Context"
+                  "Property": "Profile State Rank Context"
                 }
               },
-              "queryRef": "county_profile.Profile Gain Context",
-              "nativeQueryRef": "Profile Gain Context",
+              "queryRef": "county_profile.Profile State Rank Context",
+              "nativeQueryRef": "Profile State Rank Context",
               "displayName": ""
             }
           ]

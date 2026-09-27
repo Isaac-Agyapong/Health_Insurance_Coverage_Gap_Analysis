@@ -112,6 +112,15 @@ table group_trend
 		displayFolder: Donuts
 		lineageTag: 411a4a91-4422-54c1-8082-208d901f8359
 
+	measure 'US Uninsured 2023' = CALCULATE ( SUM ( group_trend[uninsured] ), group_trend[year] = 2023 ) / 1000000
+		formatString: 0.0"M"
+		displayFolder: Overview
+		lineageTag: 13a28493-e5d5-58ba-92f1-9a2f30121fd6
+
+	measure 'US Uninsured Context' = "down from " & FORMAT ( CALCULATE ( SUM ( group_trend[uninsured] ), group_trend[year] = 2013 ) / 1000000, "0.0" ) & "M in 2013"
+		displayFolder: Overview
+		lineageTag: aad67e6d-d8bf-552b-8160-8529a4c26af4
+
 	column analysis_group
 		dataType: string
 		lineageTag: 35635528-18b2-5947-87db-a347d266510f
