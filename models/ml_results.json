@@ -1,0 +1,170 @@
+{
+  "training_rows": 9659,
+  "treated_windows": 1707,
+  "states": 43,
+  "forest_ate_expansion_counties": -6.457454543054673,
+  "forest_ate_ci": [
+    -7.601293195632574,
+    -5.377868438756246
+  ],
+  "did_estimate_years_0_2": -6.408894277426078,
+  "validation_splits": [
+    {
+      "split": 0,
+      "test_states": [
+        "AL",
+        "AR",
+        "AZ",
+        "CA",
+        "GA",
+        "IA",
+        "LA",
+        "ME",
+        "MN",
+        "NJ",
+        "SD",
+        "VA",
+        "WY"
+      ],
+      "gap_top_vs_bottom_actual": -3.585743114429441,
+      "gap_top_vs_bottom_predicted": -6.707586122967147
+    },
+    {
+      "split": 1,
+      "test_states": [
+        "CO",
+        "GA",
+        "HI",
+        "ID",
+        "IN",
+        "LA",
+        "MN",
+        "RI",
+        "SD",
+        "TN",
+        "UT",
+        "WA",
+        "WY"
+      ],
+      "gap_top_vs_bottom_actual": -9.04151970780031,
+      "gap_top_vs_bottom_predicted": -5.4005170386242565
+    },
+    {
+      "split": 2,
+      "test_states": [
+        "AK",
+        "AZ",
+        "CA",
+        "CO",
+        "ID",
+        "IL",
+        "KS",
+        "MI",
+        "MS",
+        "NE",
+        "NH",
+        "TN",
+        "TX"
+      ],
+      "gap_top_vs_bottom_actual": 0.9551349218993375,
+      "gap_top_vs_bottom_predicted": -4.8839942307782565
+    },
+    {
+      "split": 3,
+      "test_states": [
+        "IA",
+        "LA",
+        "ME",
+        "MS",
+        "NC",
+        "OH",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "TX",
+        "UT",
+        "WA"
+      ],
+      "gap_top_vs_bottom_actual": -5.188339596305749,
+      "gap_top_vs_bottom_predicted": -2.3869122402242047
+    },
+    {
+      "split": 4,
+      "test_states": [
+        "AK",
+        "AL",
+        "KY",
+        "MI",
+        "NJ",
+        "NM",
+        "NV",
+        "PA",
+        "SC",
+        "TN",
+        "UT",
+        "VA",
+        "WI"
+      ],
+      "gap_top_vs_bottom_actual": -6.8246411412543715,
+      "gap_top_vs_bottom_predicted": -4.051260518162311
+    }
+  ],
+  "validation_quartiles_mean": [
+    {
+      "group": 1,
+      "predicted": -8.29461106168671,
+      "actual_effect": -9.262780803750138
+    },
+    {
+      "group": 2,
+      "predicted": -5.851128272921571,
+      "actual_effect": -6.712474849809989
+    },
+    {
+      "group": 3,
+      "predicted": -4.432756113650163,
+      "actual_effect": -5.514981893686766
+    },
+    {
+      "group": 4,
+      "predicted": -3.3717444949169275,
+      "actual_effect": -4.538766897145148
+    }
+  ],
+  "feature_importance": {
+    "Uninsured rate before expansion": 0.371,
+    "Hispanic share": 0.2461,
+    "Uninsured rate, adults 138-400% of poverty": 0.106,
+    "Share of residents 65+": 0.095,
+    "Black (non-Hispanic) share": 0.066,
+    "Change in uninsured rate over prior 3 years": 0.0539,
+    "Population (log)": 0.0224,
+    "Median household income (log, 2013)": 0.0181,
+    "Poverty rate (2013)": 0.0164,
+    "Rurality code (1 = big metro, 9 = remote)": 0.0051
+  },
+  "effect_by": {
+    "rurality": {
+      "Metro": -6.38,
+      "Remote rural": -7.33,
+      "Rural, near a metro": -6.61
+    },
+    "poverty_band": {
+      "Lowest poverty": -5.46,
+      "Low-mid": -5.58,
+      "Mid-high": -6.94,
+      "Highest poverty": -7.05
+    },
+    "base_band": {
+      "Lowest": -4.02,
+      "Low-mid": -5.06,
+      "Mid-high": -6.07,
+      "Highest": -8.2
+    }
+  },
+  "nonexpansion_total_adults_gaining": 529029.8761756871,
+  "nonexpansion_total_ci_note": "sum of county point estimates; county 95% intervals in ml_nonexpansion_county_predictions.csv",
+  "nonexpansion_uninsured_2023": 2896289.9860000005,
+  "nonexpansion_counties": 970
+}
