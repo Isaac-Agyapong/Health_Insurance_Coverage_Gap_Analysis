@@ -3,8 +3,8 @@ table group_trend
 
 	column 'Coverage Group' =
 			SWITCH ( group_trend[analysis_group],
-			    "Not expanded by 2023", "Not expanded",
-			    "Excluded (early coverage)", "Covered before 2014",
+			    "Not expanded by 2023", "Did not expand",
+			    "Excluded (early coverage)", "Covered adults early",
 			    "Expanded" )
 		dataType: string
 		lineageTag: 6a2b98df-6fe7-5410-b7ec-d209b525986e
@@ -47,11 +47,11 @@ table group_trend
 		displayFolder: Trend
 		lineageTag: 1fed9824-afbf-562c-993a-68c8f5b21ca2
 
-	measure 'KPI Exp Context' = "was " & FORMAT ( [Exp Rate 2013], "0%" ) & " in 2013  ·  down " & FORMAT ( ( [Exp Rate 2013] - [Exp Rate 2023] ) * 100, "0" ) & " points"
+	measure 'KPI Exp Context' = "down from " & FORMAT ( [Exp Rate 2013], "0%" ) & " in 2013"
 		displayFolder: Context
 		lineageTag: f36f4dc8-25e4-5d84-96ae-5defe348ab68
 
-	measure 'KPI NonExp Context' = "was " & FORMAT ( [NonExp Rate 2013], "0%" ) & " in 2013  ·  down " & FORMAT ( ( [NonExp Rate 2013] - [NonExp Rate 2023] ) * 100, "0" ) & " points"
+	measure 'KPI NonExp Context' = "down from " & FORMAT ( [NonExp Rate 2013], "0%" ) & " in 2013"
 		displayFolder: Context
 		lineageTag: f4909994-26b6-523e-80c2-5e64b1ed6a3c
 

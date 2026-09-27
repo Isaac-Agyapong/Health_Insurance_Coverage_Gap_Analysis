@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "notes2",
+  "name": "checks",
   "visual": {
     "visualType": "textbox",
     "drillFilterOtherVisuals": true,
@@ -12,9 +12,9 @@
               {
                 "textRuns": [
                   {
-                    "value": "Where the data comes from",
+                    "value": "Can we trust this result?",
                     "textStyle": {
-                      "fontSize": "19pt",
+                      "fontSize": "15pt",
                       "color": "#1F2D3D",
                       "fontWeight": "bold",
                       "fontFamily": "Bahnschrift"
@@ -25,9 +25,9 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  US Census Bureau Small Area Health Insurance Estimates (SAHIE), 2008-2023, every county",
+                    "value": "",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "6pt",
                       "color": "#1F2D3D"
                     }
                   }
@@ -36,9 +36,17 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  KFF tracker of when each state expanded Medicaid",
+                    "value": "\u2713  ",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "14pt",
+                      "color": "#0E9F6E",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Before 2014, both groups of counties were on the same path, so the comparison is fair.",
+                    "textStyle": {
+                      "fontSize": "12pt",
                       "color": "#1F2D3D"
                     }
                   }
@@ -47,9 +55,9 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Census poverty, income and population figures; USDA rural-urban codes",
+                    "value": "",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "6pt",
                       "color": "#1F2D3D"
                     }
                   }
@@ -58,9 +66,17 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Effect of expansion: difference-in-differences (Callaway & Sant'Anna), comparing each county with similar counties in states that did not expand; ranges from 499 resamples of states",
+                    "value": "\u2713  ",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "14pt",
+                      "color": "#0E9F6E",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Pretending expansion happened in 2011, when it did not, shows no effect, as it should.",
+                    "textStyle": {
+                      "fontSize": "12pt",
                       "color": "#1F2D3D"
                     }
                   }
@@ -69,10 +85,81 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Predictions: causal forest machine learning model (EconML), tested on states it never saw",
+                    "value": "",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "6pt",
                       "color": "#1F2D3D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\u2713  ",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#0E9F6E",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Adults who earn too much to qualify changed much less (3 in 100, not 6).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1F2D3D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontSize": "6pt",
+                      "color": "#1F2D3D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\u2713  ",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#0E9F6E",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "A separate machine learning model gives the same answer.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1F2D3D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#1F2D3D"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Method: difference-in-differences on 3,035 counties, 2008-2023. Details on the Data Notes page.",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#5B6B7C"
                     }
                   }
                 ]
@@ -307,11 +394,11 @@
     }
   },
   "position": {
-    "x": 440,
-    "y": 128,
-    "z": 7000,
-    "height": 512,
-    "width": 400,
-    "tabOrder": 7000
+    "x": 820,
+    "y": 256,
+    "z": 19000,
+    "height": 384,
+    "width": 436,
+    "tabOrder": 19000
   }
 }

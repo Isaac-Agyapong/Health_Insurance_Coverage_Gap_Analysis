@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "The highest uninsured rates are in Texas and the Southeast, mostly states that had not expanded",
+                    "value": "Texas and the Southeast have the highest shares of uninsured low-income adults",
                     "textStyle": {
                       "fontSize": "14pt",
                       "color": "#1F2D3D",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Uninsured rate of low-income adults by state, 2023  \u00b7  hover over a state for its profile",
+                    "value": "Share of low-income adults without health insurance in 2023  \u00b7  hover over a state to see its details",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#5B6B7C"

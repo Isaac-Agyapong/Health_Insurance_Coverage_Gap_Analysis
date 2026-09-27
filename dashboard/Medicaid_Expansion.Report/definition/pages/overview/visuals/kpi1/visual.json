@@ -20,7 +20,7 @@
               },
               "queryRef": "group_trend.Exp Rate 2023",
               "nativeQueryRef": "Exp Rate 2023",
-              "displayName": "Uninsured, 2014 expansion states"
+              "displayName": "Uninsured where Medicaid expanded"
             }
           ]
         }

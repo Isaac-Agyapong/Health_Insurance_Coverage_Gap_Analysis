@@ -50,7 +50,7 @@
               },
               "queryRef": "ml_county_predictions.Rate Now",
               "nativeQueryRef": "Rate Now",
-              "displayName": "Now"
+              "displayName": "Today"
             },
             {
               "field": {
@@ -65,7 +65,7 @@
               },
               "queryRef": "ml_county_predictions.Rate After",
               "nativeQueryRef": "Rate After",
-              "displayName": "After"
+              "displayName": "If expanded"
             },
             {
               "field": {
@@ -80,7 +80,7 @@
               },
               "queryRef": "ml_county_predictions.Adults Gaining",
               "nativeQueryRef": "Adults Gaining",
-              "displayName": "Adults gaining"
+              "displayName": "Would gain"
             }
           ]
         }
@@ -326,7 +326,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Counties with the largest predicted gains'"
+                  "Value": "'Counties that would gain the most'"
                 }
               }
             },
@@ -378,7 +378,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Uninsured rate now and predicted after expansion'"
+                  "Value": "'Share uninsured today vs if the state expanded'"
                 }
               }
             },
@@ -419,7 +419,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "10D"
                 }
               }
             }
@@ -490,6 +490,78 @@
           }
         }
       ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "134D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ml_county_predictions.county_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "50D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ml_county_predictions.state"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "58D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ml_county_predictions.Rate Now"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "82D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ml_county_predictions.Rate After"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "92D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "ml_county_predictions.Adults Gaining"
+          }
+        }
+      ],
       "columnFormatting": [
         {
           "properties": {
@@ -553,9 +625,9 @@
   "position": {
     "x": 776,
     "y": 256,
-    "z": 21000,
+    "z": 20000,
     "height": 384,
     "width": 480,
-    "tabOrder": 21000
+    "tabOrder": 20000
   }
 }

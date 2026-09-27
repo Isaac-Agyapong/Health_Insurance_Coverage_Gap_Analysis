@@ -15,11 +15,11 @@
                       "Entity": "model_metrics"
                     }
                   },
-                  "Property": "Effect CI Text"
+                  "Property": "Effect Range Text"
                 }
               },
-              "queryRef": "model_metrics.Effect CI Text",
-              "nativeQueryRef": "Effect CI Text",
+              "queryRef": "model_metrics.Effect Range Text",
+              "nativeQueryRef": "Effect Range Text",
               "displayName": ""
             }
           ]

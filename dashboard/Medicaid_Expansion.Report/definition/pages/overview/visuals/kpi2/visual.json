@@ -20,7 +20,7 @@
               },
               "queryRef": "group_trend.NonExp Rate 2023",
               "nativeQueryRef": "NonExp Rate 2023",
-              "displayName": "Uninsured, non-expansion states"
+              "displayName": "Uninsured where it did not expand"
             }
           ]
         }

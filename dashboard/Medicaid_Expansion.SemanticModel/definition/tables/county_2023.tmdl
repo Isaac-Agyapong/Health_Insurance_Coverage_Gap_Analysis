@@ -24,6 +24,19 @@ table county_2023
 		displayFolder: Counties
 		lineageTag: a165d4bc-63f2-5bca-8907-53fb411f8953
 
+	measure 'Top 8 County Uninsured' =
+			VAR _cur = [County Uninsured]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( county_2023[county_fips] ), "@u", [County Uninsured] ), REMOVEFILTERS ( county_2023 ) )
+			RETURN IF ( HASONEVALUE ( county_2023[county_fips] ) && COUNTROWS ( FILTER ( _all, [@u] > _cur ) ) < 8, _cur )
+		formatString: #,0
+		displayFolder: Plain
+		lineageTag: 48f83222-40f6-54d0-a06f-208825917ba6
+
+	measure 'Top 8 County Rate' = IF ( NOT ISBLANK ( [Top 8 County Uninsured] ), [County Rate] )
+		formatString: 0%
+		displayFolder: Plain
+		lineageTag: 1632593d-5601-5ca9-bc53-6d3e6996a4b3
+
 	column county_fips
 		dataType: int64
 		formatString: 0

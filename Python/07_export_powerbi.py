@@ -47,10 +47,10 @@ def main():
         br = pd.concat([inc, rur, race])
         br = br[br.analysis_group.isin(["Expanded 2014", "Not expanded by 2023"])]
         # self-explanatory row labels in a fixed reading order for the dashboard table
-        order = {"At or below 138% of poverty (eligible)": ("Income at or below 138% of poverty (eligible)", 1),
-                 "138-400% of poverty (not eligible)": ("Income 138-400% of poverty (not eligible)", 2),
-                 "Metro": ("Metro counties", 3), "Rural, near a metro": ("Rural counties near a metro", 4),
-                 "Remote rural": ("Remote rural counties", 5), "Hispanic": ("Hispanic", 6),
+        order = {"At or below 138% of poverty (eligible)": ("Lowest incomes (qualify for expanded Medicaid)", 1),
+                 "138-400% of poverty (not eligible)": ("Low-to-middle incomes (do not qualify)", 2),
+                 "Metro": ("Cities and suburbs", 3), "Rural, near a metro": ("Small towns near a city", 4),
+                 "Remote rural": ("Remote rural areas", 5), "Hispanic": ("Hispanic", 6),
                  "Black (non-Hispanic)": ("Black (non-Hispanic)", 7), "White (non-Hispanic)": ("White (non-Hispanic)", 8)}
         br["row_label"] = br.category.map(lambda c: order[c][0])
         br["row_order"] = br.category.map(lambda c: order[c][1])
@@ -59,6 +59,15 @@ def main():
         cty = q(conn, """SELECT county_fips, county_name, state_abbrev, analysis_group, rurality, pct_uninsured,
                                 uninsured, population FROM analytics.v_county_gap_2023""")
         save(cty, "county_2023")
+        # "what happened vs what would have happened": actual rate in the 2014 expansion counties, and the same
+        # rate with the estimated effect of expansion added back (the counterfactual) from 2014 on
+        actual = q(conn, """SELECT year, 100.0 * sum(uninsured) / sum(population) AS actual
+                            FROM analytics.mv_county_panel WHERE expansion_year = 2014 GROUP BY year""")
+    att = pd.read_csv(CLEAN / "causal_att_gt_adjusted.csv").query("g == 2014 and e >= 0")[["t", "att"]]
+    wi = actual.astype(float).merge(att.rename(columns={"t": "year"}), on="year", how="left")
+    wi["without_expansion"] = wi.actual - wi.att.fillna(0)
+    wi["year"] = wi.year.astype(int)
+    save(wi[["year", "actual", "without_expansion"]], "what_if")
 
     # ---- causal results (difference-in-differences)
     es = pd.read_csv(CLEAN / "causal_event_study_adjusted.csv").rename(columns={"e": "years_since_expansion"})
@@ -84,10 +93,19 @@ def main():
 
     # ---- machine learning outputs
     val = pd.DataFrame(mr["validation_quartiles_mean"]).rename(columns={"group": "quartile"})
-    val["label"] = val.quartile.map({1: "Top quarter", 2: "Second", 3: "Third", 4: "Bottom quarter"})
+    val["label"] = val.quartile.map({1: "Biggest expected gain", 2: "Second", 3: "Third", 4: "Smallest expected gain"})
+    val["actual_drop"] = -val.actual_effect          # shown as a positive "fewer uninsured per 100" number
     save(val, "ml_validation")
     st = pd.read_csv(CLEAN / "ml_nonexpansion_state_predictions.csv")
     save(st, "ml_state_predictions")
+    ten = st[~st.expanded_late_2023]
+    extra = pd.DataFrame([
+        ("Uninsured rate today (10 states)", 100 * ten.uninsured_2023.sum() / ten.low_income_adults.sum(), None, None),
+        ("Uninsured rate if expanded (10 states)",
+         100 * (ten.uninsured_2023.sum() - ten.adults_gaining_coverage.sum()) / ten.low_income_adults.sum(), None, None),
+        ("Texas adults gaining coverage", ten.set_index("state").adults_gaining_coverage["TX"], None, None),
+    ], columns=["metric", "value", "ci_low", "ci_high"]).astype({"ci_low": float, "ci_high": float})
+    save(pd.concat([metrics, extra]), "model_metrics")
     ct = pd.read_csv(CLEAN / "ml_nonexpansion_county_predictions.csv")
     ct = ct[~ct.state.isin(["NC", "SD"])]      # expanded in late 2023
     save(ct, "ml_county_predictions")

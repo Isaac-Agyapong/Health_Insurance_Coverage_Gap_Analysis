@@ -12,10 +12,10 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2714",
+                    "value": "\u2605",
                     "textStyle": {
                       "fontSize": "16pt",
-                      "color": "#0E9F6E",
+                      "color": "#D63F6C",
                       "fontWeight": "bold"
                     }
                   }
@@ -194,9 +194,9 @@
   "position": {
     "x": 890,
     "y": 140,
-    "z": 17000,
+    "z": 16000,
     "height": 40,
     "width": 40,
-    "tabOrder": 17000
+    "tabOrder": 16000
   }
 }

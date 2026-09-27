@@ -15,12 +15,12 @@
                       "Entity": "model_metrics"
                     }
                   },
-                  "Property": "Effect Years 0-2"
+                  "Property": "Effect Plain"
                 }
               },
-              "queryRef": "model_metrics.Effect Years 0-2",
-              "nativeQueryRef": "Effect Years 0-2",
-              "displayName": "Effect of expansion, first 3 years"
+              "queryRef": "model_metrics.Effect Plain",
+              "nativeQueryRef": "Effect Plain",
+              "displayName": "fewer uninsured, thanks to expansion"
             }
           ]
         }

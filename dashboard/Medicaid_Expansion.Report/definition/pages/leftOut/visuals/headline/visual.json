@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Hispanic adults and people in non-expansion states are the most likely to be uninsured today",
+                    "value": "Hispanic adults and people in states that did not expand are the most likely to be uninsured",
                     "textStyle": {
                       "fontSize": "14pt",
                       "color": "#1F2D3D",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Uninsured rate in 2023: states that expanded in 2014 vs states that had not expanded by 2023",
+                    "value": "Share of low-income adults without health insurance in 2023",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#5B6B7C"

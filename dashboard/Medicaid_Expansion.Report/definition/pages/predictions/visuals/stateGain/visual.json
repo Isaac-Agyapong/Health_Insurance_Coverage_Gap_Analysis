@@ -39,7 +39,7 @@
               },
               "queryRef": "ml_state_predictions.State Adults Gaining",
               "nativeQueryRef": "State Adults Gaining",
-              "displayName": "Adults gaining coverage"
+              "displayName": "Adults who would gain coverage"
             }
           ]
         }
@@ -285,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Texas alone accounts for 44%'"
+                  "Value": "'Texas would gain the most'"
                 }
               }
             },
@@ -337,7 +337,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Predicted adults gaining coverage by state'"
+                  "Value": "'Adults who would gain health insurance, by state'"
                 }
               }
             },
@@ -533,9 +533,9 @@
   "position": {
     "x": 24,
     "y": 256,
-    "z": 19000,
+    "z": 18000,
     "height": 384,
     "width": 380,
-    "tabOrder": 19000
+    "tabOrder": 18000
   }
 }

@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Expansion itself cut the uninsured rate by about 6 points, measured against similar counties that did not expand",
+                    "value": "Medicaid expansion itself cut the share of uninsured low-income adults by about 6 in every 100",
                     "textStyle": {
                       "fontSize": "14pt",
                       "color": "#1F2D3D",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Difference-in-differences (Callaway & Sant'Anna) on 3,035 counties in 45 states, 2008-2023, 499 state-level bootstrap draws",
+                    "value": "Measured against similar counties in states that did not expand, so changes that happened everywhere (like the 2014 insurance marketplaces) are not counted",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#5B6B7C"

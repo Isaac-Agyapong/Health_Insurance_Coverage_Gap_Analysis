@@ -45,12 +45,12 @@
                       "Entity": "county_2023"
                     }
                   },
-                  "Property": "Top 10 County Uninsured"
+                  "Property": "Top 8 County Uninsured"
                 }
               },
-              "queryRef": "county_2023.Top 10 County Uninsured",
-              "nativeQueryRef": "Top 10 County Uninsured",
-              "displayName": "Uninsured"
+              "queryRef": "county_2023.Top 8 County Uninsured",
+              "nativeQueryRef": "Top 8 County Uninsured",
+              "displayName": "Uninsured adults"
             },
             {
               "field": {
@@ -60,12 +60,12 @@
                       "Entity": "county_2023"
                     }
                   },
-                  "Property": "Top 10 County Rate"
+                  "Property": "Top 8 County Rate"
                 }
               },
-              "queryRef": "county_2023.Top 10 County Rate",
-              "nativeQueryRef": "Top 10 County Rate",
-              "displayName": "Rate"
+              "queryRef": "county_2023.Top 8 County Rate",
+              "nativeQueryRef": "Top 8 County Rate",
+              "displayName": "Share uninsured"
             }
           ]
         }
@@ -80,7 +80,7 @@
                     "Entity": "county_2023"
                   }
                 },
-                "Property": "Top 10 County Uninsured"
+                "Property": "Top 8 County Uninsured"
               }
             },
             "direction": "Descending"
@@ -311,7 +311,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Five of the 10 counties with the most uninsured are in Texas'"
+                  "Value": "'Four of the 8 counties with the most uninsured adults are in Texas'"
                 }
               }
             },
@@ -344,51 +344,6 @@
               "expr": {
                 "Literal": {
                   "Value": "'Bahnschrift'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "subTitle": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Low-income adults without insurance, 2023'"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#5B6B7C'"
-                    }
-                  }
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            },
-            "titleWrap": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
                 }
               }
             }
@@ -529,7 +484,7 @@
             }
           },
           "selector": {
-            "metadata": "county_2023.Top 10 County Uninsured"
+            "metadata": "county_2023.Top 8 County Uninsured"
           }
         }
       ]
@@ -537,9 +492,9 @@
   },
   "position": {
     "x": 640,
-    "y": 326,
+    "y": 402,
     "z": 8000,
-    "height": 314,
+    "height": 238,
     "width": 616,
     "tabOrder": 8000
   }

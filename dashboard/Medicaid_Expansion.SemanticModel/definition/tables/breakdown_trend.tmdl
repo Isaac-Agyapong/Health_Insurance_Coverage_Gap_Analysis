@@ -12,7 +12,7 @@ table breakdown_trend
 		lineageTag: b2e8b65f-c5e7-5fdd-90d0-9ef98e3b32cb
 
 	measure 'Gap 2023' = ( [Rate Not Expanded 2023] - [Rate Expanded 2023] ) * 100
-		formatString: 0" pts"
+		formatString: 0
 		displayFolder: Breakdown
 		lineageTag: ef86b15d-576e-5c1b-a15b-21e9bd08bb23
 

@@ -20,7 +20,7 @@
               },
               "queryRef": "breakdown_trend.row_label",
               "nativeQueryRef": "row_label",
-              "displayName": "Low-income adults 18-64"
+              "displayName": "Group"
             },
             {
               "field": {
@@ -50,7 +50,7 @@
               },
               "queryRef": "breakdown_trend.Rate Not Expanded 2023",
               "nativeQueryRef": "Rate Not Expanded 2023",
-              "displayName": "Not expanded"
+              "displayName": "Did not expand"
             },
             {
               "field": {
@@ -65,7 +65,7 @@
               },
               "queryRef": "breakdown_trend.Gap 2023",
               "nativeQueryRef": "Gap 2023",
-              "displayName": "Gap"
+              "displayName": "Gap (per 100)"
             }
           ]
         }
@@ -311,7 +311,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'The gap is wide in every group'"
+                  "Value": "'Every group is better off where Medicaid expanded'"
                 }
               }
             },
@@ -363,7 +363,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Uninsured rate in 2023 (low-income adults unless stated)'"
+                  "Value": "'Share uninsured in 2023, states that expanded in 2014 vs states that did not'"
                 }
               }
             },
@@ -438,6 +438,13 @@
                   }
                 }
               }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Bahnschrift'"
+                }
+              }
             }
           }
         }
@@ -474,7 +481,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "262D"
+                  "Value": "250D"
                 }
               }
             }
@@ -488,7 +495,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "92D"
+                  "Value": "96D"
                 }
               }
             }
@@ -516,7 +523,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "84D"
+                  "Value": "92D"
                 }
               }
             }

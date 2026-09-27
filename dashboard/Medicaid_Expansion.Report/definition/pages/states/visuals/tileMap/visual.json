@@ -284,7 +284,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Uninsured rate by state, 2023'"
+                  "Value": "'Share uninsured by state, 2023'"
                 }
               }
             },
@@ -336,7 +336,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Darker = more low-income adults uninsured'"
+                  "Value": "'Darker purple = more people without insurance'"
                 }
               }
             },

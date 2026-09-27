@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Where Medicaid expanded, the uninsured rate fell further; expansion itself cut it by about 6 points",
+                    "value": "Where states expanded Medicaid, far fewer low-income adults are uninsured today",
                     "textStyle": {
                       "fontSize": "14pt",
                       "color": "#1F2D3D",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Uninsured rate of adults 18-64 at or below 138% of the poverty line, the group expansion made eligible for Medicaid",
+                    "value": "Low-income adults = people aged 18-64 earning about $20,000 a year or less (138% of the poverty line)",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#5B6B7C"

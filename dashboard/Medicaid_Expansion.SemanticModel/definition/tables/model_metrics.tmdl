@@ -15,7 +15,7 @@ table model_metrics
 		displayFolder: Causal
 		lineageTag: c6904e69-ce67-5668-863e-44f7e7746479
 
-	measure 'Covered Context' = "95% CI " & FORMAT ( CALCULATE ( SUM ( model_metrics[ci_low] ), model_metrics[metric] = "Adults covered in 2023 because of expansion" ), "#,0" ) & " to " & FORMAT ( CALCULATE ( SUM ( model_metrics[ci_high] ), model_metrics[metric] = "Adults covered in 2023 because of expansion" ), "#,0" )
+	measure 'Covered Context' = "likely between " & FORMAT ( ROUND ( CALCULATE ( SUM ( model_metrics[ci_low] ), model_metrics[metric] = "Adults covered in 2023 because of expansion" ), -4 ), "#,0" ) & " and " & FORMAT ( CALCULATE ( SUM ( model_metrics[ci_high] ), model_metrics[metric] = "Adults covered in 2023 because of expansion" ) / 1000000, "0.0" ) & " million"
 		displayFolder: Context
 		lineageTag: 1ac16739-e9f2-5f42-a626-f3109f433a63
 
@@ -45,6 +45,36 @@ table model_metrics
 	measure 'Forest Context' = "difference-in-differences: " & FORMAT ( [Effect Years 0-2], "0.0" ) & " pts"
 		displayFolder: Context
 		lineageTag: 7c082209-3052-59ab-b750-f2edc9f37b27
+
+	measure 'Effect Plain' = ABS ( CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Effect of expansion (years 0-2)" ) )
+		formatString: 0.0" in 100"
+		displayFolder: Plain
+		lineageTag: 134a1545-401d-5663-9a08-8e022ad229ef
+
+	measure 'Effect Range Text' = "likely between " & FORMAT ( ABS ( CALCULATE ( SUM ( model_metrics[ci_high] ), model_metrics[metric] = "Effect of expansion (years 0-2)" ) ), "0" ) & " and " & FORMAT ( ABS ( CALCULATE ( SUM ( model_metrics[ci_low] ), model_metrics[metric] = "Effect of expansion (years 0-2)" ) ), "0" ) & " in every 100"
+		displayFolder: Plain
+		lineageTag: 9b9a30c1-91c2-5cd0-99a7-0ddd78627625
+
+	measure 'Checks Passed' = "4 of 4"
+		displayFolder: Plain
+		lineageTag: dd66929a-fb0c-5a6a-b017-32c01af37afc
+
+	measure 'Checks Context' = "see the checklist below"
+		displayFolder: Plain
+		lineageTag: be10280d-5d07-5f6a-92fb-ecd15d705e46
+
+	measure 'Rate Change Text' = FORMAT ( CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Uninsured rate today (10 states)" ) / 100, "0%" ) & "  →  " & FORMAT ( CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Uninsured rate if expanded (10 states)" ) / 100, "0%" )
+		displayFolder: Plain
+		lineageTag: 8db51184-8d66-54e8-9520-c942672bcf94
+
+	measure 'Texas Gain' = CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Texas adults gaining coverage" )
+		formatString: #,0
+		displayFolder: Plain
+		lineageTag: eabca588-9fef-5d64-afa5-ff3c5b0b0c79
+
+	measure 'Texas Context' = FORMAT ( DIVIDE ( CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Texas adults gaining coverage" ), CALCULATE ( SUM ( model_metrics[value] ), model_metrics[metric] = "Adults who would gain coverage (10 states)" ) ), "0%" ) & " of the total"
+		displayFolder: Plain
+		lineageTag: 8e6e8436-e7bc-5c0d-b944-82b4fd4e2c63
 
 	column metric
 		dataType: string

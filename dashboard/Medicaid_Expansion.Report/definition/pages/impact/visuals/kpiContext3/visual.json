@@ -15,11 +15,11 @@
                       "Entity": "model_metrics"
                     }
                   },
-                  "Property": "Placebo Context"
+                  "Property": "Checks Context"
                 }
               },
-              "queryRef": "model_metrics.Placebo Context",
-              "nativeQueryRef": "Placebo Context",
+              "queryRef": "model_metrics.Checks Context",
+              "nativeQueryRef": "Checks Context",
               "displayName": ""
             }
           ]

@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
-  "name": "eventStudy",
+  "name": "whatIf",
   "visual": {
-    "visualType": "columnChart",
+    "visualType": "lineChart",
     "query": {
       "queryState": {
         "Category": {
@@ -12,15 +12,15 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "event_study"
+                      "Entity": "what_if"
                     }
                   },
-                  "Property": "years_since_expansion"
+                  "Property": "year"
                 }
               },
-              "queryRef": "event_study.years_since_expansion",
-              "nativeQueryRef": "years_since_expansion",
-              "displayName": "Years since expansion"
+              "queryRef": "what_if.year",
+              "nativeQueryRef": "year",
+              "displayName": "Year"
             }
           ]
         },
@@ -31,15 +31,30 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "event_study"
+                      "Entity": "what_if"
                     }
                   },
-                  "Property": "Effect"
+                  "Property": "With Expansion"
                 }
               },
-              "queryRef": "event_study.Effect",
-              "nativeQueryRef": "Effect",
-              "displayName": "Effect on uninsured rate (pts)"
+              "queryRef": "what_if.With Expansion",
+              "nativeQueryRef": "With Expansion",
+              "displayName": "What happened"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "what_if"
+                    }
+                  },
+                  "Property": "Without Expansion"
+                }
+              },
+              "queryRef": "what_if.Without Expansion",
+              "nativeQueryRef": "Without Expansion",
+              "displayName": "Estimate without expansion"
             }
           ]
         }
@@ -51,10 +66,10 @@
               "Column": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "event_study"
+                    "Entity": "what_if"
                   }
                 },
-                "Property": "years_since_expansion"
+                "Property": "year"
               }
             },
             "direction": "Ascending"
@@ -285,7 +300,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'No difference before expansion, a clear drop after'"
+                  "Value": "'Without expansion, about 21% would still be uninsured instead of 16%'"
                 }
               }
             },
@@ -337,7 +352,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Estimated effect by years since the state expanded (grey = before expansion, a check that trends matched)'"
+                  "Value": "'States that expanded in 2014: share of low-income adults without insurance. The gap between the lines is the effect of expansion.'"
                 }
               }
             },
@@ -399,13 +414,6 @@
                   "Value": "11D"
                 }
               }
-            },
-            "axisType": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Categorical'"
-                }
-              }
             }
           }
         }
@@ -416,7 +424,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -448,7 +456,7 @@
             "gridlineShow": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
@@ -466,7 +474,7 @@
           }
         }
       ],
-      "labels": [
+      "legend": [
         {
           "properties": {
             "show": {
@@ -476,31 +484,61 @@
                 }
               }
             },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1F2D3D'"
-                    }
-                  }
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Top'"
                 }
               }
             },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
                 }
               }
             },
-            "bold": {
+            "showMarker": {
               "expr": {
                 "Literal": {
                   "Value": "true"
                 }
               }
+            },
+            "markerSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
             }
+          }
+        },
+        {
+          "properties": {
+            "lineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dashed'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "what_if.Without Expansion"
           }
         }
       ],
@@ -511,13 +549,8 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "Measure": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "event_study"
-                        }
-                      },
-                      "Property": "Effect Colour"
+                    "Literal": {
+                      "Value": "'#0E9F6E'"
                     }
                   }
                 }
@@ -525,13 +558,25 @@
             }
           },
           "selector": {
-            "data": [
-              {
-                "dataViewWildcard": {
-                  "matchingOption": 1
+            "metadata": "what_if.With Expansion"
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8A94A0'"
+                    }
+                  }
                 }
               }
-            ]
+            }
+          },
+          "selector": {
+            "metadata": "what_if.Without Expansion"
           }
         }
       ]

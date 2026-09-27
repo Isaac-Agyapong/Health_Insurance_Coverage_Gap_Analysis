@@ -19,7 +19,8 @@
                 }
               },
               "queryRef": "group_trend.year",
-              "nativeQueryRef": "year"
+              "nativeQueryRef": "year",
+              "displayName": "Year"
             }
           ]
         },
@@ -38,7 +39,7 @@
               },
               "queryRef": "group_trend.Expanded in 2014",
               "nativeQueryRef": "Expanded in 2014",
-              "displayName": "States that expanded in 2014"
+              "displayName": "Expanded Medicaid in 2014"
             },
             {
               "field": {
@@ -53,7 +54,7 @@
               },
               "queryRef": "group_trend.Not expanded",
               "nativeQueryRef": "Not expanded",
-              "displayName": "States that had not expanded"
+              "displayName": "Did not expand"
             }
           ]
         }
@@ -299,7 +300,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'The gap between the two groups nearly doubled after 2014'"
+                  "Value": "'Since 2014, the share without insurance fell much faster where Medicaid expanded'"
                 }
               }
             },
@@ -351,7 +352,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Share of low-income adults without health insurance'"
+                  "Value": "'Out of every 100 low-income adults, how many had no health insurance'"
                 }
               }
             },

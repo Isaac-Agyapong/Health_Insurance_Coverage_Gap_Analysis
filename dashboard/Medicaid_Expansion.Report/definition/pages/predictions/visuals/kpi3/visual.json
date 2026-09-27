@@ -12,15 +12,15 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "ml_validation"
+                      "Entity": "model_metrics"
                     }
                   },
-                  "Property": "Top Quarter Actual"
+                  "Property": "Texas Gain"
                 }
               },
-              "queryRef": "ml_validation.Top Quarter Actual",
-              "nativeQueryRef": "Top Quarter Actual",
-              "displayName": "Actual drop, top-ranked quarter"
+              "queryRef": "model_metrics.Texas Gain",
+              "nativeQueryRef": "Texas Gain",
+              "displayName": "of them in Texas alone"
             }
           ]
         }
@@ -73,7 +73,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#DDF5EB'"
+                      "Value": "'#FDE2EA'"
                     }
                   }
                 }
@@ -106,7 +106,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -137,7 +137,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -174,7 +174,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -185,7 +185,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#0E9F6E'"
+                      "Value": "'#D63F6C'"
                     }
                   }
                 }
@@ -258,9 +258,9 @@
   "position": {
     "x": 652,
     "y": 134,
-    "z": 15000,
+    "z": 14000,
     "height": 80,
     "width": 288,
-    "tabOrder": 15000
+    "tabOrder": 14000
   }
 }

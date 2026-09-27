@@ -82,7 +82,7 @@
       "type": "NoFilter"
     },
     {
-      "source": "incomeGap",
+      "source": "leftOutBars",
       "target": "counties",
       "type": "NoFilter"
     }

@@ -45,7 +45,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Filter counties by state'"
+                  "Value": "'Pick a state to see its counties'"
                 }
               }
             },
@@ -319,9 +319,9 @@
   "position": {
     "x": 960,
     "y": 128,
-    "z": 18000,
+    "z": 17000,
     "height": 116,
     "width": 296,
-    "tabOrder": 18000
+    "tabOrder": 17000
   }
 }

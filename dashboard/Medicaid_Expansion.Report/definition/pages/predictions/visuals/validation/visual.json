@@ -20,7 +20,7 @@
               },
               "queryRef": "ml_validation.label",
               "nativeQueryRef": "label",
-              "displayName": "Model's ranking"
+              "displayName": "Counties grouped by the model"
             }
           ]
         },
@@ -34,27 +34,12 @@
                       "Entity": "ml_validation"
                     }
                   },
-                  "Property": "Model Prediction"
+                  "Property": "Actual Drop"
                 }
               },
-              "queryRef": "ml_validation.Model Prediction",
-              "nativeQueryRef": "Model Prediction",
-              "displayName": "Predicted"
-            },
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "ml_validation"
-                    }
-                  },
-                  "Property": "Actual Result"
-                }
-              },
-              "queryRef": "ml_validation.Actual Result",
-              "nativeQueryRef": "Actual Result",
-              "displayName": "Actual"
+              "queryRef": "ml_validation.Actual Drop",
+              "nativeQueryRef": "Actual Drop",
+              "displayName": "Fewer uninsured per 100 (what really happened)"
             }
           ]
         }
@@ -300,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tested on unseen states, the ranking holds'"
+                  "Value": "'The model picked the right places'"
                 }
               }
             },
@@ -352,7 +337,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Effect by predicted quarter (pts), held-out states'"
+                  "Value": "'Tested on states it had never seen: counties it expected to gain most really did (fewer uninsured per 100)'"
                 }
               }
             },
@@ -498,7 +483,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "12D"
                 }
               }
             },
@@ -512,33 +497,6 @@
           }
         }
       ],
-      "legend": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "position": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Top'"
-                }
-              }
-            },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "11D"
-                }
-              }
-            }
-          }
-        }
-      ],
       "dataPoint": [
         {
           "properties": {
@@ -546,8 +504,13 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "Literal": {
-                      "Value": "'#9BDCC3'"
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "ml_validation"
+                        }
+                      },
+                      "Property": "Validation Colour"
                     }
                   }
                 }
@@ -555,25 +518,13 @@
             }
           },
           "selector": {
-            "metadata": "ml_validation.Model Prediction"
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#0E9F6E'"
-                    }
-                  }
+            "data": [
+              {
+                "dataViewWildcard": {
+                  "matchingOption": 1
                 }
               }
-            }
-          },
-          "selector": {
-            "metadata": "ml_validation.Actual Result"
+            ]
           }
         }
       ]
@@ -582,9 +533,9 @@
   "position": {
     "x": 420,
     "y": 256,
-    "z": 20000,
+    "z": 19000,
     "height": 384,
     "width": 340,
-    "tabOrder": 20000
+    "tabOrder": 19000
   }
 }

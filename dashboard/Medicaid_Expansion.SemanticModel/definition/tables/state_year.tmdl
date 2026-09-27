@@ -107,6 +107,11 @@ table state_year
 		displayFolder: Tooltip
 		lineageTag: 359fa53b-ff70-5cd4-89d0-e9eb49536459
 
+	measure 'Top 5 Improvement' = IF ( NOT ISBLANK ( [Top 10 Drop] ), - [Top 10 Drop] )
+		formatString: 0.0
+		displayFolder: Plain
+		lineageTag: 548d1f39-8d74-53f7-912d-eb4ff844d68d
+
 	column state_abbrev
 		dataType: string
 		lineageTag: c837c9b2-0734-5b2a-87ee-8afad2a667d4

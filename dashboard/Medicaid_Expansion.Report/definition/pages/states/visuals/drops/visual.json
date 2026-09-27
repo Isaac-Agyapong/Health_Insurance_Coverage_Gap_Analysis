@@ -35,7 +35,7 @@
               },
               "queryRef": "state_year.analysis_group",
               "nativeQueryRef": "analysis_group",
-              "displayName": "Status"
+              "displayName": "Medicaid"
             },
             {
               "field": {
@@ -75,12 +75,12 @@
                       "Entity": "state_year"
                     }
                   },
-                  "Property": "Top 10 Drop"
+                  "Property": "Top 5 Improvement"
                 }
               },
-              "queryRef": "state_year.Top 10 Drop",
-              "nativeQueryRef": "Top 10 Drop",
-              "displayName": "Change"
+              "queryRef": "state_year.Top 5 Improvement",
+              "nativeQueryRef": "Top 5 Improvement",
+              "displayName": "Fewer per 100"
             }
           ]
         }
@@ -95,10 +95,10 @@
                     "Entity": "state_year"
                   }
                 },
-                "Property": "Top 10 Drop"
+                "Property": "Top 5 Improvement"
               }
             },
-            "direction": "Ascending"
+            "direction": "Descending"
           }
         ],
         "isDefaultSort": false
@@ -326,7 +326,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'The 5 biggest drops since 2013 were all in expansion states'"
+                  "Value": "'Biggest improvements since 2013: all states that expanded'"
                 }
               }
             },
@@ -519,7 +519,7 @@
             }
           },
           "selector": {
-            "metadata": "state_year.Top 10 Drop"
+            "metadata": "state_year.Top 5 Improvement"
           }
         }
       ]

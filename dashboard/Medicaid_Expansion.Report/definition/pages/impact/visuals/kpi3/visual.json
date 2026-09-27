@@ -15,12 +15,12 @@
                       "Entity": "model_metrics"
                     }
                   },
-                  "Property": "Placebo Effect"
+                  "Property": "Checks Passed"
                 }
               },
-              "queryRef": "model_metrics.Placebo Effect",
-              "nativeQueryRef": "Placebo Effect",
-              "displayName": "Placebo test (fake expansion in 2011)"
+              "queryRef": "model_metrics.Checks Passed",
+              "nativeQueryRef": "Checks Passed",
+              "displayName": "reliability checks passed"
             }
           ]
         }

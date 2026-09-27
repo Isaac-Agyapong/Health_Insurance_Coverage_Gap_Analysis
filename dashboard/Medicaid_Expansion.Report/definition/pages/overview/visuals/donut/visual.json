@@ -266,7 +266,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'49% of the uninsured live in the states that had not expanded'"
+                  "Value": "'Half of all uninsured low-income adults live in states that did not expand'"
                 }
               }
             },
@@ -318,7 +318,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Uninsured low-income adults in 2023 (12 non-expansion states hold about a quarter of the population)'"
+                  "Value": "'Where the 6.5 million uninsured low-income adults lived in 2023'"
                 }
               }
             },
@@ -472,7 +472,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Not expanded'"
+                        "Value": "'Did not expand'"
                       }
                     }
                   }
@@ -554,7 +554,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Covered before 2014'"
+                        "Value": "'Covered adults early'"
                       }
                     }
                   }

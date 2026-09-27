@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Sources",
+                    "value": "Words used here",
                     "textStyle": {
                       "fontSize": "19pt",
                       "color": "#0E9F6E",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  US Census Bureau Small Area Health Insurance Estimates (SAHIE), 2008-2023, every county and state",
+                    "value": "\u2022  Low-income adults: people aged 18-64 earning about $20,000 a year or less for one person (138% of the federal poverty line, the Medicaid expansion limit)",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -36,7 +36,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  KFF tracker of state Medicaid expansion decisions (implementation dates)",
+                    "value": "\u2022  Uninsured: has no health insurance of any kind",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -47,7 +47,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Census SAIPE poverty and income, and county population estimates (2013 baseline)",
+                    "value": "\u2022  Medicaid expansion: a state lets these adults get Medicaid; 40 states and DC have done it since 2014",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  USDA ERS Rural-Urban Continuum Codes 2013",
+                    "value": "\u2022  \"6 in 100\": for every 100 low-income adults, 6 fewer are uninsured",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Loaded into PostgreSQL (raw, core, analytics layers); this report imports extracts of the analytics views",
+                    "value": "\u2022  Would gain coverage: our estimate of how many more adults would be insured if the state expanded",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"

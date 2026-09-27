@@ -19,7 +19,8 @@
                 }
               },
               "queryRef": "state_year.state_name",
-              "nativeQueryRef": "state_name"
+              "nativeQueryRef": "state_name",
+              "displayName": "State"
             }
           ]
         },
@@ -38,7 +39,7 @@
               },
               "queryRef": "state_year.Top 10 Uninsured 2023",
               "nativeQueryRef": "Top 10 Uninsured 2023",
-              "displayName": "Uninsured rate, 2023"
+              "displayName": "Share uninsured, 2023"
             }
           ]
         }
@@ -284,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'7 of the 10 highest rates are in states that had not expanded'"
+                  "Value": "'7 of the 10 states with the most uninsured did not expand Medicaid'"
                 }
               }
             },
@@ -336,7 +337,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Rose = had not expanded by 2023  \u00b7  emerald = expanded'"
+                  "Value": "'Pink = did not expand  \u00b7  green = expanded'"
                 }
               }
             },

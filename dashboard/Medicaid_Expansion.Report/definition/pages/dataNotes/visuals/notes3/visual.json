@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Limitations",
+                    "value": "Keep in mind",
                     "textStyle": {
                       "fontSize": "19pt",
                       "color": "#D63F6C",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  SAHIE figures are model-based estimates with margins of error (median about 4 points per county)",
+                    "value": "\u2022  Census figures are estimates with a margin of error (about 4 in 100 for a typical county)",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -36,7 +36,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  DE, DC, MA, NY and VT are excluded from the effect estimate: they covered adults before 2014",
+                    "value": "\u2022  Five states that already covered these adults before 2014 (DE, DC, MA, NY, VT) are left out of the effect",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -47,7 +47,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Connecticut counties changed in 2022, so Connecticut is left out of county-level results",
+                    "value": "\u2022  Connecticut changed its county system in 2022, so it is left out of county results",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -58,7 +58,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  States chose whether to expand; a state-specific change at the same time would bias the estimate",
+                    "value": "\u2022  States chose whether to expand; something else changing at the same time could affect the estimate",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
@@ -69,7 +69,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "\u2022  Predictions assume expansion would work as it did in similar counties; they are not enrollment forecasts",
+                    "value": "\u2022  Predictions assume expansion would work as it did in similar places; they are not enrollment forecasts",
                     "textStyle": {
                       "fontSize": "13pt",
                       "color": "#1F2D3D"
