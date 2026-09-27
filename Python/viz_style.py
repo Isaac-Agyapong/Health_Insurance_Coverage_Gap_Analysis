@@ -46,8 +46,9 @@ def apply():
 def title(ax, text, sub=None):
     """Serif headline stating the finding, plus a grey one-line takeaway underneath."""
     ax.set_title(text, fontfamily="Georgia", fontsize=14, fontweight="bold", loc="left", pad=30 if sub else 12)
-    if sub:
-        ax.text(0, 1.03, sub, transform=ax.transAxes, color=INK_2, fontsize=10, va="bottom")
+    if sub:   # offset in points (not axes fraction) so it sits the same distance under the title at any figure height
+        ax.annotate(sub, (0, 1), xycoords="axes fraction", xytext=(0, 9), textcoords="offset points",
+                    color=INK_2, fontsize=10, va="bottom")
 
 
 def pct(ax, axis="y", decimals=0):

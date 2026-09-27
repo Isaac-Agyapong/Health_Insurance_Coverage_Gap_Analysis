@@ -4,8 +4,8 @@
   "states": 43,
   "forest_ate_expansion_counties": -6.457454543054673,
   "forest_ate_ci": [
-    -7.601293195632574,
-    -5.377868438756246
+    -7.601293195632575,
+    -5.377868438756247
   ],
   "did_estimate_years_0_2": -6.408894277426078,
   "validation_splits": [
@@ -27,7 +27,7 @@
         "WY"
       ],
       "gap_top_vs_bottom_actual": -3.585743114429441,
-      "gap_top_vs_bottom_predicted": -6.707586122967147
+      "gap_top_vs_bottom_predicted": -6.7075861229671485
     },
     {
       "split": 1,
@@ -47,7 +47,7 @@
         "WY"
       ],
       "gap_top_vs_bottom_actual": -9.04151970780031,
-      "gap_top_vs_bottom_predicted": -5.4005170386242565
+      "gap_top_vs_bottom_predicted": -5.400517038624258
     },
     {
       "split": 2,
@@ -118,12 +118,12 @@
     },
     {
       "group": 2,
-      "predicted": -5.851128272921571,
+      "predicted": -5.851128272921572,
       "actual_effect": -6.712474849809989
     },
     {
       "group": 3,
-      "predicted": -4.432756113650163,
+      "predicted": -4.432756113650164,
       "actual_effect": -5.514981893686766
     },
     {
