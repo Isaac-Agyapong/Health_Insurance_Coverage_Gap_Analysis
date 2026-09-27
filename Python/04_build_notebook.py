@@ -21,7 +21,7 @@ code = lambda s: cells.append(nbf.v4.new_code_cell(s.strip()))
 md("""
 # Health Insurance Coverage Gap Analysis and Machine Learning Model for Medicaid Expansion Impact
 
-**In short:** between 2014 and 2023, 39 states and DC expanded Medicaid so that adults earning up to 138% of the
+**In short:** between 2014 and 2023, 40 states and DC expanded Medicaid so that adults earning up to 138% of the
 poverty line could get free coverage. This notebook measures what happened to the share of low-income adults
 without health insurance, how much of the drop the policy itself caused, and which places would gain the most
 if the remaining states expanded.

@@ -17,8 +17,8 @@ UNION ALL SELECT 'analytics.mv_county_panel (county-years)', count(*) FROM analy
 
 | layer                                    |    rows |
 |:-----------------------------------------|--------:|
-| core.dim_county (balanced panel)         |    3129 |
 | core.dim_county                          |    3156 |
+| core.dim_county (balanced panel)         |    3129 |
 | analytics.mv_county_panel (county-years) |   48560 |
 | core.fact_state_coverage                 |   92004 |
 | core.fact_county_coverage                | 1602766 |
