@@ -68,6 +68,9 @@ def main():
     wi["without_expansion"] = wi.actual - wi.att.fillna(0)
     wi["year"] = wi.year.astype(int)
     save(wi[["year", "actual", "without_expansion"]], "what_if")
+    last = wi.set_index("year").loc[2023]
+    save(pd.DataFrame({"scenario": ["With expansion (what happened)", "Without expansion (our estimate)"],
+                       "rate": [last.actual, last.without_expansion], "order": [1, 2]}), "scenario_2023")
 
     # ---- causal results (difference-in-differences)
     es = pd.read_csv(CLEAN / "causal_event_study_adjusted.csv").rename(columns={"e": "years_since_expansion"})

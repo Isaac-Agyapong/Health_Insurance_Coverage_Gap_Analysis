@@ -13,6 +13,7 @@ ref table state_year
 ref table breakdown_trend
 ref table county_2023
 ref table what_if
+ref table scenario_2023
 ref table event_study
 ref table model_metrics
 ref table robustness

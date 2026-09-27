@@ -29,10 +29,10 @@ NAME = "Medicaid_Expansion"
 SM = DASH / f"{NAME}.SemanticModel"
 RPT = DASH / f"{NAME}.Report"
 
-TABLES = ["group_trend", "state_year", "breakdown_trend", "county_2023", "what_if", "event_study", "model_metrics",
+TABLES = ["group_trend", "state_year", "breakdown_trend", "county_2023", "what_if", "scenario_2023", "event_study", "model_metrics",
           "robustness", "ml_validation", "ml_state_predictions", "ml_county_predictions"]
-HIDDEN = {"order", "quartile", "in_study", "row_order"}
-SORT_BY = {("robustness", "label"): "order", ("ml_validation", "label"): "quartile", ("breakdown_trend", "row_label"): "row_order"}
+HIDDEN = {"order", "rate", "quartile", "in_study", "row_order"}
+SORT_BY = {("scenario_2023", "scenario"): "order", ("robustness", "label"): "order", ("ml_validation", "label"): "quartile", ("breakdown_trend", "row_label"): "row_order"}
 
 SCHEMA = "https://developer.microsoft.com/json-schemas/fabric"
 S_PBIP = f"{SCHEMA}/pbip/pbipProperties/1.0.0/schema.json"
@@ -243,6 +243,20 @@ PLAIN = [
     ("county_2023", "Top 8 County Rate", "IF ( NOT ISBLANK ( [Top 8 County Uninsured] ), [County Rate] )", "0%", "Plain"),
 ]
 MEASURES += PLAIN
+MEASURES += [
+    # ---- "out of every 100" donuts on the overview (uninsured slice + insured slice)
+    ("group_trend", "Exp Uninsured 2013", "[Exp Rate 2013]", "0%", "Donuts"),
+    ("group_trend", "Exp Insured 2013", "1 - [Exp Rate 2013]", "0%", "Donuts"),
+    ("group_trend", "Exp Uninsured 2023", "[Exp Rate 2023]", "0%", "Donuts"),
+    ("group_trend", "Exp Insured 2023", "1 - [Exp Rate 2023]", "0%", "Donuts"),
+    ("group_trend", "NonExp Uninsured 2013", "[NonExp Rate 2013]", "0%", "Donuts"),
+    ("group_trend", "NonExp Insured 2013", "1 - [NonExp Rate 2013]", "0%", "Donuts"),
+    ("group_trend", "NonExp Uninsured 2023", "[NonExp Rate 2023]", "0%", "Donuts"),
+    ("group_trend", "NonExp Insured 2023", "1 - [NonExp Rate 2023]", "0%", "Donuts"),
+    # ---- with vs without expansion (2023), two bars
+    ("scenario_2023", "Scenario Rate", "SUM ( scenario_2023[rate] ) / 100", "0%", "Plain"),
+    ("scenario_2023", "Scenario Colour", f'IF ( SELECTEDVALUE ( scenario_2023[order] ) = 1, "{EXP}", "#AEB6C0" )', None, "Plain"),
+]
 
 CALC_COLUMNS = [
     ("group_trend", "Coverage Group",
@@ -578,18 +592,25 @@ class Page:
 X0, W, TOP = 24, 1232, 128          # content area (y 128-640); chapter bar at the bottom
 
 
+def chip(text, fill="#EEF1EC", colour=INK_2, bold=False):
+    return textbox([(text, 9, bold, colour, FONT)], background=fill, radius=13, align="center", pad=(5, 0, 6, 6))
+
+
 def frame(page, finding, sub):
-    """Title band, sticker credit, section finding, source line and bottom chapter bar: identical on every page."""
-    page.add("title", 16, 6, 900, 70, textbox(
-        [("Health Insurance Coverage Gap", 24, True, SLATE, FONT),
-         [("MEDICAID EXPANSION IMPACT", 11, True, NONEXP, FONT),
-          ("     Analytics + machine learning  ·  3,143 US counties  ·  2008-2023", 10, False, INK_2)]],
-        pad=(0, 0, 8, 8)))
-    page.add("sticker", 1040, 16, 224, 50, textbox(
-        [("Built by Isaac Agyapong", 11, True, SLATE, FONT), ("PostgreSQL · Python · EconML · Power BI", 8, False, "#4A3B00")],
-        background=SUN, radius=25, align="center", pad=(6, 2, 8, 8), shadow=True))
-    page.add("headline", X0 - 4, 76, W + 8, 52, textbox(
-        [(finding, 14, True, INK, FONT), (sub, 10, False, INK_2)], pad=(0, 0, 4, 4)))
+    """App-bar header, section finding with an accent bar, source line and bottom chapter bar: same on every page."""
+    page.add("appBar", 16, 10, 1248, 58, block("#FFFFFF", radius=16, shadow=True))
+    page.add("logo", 28, 19, 40, 40, textbox([("✚", 17, True, "#FFFFFF")], background=EXP, radius=12,
+                                             align="center", pad=(6, 0, 0, 0)))
+    page.add("title", 78, 10, 600, 58, textbox(
+        [("Health Insurance Coverage Gap", 18, True, SLATE, FONT),
+         [("Medicaid Expansion Impact", 10, True, NONEXP, FONT), ("   ·   analytics and machine learning", 10, False, INK_2)]],
+        pad=(0, 0, 4, 4)))
+    page.add("chipCounties", 792, 26, 118, 26, chip("3,143 US counties"))
+    page.add("chipYears", 918, 26, 92, 26, chip("2008 - 2023"))
+    page.add("chipAuthor", 1018, 26, 234, 26, chip("Built by Isaac Agyapong", fill=SUN, colour=SLATE, bold=True))
+    page.add("accent", X0, 82, 5, 38, block(EXP, radius=3))
+    page.add("headline", X0 + 12, 76, W - 12, 52, textbox(
+        [(finding, 15, True, INK, FONT), (sub, 10, False, INK_2)], pad=(0, 0, 4, 4)))
     page.add("source", X0 - 4, 640, W + 8, 26, textbox(
         [[("Source: ", 8, True, GREY), ("US Census Bureau SAHIE 2008-2023, SAIPE and population estimates; KFF Medicaid expansion tracker; "
                                         "USDA ERS rural-urban codes.  Low-income adults = ages 18-64 at or below 138% of the federal poverty level.", 8, False, GREY)]],
@@ -653,6 +674,8 @@ def facts():
     words = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "All 10"}
     cty8 = pd.read_csv(DATA / "county_2023.csv").nlargest(8, "uninsured")
     wi = pd.read_csv(DATA / "what_if.csv").set_index("year")
+    gt_all = pd.read_csv(DATA / "group_trend.csv")
+    rate = lambda d, g, y: 100 * d.query("analysis_group == @g and year == @y").eval("uninsured / population").iloc[0]
     return {
         "top10_nonexp": int((top10.analysis_group == "Not expanded by 2023").sum()),
         "tx_counties": words[int((cty.state_abbrev == "TX").sum())],
@@ -665,7 +688,46 @@ def facts():
         "tx_counties8": words[int((cty8.state_abbrev == "TX").sum())],
         "actual_2023": wi.loc[2023, "actual"],
         "without_2023": wi.loc[2023, "without_expansion"],
+        # differences of the rounded percentages the reader sees (37% - 16% = 21), not of unrounded values
+        "drop_exp": round(rate(gt_all, "Expanded 2014", 2013)) - round(rate(gt_all, "Expanded 2014", 2023)),
+        "drop_nonexp": round(rate(gt_all, "Not expanded by 2023", 2013)) - round(rate(gt_all, "Not expanded by 2023", 2023)),
     }
+
+
+def small_donut(uninsured, insured, colour):
+    """Donut with the uninsured slice in colour and the insured slice in light grey; only the uninsured % is labelled."""
+    v = chart("donutChart", {"Y": [MN(uninsured, "Uninsured"), MN(insured, "Insured")]}, None,
+              objects={"labels": [{"properties": {"show": lit("false")}}],
+                       "legend": [{"properties": {"show": lit("false")}}],
+                       "dataPoint": [series_colour(uninsured, colour), series_colour(insured, "#E4E8E2")]})
+    v["visualContainerObjects"] = tile(background="#FFFFFF", pad=(0, 0, 0, 0), shadow=False)
+    return v
+
+
+def add_donut_panel(page, x, y, w, h, f):
+    """Out of every 100 low-income adults, how many are uninsured: 2013 vs 2023, for each group."""
+    page.add("donutCard", x, y, w, h, textbox(
+        [("Out of every 100 low-income adults, how many have no health insurance?", 14, True, INK, FONT),
+         ("2013 (before expansion) compared with 2023", 10, False, INK_2)],
+        background="#FFFFFF", pad=(12, 10, 16, 16), shadow=True))
+    cx = {"label": x + 16, "d13": x + 196, "arrow": x + 372, "d23": x + 420, "change": x + 600}
+    page.add("hdr2013", cx["d13"], y + 60, 170, 30, textbox([("2013", 12, True, INK_2, FONT)], align="center", pad=(0, 0, 0, 0)))
+    page.add("hdr2023", cx["d23"], y + 60, 170, 30, textbox([("2023", 12, True, INK_2, FONT)], align="center", pad=(0, 0, 0, 0)))
+    rows = [("Exp", "States that expanded", "Medicaid in 2014", EXP, f["drop_exp"]),
+            ("NonExp", "States that did not expand", "as of 2023", NONEXP, f["drop_nonexp"])]
+    for i, (key, name, note, colour, drop) in enumerate(rows):
+        ry = y + 90 + i * 146
+        page.add(f"rowLabel{i}", cx["label"], ry + 40, 176, 72, textbox(
+            [(name, 13, True, colour, FONT), (note, 10, False, INK_2)], pad=(0, 0, 0, 0)))
+        for yr, dx in (("2013", cx["d13"]), ("2023", cx["d23"])):
+            m = f"{key} Uninsured {yr}"
+            page.add(f"donut{yr}_{i}", dx, ry, 170, 140, small_donut(m, f"{key} Insured {yr}", colour))
+            page.add(f"pct{yr}_{i}", dx + 50, ry + 51, 70, 38,       # sits in the donut hole
+                     card(m, "", value_colour=colour, size=17, show_label=False, pad=(0, 0, 0, 0)))
+        page.add(f"arrow{i}", cx["arrow"] - 4, ry + 42, 52, 60, textbox([("→", 20, True, GREY)], align="center", pad=(8, 0, 0, 0)))
+        page.add(f"change{i}", cx["change"], ry + 36, 184, 74, textbox(
+            [(f"{drop:.0f} fewer", 20, True, colour, FONT), ("uninsured in every 100", 10, False, INK_2)],
+            pad=(0, 0, 0, 0)))
 
 
 def build_pages():
@@ -679,16 +741,9 @@ def build_pages():
     frame(p1, "Where states expanded Medicaid, far fewer low-income adults are uninsured today", LOW_INCOME)
     kpi(p1, 1, kx[0], TOP, kw, "Exp Rate 2023", "Uninsured where Medicaid expanded", "KPI Exp Context", EXP)
     kpi(p1, 2, kx[1], TOP, kw, "NonExp Rate 2023", "Uninsured where it did not expand", "KPI NonExp Context", NONEXP)
-    kpi(p1, 3, kx[2], TOP, kw, "Effect Plain", "fewer uninsured, thanks to expansion", "Effect Range Text", EXP)
+    kpi(p1, 3, kx[2], TOP, kw, "Effect Plain", "fewer uninsured in the first 3 years", "Effect Range Text", EXP)
     kpi(p1, 4, kx[3], TOP, kw, "Adults Would Gain", "more adults could be insured", "Gain Context", SUN)
-    p1.add("trend", X0, TOP + 128, 800, 384, chart(
-        "lineChart", {"Category": [C("group_trend", "year", "Year")],
-                      "Y": [MN("Expanded in 2014", "Expanded Medicaid in 2014"), MN("Not expanded", "Did not expand")]},
-        "Since 2014, the share without insurance fell much faster where Medicaid expanded",
-        "Out of every 100 low-income adults, how many had no health insurance", sort=(C("group_trend", "year"), "Ascending"),
-        objects={**axes(), "legend": [{"properties": {"show": lit("true"), "position": s("Top")}}],
-                 "lineStyles": [{"properties": {"strokeWidth": lit("3D"), "showMarker": lit("true"), "markerSize": lit("4D")}}]},
-        colours={"Expanded in 2014": EXP, "Not expanded": NONEXP}))
+    add_donut_panel(p1, X0, TOP + 128, 800, 384, f)
     grp = field("group_trend", "Coverage Group")
     donut_colours = [{"properties": {"fill": solid(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
         "ComparisonKind": 0, "Left": grp, "Right": {"Literal": {"Value": f"'{g}'"}}}}}]}}
@@ -783,23 +838,20 @@ def build_pages():
 
     # ---------------------------------------------------------------- 4. Impact
     p4 = Page("impact", "04  Impact of Expansion")
-    frame(p4, f"Medicaid expansion itself cut the share of uninsured low-income adults by about {abs(f['effect']):.0f} in every 100",
+    frame(p4, f"Medicaid expansion itself cut the share of uninsured low-income adults by about {abs(f['effect']):.0f} in every 100 in its first three years",
           "Measured against similar counties in states that did not expand, so changes that happened everywhere "
           "(like the 2014 insurance marketplaces) are not counted")
     kw3 = (W - 32) // 3
-    kpi(p4, 1, X0, TOP, kw3, "Effect Plain", "fewer uninsured, thanks to expansion", "Effect Range Text", EXP)
+    kpi(p4, 1, X0, TOP, kw3, "Effect Plain", "fewer uninsured in the first 3 years", "Effect Range Text", EXP)
     kpi(p4, 2, X0 + kw3 + 16, TOP, kw3, "Adults Covered 2023", "more adults insured in 2023 because of expansion", "Covered Context", EXP)
     kpi(p4, 3, X0 + 2 * (kw3 + 16), TOP, kw3, "Checks Passed", "reliability checks passed", "Checks Context", SUN)
-    p4.add("whatIf", X0, TOP + 128, 780, 384, chart(
-        "lineChart", {"Category": [C("what_if", "year", "Year")],
-                      "Y": [MN("With Expansion", "What happened"), MN("Without Expansion", "Estimate without expansion")]},
-        f"Without expansion, about {f['without_2023']:.0f}% would still be uninsured instead of {f['actual_2023']:.0f}%",
-        "States that expanded in 2014: share of low-income adults without insurance. The gap between the lines is the effect of expansion.",
-        sort=(C("what_if", "year"), "Ascending"),
-        objects={**axes(), "legend": [{"properties": {"show": lit("true"), "position": s("Top")}}],
-                 "lineStyles": [{"properties": {"strokeWidth": lit("3D"), "showMarker": lit("true"), "markerSize": lit("4D")}},
-                                {"properties": {"lineStyle": s("dashed")}, "selector": {"metadata": "what_if.Without Expansion"}}]},
-        colours={"With Expansion": EXP, "Without Expansion": GREY}))
+    p4.add("scenario", X0, TOP + 128, 780, 384, chart(
+        "clusteredBarChart", {"Category": [C("scenario_2023", "scenario", " ")], "Y": [MN("Scenario Rate", "Share uninsured, 2023")]},
+        f"In 2023, expansion still meant about {round(f['without_2023']) - round(f['actual_2023'])} fewer uninsured adults in every 100",
+        "States that expanded in 2014: share of low-income adults without health insurance in 2023",
+        sort=(C("scenario_2023", "scenario"), "Ascending"),
+        objects={**axes(show_value=False, cat_size=13, inner_padding=35, label_area=40),
+                 **labels(26, labelDisplayUnits=lit("1D")), "dataPoint": fill_by("scenario_2023", "Scenario Colour")}))
     check = lambda t: [("✓  ", 14, True, EXP), (t, 12, False, INK)]
     p4.add("checks", X0 + 796, TOP + 128, W - 796, 384, textbox(
         [("Can we trust this result?", 15, True, INK, FONT), ("", 6, False, INK),

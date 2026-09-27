@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "change1",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "17 fewer",
+                    "textStyle": {
+                      "fontSize": "20pt",
+                      "color": "#D63F6C",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "uninsured in every 100",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 624,
+    "y": 528,
+    "z": 43000,
+    "height": 74,
+    "width": 184,
+    "tabOrder": 43000
+  }
+}

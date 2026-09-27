@@ -20,7 +20,7 @@
               },
               "queryRef": "model_metrics.Effect Plain",
               "nativeQueryRef": "Effect Plain",
-              "displayName": "fewer uninsured, thanks to expansion"
+              "displayName": "fewer uninsured in the first 3 years"
             }
           ]
         }
@@ -258,9 +258,9 @@
   "position": {
     "x": 28,
     "y": 134,
-    "z": 7000,
+    "z": 12000,
     "height": 80,
     "width": 392,
-    "tabOrder": 7000
+    "tabOrder": 12000
   }
 }

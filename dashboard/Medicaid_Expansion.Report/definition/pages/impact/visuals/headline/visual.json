@@ -12,9 +12,9 @@
               {
                 "textRuns": [
                   {
-                    "value": "Medicaid expansion itself cut the share of uninsured low-income adults by about 6 in every 100",
+                    "value": "Medicaid expansion itself cut the share of uninsured low-income adults by about 6 in every 100 in its first three years",
                     "textStyle": {
-                      "fontSize": "14pt",
+                      "fontSize": "15pt",
                       "color": "#1F2D3D",
                       "fontWeight": "bold",
                       "fontFamily": "Bahnschrift"
@@ -55,11 +55,11 @@
     }
   },
   "position": {
-    "x": 20,
+    "x": 36,
     "y": 76,
-    "z": 2000,
+    "z": 7000,
     "height": 52,
-    "width": 1240,
-    "tabOrder": 2000
+    "width": 1220,
+    "tabOrder": 7000
   }
 }

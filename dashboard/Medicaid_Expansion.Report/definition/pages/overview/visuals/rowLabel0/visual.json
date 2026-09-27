@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "rowLabel0",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "States that expanded",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "color": "#0E9F6E",
+                      "fontWeight": "bold",
+                      "fontFamily": "Bahnschrift"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Medicaid in 2014",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 40,
+    "y": 386,
+    "z": 30000,
+    "height": 72,
+    "width": 176,
+    "tabOrder": 30000
+  }
+}

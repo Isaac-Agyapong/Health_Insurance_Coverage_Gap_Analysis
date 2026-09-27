@@ -48,9 +48,9 @@ def glow(size, centre, radius, colour, strength):
 def main():
     size = (W * K, H * K)
     img = Image.new("RGBA", size, (*BASE, 255))
-    img = Image.alpha_composite(img, glow(size, (120 * K, 30 * K), 260 * K, SUN, 70))
-    img = Image.alpha_composite(img, glow(size, (330 * K, -40 * K), 230 * K, EMERALD, 45))
-    img = Image.alpha_composite(img, glow(size, (1230 * K, 700 * K), 260 * K, ROSE, 28))
+    # very soft corner glows only; the header sits on its own white app bar
+    img = Image.alpha_composite(img, glow(size, (1180 * K, 120 * K), 300 * K, EMERALD, 22))
+    img = Image.alpha_composite(img, glow(size, (80 * K, 700 * K), 280 * K, ROSE, 16))
 
     # county dot map across the page, very faint: visible in the gaps between cards and behind the header
     pts = county_points()

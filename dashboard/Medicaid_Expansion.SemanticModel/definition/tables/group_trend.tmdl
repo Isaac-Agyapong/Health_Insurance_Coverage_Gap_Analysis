@@ -60,6 +60,46 @@ table group_trend
 		displayFolder: Trend
 		lineageTag: f0d87f94-c574-5f67-bca5-2ba3dbc2aefa
 
+	measure 'Exp Uninsured 2013' = [Exp Rate 2013]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: 055bc083-bdca-5e86-90dd-72829a924987
+
+	measure 'Exp Insured 2013' = 1 - [Exp Rate 2013]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: 6c7ca5f8-674e-57a4-bd0a-fc37a590f0b7
+
+	measure 'Exp Uninsured 2023' = [Exp Rate 2023]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: f6a3b0ba-a6fb-547f-b4df-31d82be07b7f
+
+	measure 'Exp Insured 2023' = 1 - [Exp Rate 2023]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: c5f7af9a-a119-5832-aa6c-816a68c63da8
+
+	measure 'NonExp Uninsured 2013' = [NonExp Rate 2013]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: 83d4a4f1-58c8-5046-8d64-ecb4d77c44cd
+
+	measure 'NonExp Insured 2013' = 1 - [NonExp Rate 2013]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: 6be91537-9438-5771-9bda-7721ba9bacaf
+
+	measure 'NonExp Uninsured 2023' = [NonExp Rate 2023]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: b32e678c-598a-50f1-8527-902e93a72e06
+
+	measure 'NonExp Insured 2023' = 1 - [NonExp Rate 2023]
+		formatString: 0%
+		displayFolder: Donuts
+		lineageTag: 411a4a91-4422-54c1-8082-208d901f8359
+
 	column analysis_group
 		dataType: string
 		lineageTag: 35635528-18b2-5947-87db-a347d266510f
