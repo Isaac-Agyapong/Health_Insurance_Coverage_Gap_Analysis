@@ -59,6 +59,32 @@ def main():
         cty = q(conn, """SELECT county_fips, county_name, state_abbrev, analysis_group, rurality, pct_uninsured,
                                 uninsured, population FROM analytics.v_county_gap_2023""")
         save(cty, "county_2023")
+        # "Find your county": every county with 2023 data (all states), its 2013 rate, and its state and US rates
+        prof = q(conn, """
+            WITH c AS (
+                SELECT f.county_fips, f.year, f.uninsured, f.population, f.pct_uninsured
+                FROM core.fact_county_coverage f WHERE f.agecat = 1 AND f.iprcat = 3 AND f.year IN (2013, 2023)
+            ), st AS (
+                SELECT state_fips, 100.0 * uninsured / population AS state_rate
+                FROM core.fact_state_coverage WHERE agecat = 1 AND iprcat = 3 AND racecat = 0 AND year = 2023
+            )
+            SELECT d.county_fips, d.county_name, s.state_abbrev, s.state_name,
+                   d.county_name || ', ' || s.state_abbrev                    AS county_label,
+                   CASE WHEN s.analysis_group LIKE 'Expanded%' THEN 'Expanded Medicaid in ' || s.expansion_year
+                        WHEN s.analysis_group LIKE 'Excluded%' THEN 'Covered low-income adults before 2014'
+                        WHEN s.expansion_year IS NOT NULL THEN 'Expanded Medicaid in late 2023'
+                        ELSE 'Has not expanded Medicaid' END                    AS medicaid_status,
+                   coalesce(d.rurality, 'Not classified')                     AS rurality,
+                   c23.uninsured AS uninsured_2023, c23.population AS low_income_adults_2023,
+                   c23.pct_uninsured AS rate_2023, c13.pct_uninsured AS rate_2013, st.state_rate AS state_rate_2023,
+                   (SELECT 100.0 * sum(uninsured) / sum(population) FROM core.fact_state_coverage
+                     WHERE agecat = 1 AND iprcat = 3 AND racecat = 0 AND year = 2023) AS us_rate_2023
+            FROM core.dim_county d
+            JOIN core.dim_state s USING (state_fips)
+            JOIN c c23 ON c23.county_fips = d.county_fips AND c23.year = 2023
+            LEFT JOIN c c13 ON c13.county_fips = d.county_fips AND c13.year = 2013
+            JOIN st ON st.state_fips = d.state_fips
+            WHERE c23.pct_uninsured IS NOT NULL""")
         # "what happened vs what would have happened": actual rate in the 2014 expansion counties, and the same
         # rate with the estimated effect of expansion added back (the counterfactual) from 2014 on
         actual = q(conn, """SELECT year, 100.0 * sum(uninsured) / sum(population) AS actual
@@ -96,7 +122,7 @@ def main():
 
     # ---- machine learning outputs
     val = pd.DataFrame(mr["validation_quartiles_mean"]).rename(columns={"group": "quartile"})
-    val["label"] = val.quartile.map({1: "Biggest expected gain", 2: "Second", 3: "Third", 4: "Smallest expected gain"})
+    val["label"] = val.quartile.map({1: "Ranked highest", 2: "Next", 3: "Next ", 4: "Ranked lowest"})
     val["actual_drop"] = -val.actual_effect          # shown as a positive "fewer uninsured per 100" number
     save(val, "ml_validation")
     st = pd.read_csv(CLEAN / "ml_nonexpansion_state_predictions.csv")
@@ -109,6 +135,13 @@ def main():
         ("Texas adults gaining coverage", ten.set_index("state").adults_gaining_coverage["TX"], None, None),
     ], columns=["metric", "value", "ci_low", "ci_high"]).astype({"ci_low": float, "ci_high": float})
     save(pd.concat([metrics, extra]), "model_metrics")
+    pred = pd.read_csv(CLEAN / "ml_nonexpansion_county_predictions.csv", dtype={"county_fips": str})
+    pred = pred[~pred.state.isin(["NC", "SD"])][["county_fips", "adults_gaining_coverage", "predicted_rate_after"]]
+    prof = prof.merge(pred, on="county_fips", how="left")
+    # national ranking: 1 = highest share uninsured
+    prof["rank_us"] = prof.rate_2023.astype(float).rank(ascending=False, method="min").astype(int)
+    prof["counties_ranked"] = len(prof)
+    save(prof, "county_profile")
     ct = pd.read_csv(CLEAN / "ml_nonexpansion_county_predictions.csv")
     ct = ct[~ct.state.isin(["NC", "SD"])]      # expanded in late 2023
     save(ct, "ml_county_predictions")

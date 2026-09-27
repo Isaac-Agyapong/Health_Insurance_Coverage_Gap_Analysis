@@ -4,22 +4,24 @@
 gained the most, and what would happen if the remaining states expanded? Built from real Census data on every
 US county, 2008-2023.**
 
-> **In short:** since 2014, most states have let adults with low incomes get free health coverage through Medicaid
-> (this is called "Medicaid expansion"). Ten states still have not. Using government data for all 3,143 US
-> counties, this project shows that:
+> **In short:** Medicaid is free or low-cost government health insurance for people with low incomes. Since 2014,
+> most states have let more low-income adults qualify for it (this is called "Medicaid expansion"); ten states still
+> have not. Using government data for all 3,143 US counties, I built a database, an analysis, a machine learning
+> model and a 7-page interactive dashboard to answer three questions:
 >
-> * In states that expanded in 2014, the share of low-income adults with no health insurance fell from **37% to 16%**.
->   In states that did not expand it fell less, from **46% to 29%**.
-> * Part of that drop would have happened anyway (other health reforms also started in 2014). Comparing similar
->   counties, **expansion itself cut the uninsured rate by about 6 percentage points** and kept about
->   **970,000 more adults insured in 2023**.
-> * A machine learning model predicts that if the **10 remaining states** expanded, about **530,000 more adults**
->   would have health insurance, **44% of them in Texas**. The places with the highest uninsured rates today would
->   gain the most.
+> * **Did it help?** In states that expanded in 2014, the share of low-income adults with no health insurance fell
+>   from **37% to 16%**. In states that did not expand it fell less, from **46% to 29%**.
+> * **How much of that was the policy itself?** Some of the drop would have happened anyway. Comparing similar
+>   counties, expansion itself meant **about 6 fewer uninsured adults in every 100**, and about **970,000 more adults
+>   had insurance in 2023** because of it.
+> * **What if the rest expanded?** A machine learning model predicts about **530,000 more adults** would have health
+>   insurance, **44% of them in Texas**.
+>
+> The dashboard also lets anyone look up their own county, for example a hospital planning for uninsured patients.
 
 [![Dashboard overview](Image/dashboard_1_overview.png)](dashboard/)
 
-*The Power BI dashboard (6 pages). More screenshots below.*
+*The Power BI dashboard (7 pages). More screenshots below.*
 
 ---
 
@@ -179,8 +181,8 @@ rurality); cross-fitting folds are grouped by state so a county's state is never
   validation; notebook built with nbformat and executed with nbconvert.
 * **Causal inference:** staggered difference-in-differences, event study, pre-trend checks, placebo tests,
   heterogeneous treatment effects, double machine learning.
-* **Power BI:** report generated from Python as a PBIP (TMDL model, PBIR report), 58 DAX measures, a US tile map from
-  a matrix with conditional formatting, a hover tooltip page, ranking measures that ignore map clicks, numbers checked
+* **Power BI:** report generated from Python as a PBIP (TMDL model, PBIR report), 90+ DAX measures, a US tile map from
+  a matrix with conditional formatting, a searchable county profile page, a hover tooltip page, ranking measures that ignore map clicks, numbers checked
   against SQL through the Analysis Services engine.
 
 ## Charts
@@ -196,10 +198,19 @@ Open `dashboard/Medicaid_Expansion.pbip` in Power BI Desktop. It imports the sma
 `dashboard/data/`, so it works without the database; if you cloned the repository to another folder, change the
 `DataFolder` parameter (Transform data > Edit parameters).
 
+Every page is written for readers without a statistics background: "6 in every 100" instead of percentage points,
+no negative numbers, and a "Words used here" glossary on the Data Notes page.
+
 | | |
 |---|---|
 | ![](Image/dashboard_2_states.png) | ![](Image/dashboard_3_left_out.png) |
-| ![](Image/dashboard_4_impact.png) | ![](Image/dashboard_5_predictions.png) |
+| ![](Image/dashboard_4_impact.png) | ![](Image/dashboard_5_what_if.png) |
+
+**Find Your County:** search any of the 3,143 counties to see how many low-income adults are uninsured, how it
+compares with its state and the US, how it changed since 2013, how many would gain coverage if the state expanded,
+and what that means for a local hospital (enrollment help, Spanish-language outreach, planning for unpaid care).
+
+![Find your county](Image/dashboard_6_find_your_county.png)
 
 ## Project structure
 

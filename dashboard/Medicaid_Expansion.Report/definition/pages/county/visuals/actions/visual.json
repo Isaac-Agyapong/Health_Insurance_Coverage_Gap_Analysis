@@ -1,0 +1,122 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "actions",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "\u25cf  ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#F5B700",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Help patients enroll. ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2D3D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Many uninsured low-income adults qualify for Medicaid or low-cost Marketplace plans but are not signed up.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\u25cf  ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#F5B700",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Reach Hispanic residents in Spanish. ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2D3D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "They are the group most likely to be uninsured.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "\u25cf  ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#F5B700",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "Plan for unpaid care. ",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#1F2D3D",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "More uninsured adults nearby means more patients who cannot pay their bills.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5B6B7C"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 536,
+    "y": 500,
+    "z": 35000,
+    "height": 134,
+    "width": 704,
+    "tabOrder": 35000
+  }
+}

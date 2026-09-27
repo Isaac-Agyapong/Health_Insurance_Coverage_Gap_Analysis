@@ -1,0 +1,27 @@
+table Compare
+	lineageTag: a71dfc51-db09-5a54-912b-b03fac52ff4a
+
+	column order
+		dataType: int64
+		isHidden
+		lineageTag: c3e0df7f-038b-5a46-a722-381b920f5f44
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [order]
+
+		annotation SummarizationSetBy = Automatic
+
+	column place
+		dataType: string
+		sortByColumn: order
+		lineageTag: 8f7dd145-41d2-55bb-926d-213c115c3239
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [place]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Compare = calculated
+		mode: import
+		source =
+				DATATABLE ( "order", INTEGER, "place", STRING, { { 1, "This county" }, { 2, "Its state" }, { 3, "United States" } } )

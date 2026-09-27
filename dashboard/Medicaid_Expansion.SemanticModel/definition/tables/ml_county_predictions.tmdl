@@ -24,6 +24,7 @@ table ml_county_predictions
 	column county_fips
 		dataType: int64
 		formatString: 0
+		isHidden
 		lineageTag: e8a44519-435b-54f8-bd37-b9057eba7bf0
 		summarizeBy: sum
 		sourceColumn: county_fips

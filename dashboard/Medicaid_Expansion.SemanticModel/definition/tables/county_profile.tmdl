@@ -1,0 +1,237 @@
+table county_profile
+	lineageTag: 6ddb423d-77ef-518e-a411-d67d1deb6082
+
+	measure 'Profile Name' = IF ( HASONEVALUE ( county_profile[county_label] ), SELECTEDVALUE ( county_profile[county_label] ), "Pick a county" )
+		displayFolder: County
+		lineageTag: 410fc7aa-b867-5111-8c3d-7d2788525ab7
+
+	measure 'Profile Status' = IF ( HASONEVALUE ( county_profile[county_label] ), SELECTEDVALUE ( county_profile[medicaid_status] ) & "   ·   " & SELECTEDVALUE ( county_profile[rurality] ) & "   ·   #" & FORMAT ( SUM ( county_profile[rank_us] ), "#,0" ) & " of " & FORMAT ( MAX ( county_profile[counties_ranked] ), "#,0" ) & " counties for share uninsured", "Type a county name in the search box" )
+		displayFolder: County
+		lineageTag: 4b1c339d-78cd-5e10-b9cf-c1ff35f63eb4
+
+	measure 'Profile Uninsured' = IF ( HASONEVALUE ( county_profile[county_label] ), SUM ( county_profile[uninsured_2023] ) )
+		formatString: #,0
+		displayFolder: County
+		lineageTag: 3b71fb75-f6b2-59cd-aa8b-9f572528f846
+
+	measure 'Profile Adults Context' = IF ( HASONEVALUE ( county_profile[county_label] ), "out of " & FORMAT ( SUM ( county_profile[low_income_adults_2023] ), "#,0" ) & " low-income adults" )
+		displayFolder: County
+		lineageTag: b9ba7e98-6760-50e3-be6c-7a9acdada7ad
+
+	measure 'Profile Rate' = IF ( HASONEVALUE ( county_profile[county_label] ), SUM ( county_profile[rate_2023] ) / 100 )
+		formatString: 0%
+		displayFolder: County
+		lineageTag: e0aed6c8-441b-50d0-9a3a-24259069ac38
+
+	measure 'Profile Rate Context' = IF ( HASONEVALUE ( county_profile[county_label] ), "state average " & FORMAT ( SUM ( county_profile[state_rate_2023] ) / 100, "0%" ) & "   ·   US " & FORMAT ( MAX ( county_profile[us_rate_2023] ) / 100, "0%" ) )
+		displayFolder: County
+		lineageTag: 1a2f37fe-4287-57f0-a458-3e24a6c1198f
+
+	measure 'Profile Change' =
+			VAR _d = SUM ( county_profile[rate_2013] ) - SUM ( county_profile[rate_2023] )
+			RETURN IF ( HASONEVALUE ( county_profile[county_label] ) && NOT ISBLANK ( SUM ( county_profile[rate_2013] ) ), FORMAT ( ABS ( _d ), "0" ) & IF ( _d >= 0, " fewer", " more" ) )
+		displayFolder: County
+		lineageTag: fd046812-85cc-5e8c-ac5b-bde998780f2f
+
+	measure 'Profile Change Context' = IF ( HASONEVALUE ( county_profile[county_label] ), "share uninsured was " & FORMAT ( SUM ( county_profile[rate_2013] ) / 100, "0%" ) & " in 2013" )
+		displayFolder: County
+		lineageTag: c7fd34d7-b9fd-5e98-be59-2cdab3fed8d9
+
+	measure 'Profile Gain' = IF ( HASONEVALUE ( county_profile[county_label] ), IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "Already expanded", FORMAT ( SUM ( county_profile[adults_gaining_coverage] ), "#,0" ) ) )
+		displayFolder: County
+		lineageTag: 0665a08b-09ec-5f5f-9395-edb3412987e4
+
+	measure 'Profile Gain Context' = IF ( HASONEVALUE ( county_profile[county_label] ), IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "this state already expanded Medicaid", "uninsured would fall to about " & FORMAT ( SUM ( county_profile[predicted_rate_after] ) / 100, "0%" ) ) )
+		displayFolder: County
+		lineageTag: 19db19d1-e613-523c-9442-6b5d62783627
+
+	measure 'Compare Rate' =
+			SWITCH ( SELECTEDVALUE ( Compare[order] ),
+			    1, [Profile Rate],
+			    2, IF ( HASONEVALUE ( county_profile[county_label] ), SUM ( county_profile[state_rate_2023] ) / 100 ),
+			    3, MAX ( county_profile[us_rate_2023] ) / 100 )
+		formatString: 0%
+		displayFolder: County
+		lineageTag: 1055e968-ca4a-5ca3-9ce7-c9fbb92cc66c
+
+	measure 'Compare Colour' = IF ( SELECTEDVALUE ( Compare[order] ) = 1, "#F5B700", "#B8C0C9" )
+		displayFolder: County
+		lineageTag: 369ae6e4-f98a-5458-8ef8-86679692ee15
+
+	measure 'Profile Sentence' =
+			VAR _n = SELECTEDVALUE ( county_profile[county_name] )
+			VAR _st = SELECTEDVALUE ( county_profile[state_name] )
+			VAR _r = SUM ( county_profile[rate_2023] )
+			VAR _s = SUM ( county_profile[state_rate_2023] )
+			VAR _g = SUM ( county_profile[adults_gaining_coverage] )
+			RETURN IF ( HASONEVALUE ( county_profile[county_label] ),
+			    "About " & FORMAT ( ROUND ( SUM ( county_profile[uninsured_2023] ), -2 ), "#,0" ) & " low-income adults in " & _n
+			        & " have no health insurance: " & FORMAT ( _r, "0" ) & " in every 100. That is "
+			        & IF ( _r > _s + 0.5, "higher than", IF ( _r < _s - 0.5, "lower than", "about the same as" ) )
+			        & " the " & _st & " average (" & FORMAT ( _s, "0" ) & " in 100)."
+			        & IF ( NOT ISBLANK ( _g ), " If " & _st & " expanded Medicaid, about " & FORMAT ( ROUND ( _g, -2 ), "#,0" )
+			        & " more adults here would be insured.", "" ),
+			    "Pick a county in the search box to see what its numbers mean." )
+		displayFolder: County
+		lineageTag: 5a6de0c6-72d4-55a7-b049-34530e9eb459
+
+	column county_fips
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8a94da39-c43f-5d34-8524-154684a281d0
+		summarizeBy: sum
+		sourceColumn: county_fips
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_name
+		dataType: string
+		lineageTag: f83f7932-f20b-5cfd-ba97-68e1c9caf8c0
+		summarizeBy: none
+		sourceColumn: county_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_abbrev
+		dataType: string
+		lineageTag: 6b4ca4b5-8e2f-56d5-a666-8bc0ee0a4a09
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: 1553a402-92ea-5241-a639-2e2ed03c9216
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column county_label
+		dataType: string
+		lineageTag: 007f4b62-a941-5c57-ac6f-8f94c054cc41
+		summarizeBy: none
+		sourceColumn: county_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_status
+		dataType: string
+		lineageTag: b3d0a1d8-e8a1-56b3-94c8-ec6c12cf371b
+		summarizeBy: none
+		sourceColumn: medicaid_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column rurality
+		dataType: string
+		lineageTag: 8351decc-2614-593f-b563-22dd951a107a
+		summarizeBy: none
+		sourceColumn: rurality
+
+		annotation SummarizationSetBy = Automatic
+
+	column uninsured_2023
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e69ff90-4025-575d-9635-2bedf45c52d1
+		summarizeBy: sum
+		sourceColumn: uninsured_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column low_income_adults_2023
+		dataType: int64
+		formatString: 0
+		lineageTag: fe77e148-64f0-5bd4-b2c9-faa54ce88414
+		summarizeBy: sum
+		sourceColumn: low_income_adults_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column rate_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: b73e57f8-1d54-5d45-8d9e-8d51c728a483
+		summarizeBy: sum
+		sourceColumn: rate_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column rate_2013
+		dataType: double
+		formatString: #,0.00
+		lineageTag: ad22fd6e-c137-5dd7-acdf-8e8691c6fb85
+		summarizeBy: sum
+		sourceColumn: rate_2013
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_rate_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 73800e00-09fd-5d07-87a6-8825634f2690
+		summarizeBy: sum
+		sourceColumn: state_rate_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column us_rate_2023
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 425c052a-d118-5450-86f7-c88e19d134a6
+		summarizeBy: sum
+		sourceColumn: us_rate_2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column adults_gaining_coverage
+		dataType: double
+		formatString: #,0.00
+		lineageTag: fd7cf141-c880-58d2-bd05-4b648971fd68
+		summarizeBy: sum
+		sourceColumn: adults_gaining_coverage
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted_rate_after
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c5795b9a-7d86-5523-8950-e318b6acd8b4
+		summarizeBy: sum
+		sourceColumn: predicted_rate_after
+
+		annotation SummarizationSetBy = Automatic
+
+	column rank_us
+		dataType: int64
+		formatString: 0
+		lineageTag: 392c3f9d-27fb-5557-86e0-4839d1385cf8
+		summarizeBy: sum
+		sourceColumn: rank_us
+
+		annotation SummarizationSetBy = Automatic
+
+	column counties_ranked
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: a4848a53-dcd9-514b-ab00-69d8613b2285
+		summarizeBy: sum
+		sourceColumn: counties_ranked
+
+		annotation SummarizationSetBy = Automatic
+
+	partition county_profile = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "county_profile.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"county_fips", Int64.Type}, {"county_name", type text}, {"state_abbrev", type text}, {"state_name", type text}, {"county_label", type text}, {"medicaid_status", type text}, {"rurality", type text}, {"uninsured_2023", Int64.Type}, {"low_income_adults_2023", Int64.Type}, {"rate_2023", type number}, {"rate_2013", type number}, {"state_rate_2023", type number}, {"us_rate_2023", type number}, {"adults_gaining_coverage", type number}, {"predicted_rate_after", type number}, {"rank_us", Int64.Type}, {"counties_ranked", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

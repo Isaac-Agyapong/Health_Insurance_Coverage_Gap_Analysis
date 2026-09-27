@@ -40,6 +40,7 @@ table county_2023
 	column county_fips
 		dataType: int64
 		formatString: 0
+		isHidden
 		lineageTag: 4d81388d-6d36-5afa-9fcf-6e2c91b4f569
 		summarizeBy: sum
 		sourceColumn: county_fips

@@ -20,7 +20,7 @@
               },
               "queryRef": "ml_validation.label",
               "nativeQueryRef": "label",
-              "displayName": "Counties grouped by the model"
+              "displayName": "Counties, by the model's ranking"
             }
           ]
         },
@@ -39,7 +39,7 @@
               },
               "queryRef": "ml_validation.Actual Drop",
               "nativeQueryRef": "Actual Drop",
-              "displayName": "Fewer uninsured per 100 (what really happened)"
+              "displayName": "Fewer uninsured in every 100 (what really happened)"
             }
           ]
         }
@@ -285,7 +285,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'The model picked the right places'"
+                  "Value": "'We tested the model on states it had never seen'"
                 }
               }
             },
@@ -337,7 +337,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Tested on states it had never seen: counties it expected to gain most really did (fewer uninsured per 100)'"
+                  "Value": "'The counties it ranked highest really did gain the most. Bars = fewer uninsured in every 100 after expansion.'"
                 }
               }
             },

@@ -29,9 +29,9 @@ NAME = "Medicaid_Expansion"
 SM = DASH / f"{NAME}.SemanticModel"
 RPT = DASH / f"{NAME}.Report"
 
-TABLES = ["group_trend", "state_year", "breakdown_trend", "county_2023", "what_if", "scenario_2023", "event_study", "model_metrics",
+TABLES = ["group_trend", "state_year", "breakdown_trend", "county_2023", "county_profile", "what_if", "scenario_2023", "event_study", "model_metrics",
           "robustness", "ml_validation", "ml_state_predictions", "ml_county_predictions"]
-HIDDEN = {"order", "rate", "quartile", "in_study", "row_order"}
+HIDDEN = {"order", "rate", "county_fips", "counties_ranked", "quartile", "in_study", "row_order"}
 SORT_BY = {("scenario_2023", "scenario"): "order", ("robustness", "label"): "order", ("ml_validation", "label"): "quartile", ("breakdown_trend", "row_label"): "row_order"}
 
 SCHEMA = "https://developer.microsoft.com/json-schemas/fabric"
@@ -243,6 +243,53 @@ PLAIN = [
     ("county_2023", "Top 8 County Rate", "IF ( NOT ISBLANK ( [Top 8 County Uninsured] ), [County Rate] )", "0%", "Plain"),
 ]
 MEASURES += PLAIN
+ONE = "HASONEVALUE ( county_profile[county_label] )"
+MEASURES += [
+    ("county_profile", "Profile Name", f'IF ( {ONE}, SELECTEDVALUE ( county_profile[county_label] ), "Pick a county" )', None, "County"),
+    ("county_profile", "Profile Status",
+     f'IF ( {ONE}, SELECTEDVALUE ( county_profile[medicaid_status] ) & "   ·   " & SELECTEDVALUE ( county_profile[rurality] )'
+     ' & "   ·   #" & FORMAT ( SUM ( county_profile[rank_us] ), "#,0" ) & " of " & FORMAT ( MAX ( county_profile[counties_ranked] ), "#,0" )'
+     ' & " counties for share uninsured", "Type a county name in the search box" )', None, "County"),
+    ("county_profile", "Profile Uninsured", f"IF ( {ONE}, SUM ( county_profile[uninsured_2023] ) )", "#,0", "County"),
+    ("county_profile", "Profile Adults Context",
+     f'IF ( {ONE}, "out of " & FORMAT ( SUM ( county_profile[low_income_adults_2023] ), "#,0" ) & " low-income adults" )', None, "County"),
+    ("county_profile", "Profile Rate", f"IF ( {ONE}, SUM ( county_profile[rate_2023] ) / 100 )", "0%", "County"),
+    ("county_profile", "Profile Rate Context",
+     f'IF ( {ONE}, "state average " & FORMAT ( SUM ( county_profile[state_rate_2023] ) / 100, "0%" ) & "   ·   US " & FORMAT ( MAX ( county_profile[us_rate_2023] ) / 100, "0%" ) )',
+     None, "County"),
+    ("county_profile", "Profile Change",
+     f"VAR _d = SUM ( county_profile[rate_2013] ) - SUM ( county_profile[rate_2023] )\n"
+     f'RETURN IF ( {ONE} && NOT ISBLANK ( SUM ( county_profile[rate_2013] ) ), FORMAT ( ABS ( _d ), "0" ) & IF ( _d >= 0, " fewer", " more" ) )',
+     None, "County"),
+    ("county_profile", "Profile Change Context",
+     f'IF ( {ONE}, "share uninsured was " & FORMAT ( SUM ( county_profile[rate_2013] ) / 100, "0%" ) & " in 2013" )', None, "County"),
+    ("county_profile", "Profile Gain",
+     f'IF ( {ONE}, IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "Already expanded", FORMAT ( SUM ( county_profile[adults_gaining_coverage] ), "#,0" ) ) )',
+     None, "County"),
+    ("county_profile", "Profile Gain Context",
+     f'IF ( {ONE}, IF ( ISBLANK ( SUM ( county_profile[adults_gaining_coverage] ) ), "this state already expanded Medicaid",'
+     ' "uninsured would fall to about " & FORMAT ( SUM ( county_profile[predicted_rate_after] ) / 100, "0%" ) ) )', None, "County"),
+    ("county_profile", "Compare Rate",
+     "SWITCH ( SELECTEDVALUE ( Compare[order] ),\n"
+     "    1, [Profile Rate],\n"
+     f"    2, IF ( {ONE}, SUM ( county_profile[state_rate_2023] ) / 100 ),\n"
+     "    3, MAX ( county_profile[us_rate_2023] ) / 100 )", "0%", "County"),
+    ("county_profile", "Compare Colour", f'IF ( SELECTEDVALUE ( Compare[order] ) = 1, "{SUN}", "#B8C0C9" )', None, "County"),
+    ("county_profile", "Profile Sentence",
+     "VAR _n = SELECTEDVALUE ( county_profile[county_name] )\n"
+     "VAR _st = SELECTEDVALUE ( county_profile[state_name] )\n"
+     "VAR _r = SUM ( county_profile[rate_2023] )\n"
+     "VAR _s = SUM ( county_profile[state_rate_2023] )\n"
+     "VAR _g = SUM ( county_profile[adults_gaining_coverage] )\n"
+     f"RETURN IF ( {ONE},\n"
+     '    "About " & FORMAT ( ROUND ( SUM ( county_profile[uninsured_2023] ), -2 ), "#,0" ) & " low-income adults in " & _n\n'
+     '        & " have no health insurance: " & FORMAT ( _r, "0" ) & " in every 100. That is "\n'
+     '        & IF ( _r > _s + 0.5, "higher than", IF ( _r < _s - 0.5, "lower than", "about the same as" ) )\n'
+     '        & " the " & _st & " average (" & FORMAT ( _s, "0" ) & " in 100)."\n'
+     '        & IF ( NOT ISBLANK ( _g ), " If " & _st & " expanded Medicaid, about " & FORMAT ( ROUND ( _g, -2 ), "#,0" )\n'
+     '        & " more adults here would be insured.", "" ),\n'
+     '    "Pick a county in the search box to see what its numbers mean." )', None, "County"),
+]
 MEASURES += [
     # ---- "out of every 100" donuts on the overview (uninsured slice + insured slice)
     ("group_trend", "Exp Uninsured 2013", "[Exp Rate 2013]", "0%", "Donuts"),
@@ -262,7 +309,7 @@ CALC_COLUMNS = [
     ("group_trend", "Coverage Group",
      "SWITCH ( group_trend[analysis_group],\n"
      '    "Not expanded by 2023", "Did not expand",\n'
-     '    "Excluded (early coverage)", "Covered adults early",\n'
+     '    "Excluded (early coverage)", "Covered before 2014",\n'
      '    "Expanded" )'),
 ]
 
@@ -357,7 +404,7 @@ def build_model():
         "model Model", "\tculture: en-US", "\tdefaultPowerBIDataSourceVersion: powerBI_V3",
         "\tsourceQueryCulture: en-US", "\tdataAccessOptions", "\t\tlegacyRedirects", "\t\treturnErrorValuesAsNull",
         "", "annotation __PBI_TimeIntelligenceEnabled = 0", "",
-        *[f"ref table {t}" for t in TABLES + ["StateGrid"]], ""]))
+        *[f"ref table {t}" for t in TABLES + ["StateGrid", "Compare"]], ""]))
     folder = str(DATA) + "\\"
     write(d / "expressions.tmdl", "\n".join([
         f'expression DataFolder = "{folder}" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]',
@@ -374,6 +421,16 @@ def build_model():
         "table StateGrid", f"\tlineageTag: {tag('StateGrid')}", "", *grid_cols,
         "\tpartition StateGrid = calculated", "\t\tmode: import", "\t\tsource =",
         indent(f'DATATABLE ( "state_abbr", STRING, "tile_x", INTEGER, "tile_y", INTEGER, {{ {rows} }} )', 4), ""]))
+    cmp_cols = []
+    for col, dtype in [("order", "int64"), ("place", "string")]:
+        cmp_cols += [f"\tcolumn {col}", f"\t\tdataType: {dtype}", *(["\t\tisHidden"] if col == "order" else []),
+                     *(["\t\tsortByColumn: order"] if col == "place" else []),
+                     f"\t\tlineageTag: {tag('Compare', col)}", "\t\tsummarizeBy: none", "\t\tisNameInferred",
+                     f"\t\tsourceColumn: [{col}]", "", "\t\tannotation SummarizationSetBy = Automatic", ""]
+    write(d / "tables" / "Compare.tmdl", "\n".join([
+        "table Compare", f"\tlineageTag: {tag('Compare')}", "", *cmp_cols,
+        "\tpartition Compare = calculated", "\t\tmode: import", "\t\tsource =",
+        indent('DATATABLE ( "order", INTEGER, "place", STRING, { { 1, "This county" }, { 2, "Its state" }, { 3, "United States" } } )', 4), ""]))
     write(d / "relationships.tmdl", f"relationship {tag('rel', 'stategrid')}\n\tfromColumn: state_year.state_abbrev\n"
                                     "\ttoColumn: StateGrid.state_abbr\n")
 
@@ -540,6 +597,20 @@ def slicer(entity, prop, title):
             "visualContainerObjects": tile(pad=(8, 6, 12, 12)), "drillFilterOtherVisuals": True}
 
 
+def county_search(default="Harris County, TX"):
+    v = slicer("county_profile", "county_label", "Find a county")
+    v["objects"]["selection"] = [{"properties": {"singleSelect": lit("true")}}]
+    v["objects"]["general"] = [{"properties": {
+        "selfFilterEnabled": lit("true"),                     # search box in the dropdown
+        "filter": {"filter": {"Version": 2, "From": [{"Name": "c", "Entity": "county_profile", "Type": 0}],
+                              "Where": [{"Condition": {"In": {
+                                  "Expressions": [{"Column": {"Expression": {"SourceRef": {"Source": "c"}},
+                                                              "Property": "county_label"}}],
+                                  "Values": [[{"Literal": {"Value": f"'{default}'"}}]]}}}]}}}}]
+    v["objects"]["header"][0]["properties"]["fontSize"] = lit("13D")
+    return v
+
+
 def navigator():
     state = lambda sid, props: {"properties": props, "selector": {"id": sid}}
     return {"visualType": "pageNavigator", "drillFilterOtherVisuals": True,
@@ -620,7 +691,7 @@ def frame(page, finding, sub):
 
 
 ICONS = {"Exp Rate 2023": "✔", "NonExp Rate 2023": "✖", "Effect Years 0-2": "▼", "Adults Would Gain": "★",
-         "Effect Plain": "▼", "Checks Passed": "✔", "Rate Change Text": "↘", "Texas Gain": "★",
+         "Effect Plain": "▼", "Profile Uninsured": "●", "Profile Rate": "%", "Profile Change": "↘", "Profile Gain": "★", "Checks Passed": "✔", "Rate Change Text": "↘", "Texas Gain": "★",
          "Adults Covered 2023": "♥", "Placebo Effect": "◎", "Forest Effect": "◆", "Top Quarter Actual": "✔"}
 
 
@@ -747,7 +818,7 @@ def build_pages():
     grp = field("group_trend", "Coverage Group")
     donut_colours = [{"properties": {"fill": solid(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
         "ComparisonKind": 0, "Left": grp, "Right": {"Literal": {"Value": f"'{g}'"}}}}}]}}
-        for g, c in {"Did not expand": NONEXP, "Expanded": EXP, "Covered adults early": GREY_LIGHT}.items()]
+        for g, c in {"Did not expand": NONEXP, "Expanded": EXP, "Covered before 2014": GREY_LIGHT}.items()]
     p1.add("donut", X0 + 816, TOP + 128, W - 816, 384, chart(
         "donutChart", {"Category": [C("group_trend", "Coverage Group")], "Y": [MN("Uninsured 2023", "Uninsured low-income adults, 2023")]},
         f"{'Half' if round(f['nonexp_share'], 1) == 0.5 else format(f['nonexp_share'], '.0%')} of all uninsured low-income adults live in states that did not expand",
@@ -837,7 +908,7 @@ def build_pages():
                  "columnFormatting": [data_bar("county_2023", "Top 8 County Uninsured", NONEXP_L)]}))
 
     # ---------------------------------------------------------------- 4. Impact
-    p4 = Page("impact", "04  Impact of Expansion")
+    p4 = Page("impact", "04  Impact")
     frame(p4, f"Medicaid expansion itself cut the share of uninsured low-income adults by about {abs(f['effect']):.0f} in every 100 in its first three years",
           "Measured against similar counties in states that did not expand, so changes that happened everywhere "
           "(like the 2014 insurance marketplaces) are not counted")
@@ -867,7 +938,7 @@ def build_pages():
         background="#FFFFFF", pad=(18, 12, 20, 20), shadow=True))
 
     # ---------------------------------------------------------------- 5. If the rest expanded
-    p5 = Page("predictions", "05  If the Rest Expanded")
+    p5 = Page("predictions", "05  What If")
     frame(p5, f"If the 10 remaining states expanded Medicaid, about {round(f['gain'], -4):,.0f} more adults would have health insurance",
           "Estimate from a machine learning model that learned from counties that expanded between 2014 and 2021")
     kpi(p5, 1, kx[0], TOP, kw, "Adults Would Gain", "more adults could be insured", "Gain Context", SUN)
@@ -881,9 +952,10 @@ def build_pages():
         objects={**axes(show_value=False), **labels(11, labelDisplayUnits=lit("1000D"), labelPrecision=lit("0L")),
                  "dataPoint": [{"properties": {"fill": solid(NONEXP)}}]}))
     p5.add("validation", X0 + 396, TOP + 128, 340, 384, chart(
-        "clusteredColumnChart", {"Category": [C("ml_validation", "label", "Counties grouped by the model")],
-                                 "Y": [MN("Actual Drop", "Fewer uninsured per 100 (what really happened)")]},
-        "The model picked the right places", "Tested on states it had never seen: counties it expected to gain most really did (fewer uninsured per 100)",
+        "clusteredColumnChart", {"Category": [C("ml_validation", "label", "Counties, by the model's ranking")],
+                                 "Y": [MN("Actual Drop", "Fewer uninsured in every 100 (what really happened)")]},
+        "We tested the model on states it had never seen",
+        "The counties it ranked highest really did gain the most. Bars = fewer uninsured in every 100 after expansion.",
         sort=(C("ml_validation", "label"), "Ascending"),
         objects={**axes(show_value=False, cat_size=10), **labels(12), "dataPoint": fill_by("ml_validation", "Validation Colour")}))
     p5.no_filter += [("stateGain", "validation"), ("stateSlicer", "validation"), ("stateSlicer", "stateGain")]
@@ -898,8 +970,42 @@ def build_pages():
                              "ml_county_predictions__Adults Gaining": 92}),
                  "columnFormatting": [data_bar("ml_county_predictions", "Adults Gaining", SUN_L)]}))
 
-    # ---------------------------------------------------------------- 6. Data notes
-    p6 = Page("dataNotes", "06  Data Notes")
+    # ---------------------------------------------------------------- 6. Find your county
+    pc = Page("county", "06  Find Your County")
+    frame(pc, "Look up any US county: how many low-income adults are uninsured, and what it means for local hospitals",
+          "Search for a county by name. " + LOW_INCOME)
+    pc.add("search", X0, TOP, 400, 92, county_search())
+    pc.add("countyName", X0 + 416, TOP, W - 416, 92, textbox([None], background="#FFFFFF", shadow=True))
+    pc.add("countyTitle", X0 + 428, TOP + 6, W - 440, 48, card("Profile Name", "", value_colour=SLATE, size=22, show_label=False,
+                                                              pad=(0, 0, 8, 8)))
+    pc.add("countyStatus", X0 + 428, TOP + 52, W - 440, 34, card("Profile Status", "", value_colour=INK_2, size=11,
+                                                                 show_label=False, pad=(0, 0, 8, 8), font="Segoe UI"))
+    ky = TOP + 104
+    kpi(pc, 1, kx[0], ky, kw, "Profile Uninsured", "low-income adults without insurance", "Profile Adults Context", SLATE)
+    kpi(pc, 2, kx[1], ky, kw, "Profile Rate", "of low-income adults are uninsured", "Profile Rate Context", SLATE)
+    kpi(pc, 3, kx[2], ky, kw, "Profile Change", "uninsured in every 100 than in 2013", "Profile Change Context", EXP)
+    kpi(pc, 4, kx[3], ky, kw, "Profile Gain", "more insured if the state expands", "Profile Gain Context", SUN)
+    cy = ky + 128
+    pc.add("compare", X0, cy, 480, 640 - cy, chart(
+        "clusteredBarChart", {"Category": [C("Compare", "place", " ")], "Y": [MN("Compare Rate", "Share uninsured, 2023")]},
+        "How the county compares", "Share of low-income adults without insurance, 2023",
+        sort=(C("Compare", "place"), "Ascending"),
+        objects={**axes(show_value=False, cat_size=12, inner_padding=30, label_area=35), **labels(16),
+                 "dataPoint": fill_by("county_profile", "Compare Colour")}))
+    pc.add("meaning", X0 + 496, cy, W - 496, 640 - cy, textbox([None], background="#FFFFFF", shadow=True))
+    pc.add("meaningTitle", X0 + 512, cy + 8, W - 528, 36, textbox([("What this means for a local hospital", 15, True, INK, FONT)],
+                                                                   pad=(0, 0, 0, 0)))
+    pc.add("meaningText", X0 + 508, cy + 44, W - 520, 92, card("Profile Sentence", "", value_colour=INK, size=12, show_label=False,
+                                                                pad=(0, 0, 4, 4), font="Segoe UI"))
+    action = lambda t, b: [("●  ", 11, True, SUN), (t, 11, True, INK), (b, 11, False, INK_2)]
+    pc.add("actions", X0 + 512, cy + 140, W - 528, 640 - cy - 146, textbox(
+        [action("Help patients enroll. ", "Many uninsured low-income adults qualify for Medicaid or low-cost Marketplace plans but are not signed up."),
+         action("Reach Hispanic residents in Spanish. ", "They are the group most likely to be uninsured."),
+         action("Plan for unpaid care. ", "More uninsured adults nearby means more patients who cannot pay their bills.")],
+        pad=(0, 0, 0, 0)))
+
+    # ---------------------------------------------------------------- 7. Data notes
+    p6 = Page("dataNotes", "07  Data Notes")
     frame(p6, "Data notes", "What the words mean, where the data comes from, and what to keep in mind")
     cols = [
         ("Words used here", [
@@ -940,7 +1046,7 @@ def build_pages():
     tt.add("ttRate23", 164, 78, 148, 74, card("State Rate 2023", "Uninsured, 2023", value_colour=INK, size=18))
     tt.add("ttChange", 8, 158, 148, 74, card("State Change", "Change since 2013", value_colour=INK, size=18))
     tt.add("ttRank", 164, 158, 148, 74, card("Rank Text", "", value_colour=INK_2, size=10, show_label=False, font="Segoe UI"))
-    return [p1, p2, p3, p4, p5, p6, tt]
+    return [p1, p2, p3, p4, p5, pc, p6, tt]
 
 
 def find_base_theme():

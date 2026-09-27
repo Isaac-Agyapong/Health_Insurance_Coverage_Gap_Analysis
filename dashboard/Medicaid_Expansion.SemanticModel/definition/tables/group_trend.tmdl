@@ -4,7 +4,7 @@ table group_trend
 	column 'Coverage Group' =
 			SWITCH ( group_trend[analysis_group],
 			    "Not expanded by 2023", "Did not expand",
-			    "Excluded (early coverage)", "Covered adults early",
+			    "Excluded (early coverage)", "Covered before 2014",
 			    "Expanded" )
 		dataType: string
 		lineageTag: 6a2b98df-6fe7-5410-b7ec-d209b525986e
